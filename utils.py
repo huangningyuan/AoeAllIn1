@@ -1,6 +1,8 @@
 import copy
+import os
+import zipfile
 from dataclasses import fields
-from typing import Any, Type
+from typing import Any, Type, Tuple
 
 from genieutils.civ import Civ
 from genieutils.datfile import DatFile
@@ -252,6 +254,36 @@ def extend_effect(effect: Effect, unit_ids = [], class_ids=[]):
 def set_require_techs(tech: Tech, *args):
     tech.required_techs = args + (-1,) * (6 - len(args))
     tech.required_tech_count = len(args)
+
+
+def get_mod_path(mod_name: str = 'All Civ Bonus Test') -> str:
+    """查找游戏的mod路径"""
+    user_path = r'C:\Users'
+    for user in os.listdir(user_path):
+        if user in ('.', 'Public'):
+            continue
+        game_path = os.path.join(user_path, user, 'Games', 'Age of Empires 2 DE')
+        if os.path.isdir(game_path):
+            break
+    for steam_account in os.listdir(game_path):
+        if steam_account == '0' or not steam_account.isnumeric():
+            continue
+        mod_path = os.path.join(game_path, steam_account, 'mods', 'local', mod_name)
+        if os.path.isdir(mod_path):
+            break
+    return mod_path
+
+
+def create_mod_zip(mod_path: str, zip_filename: str = 'allin1.zip') -> str:
+    """创建mod的zip文件"""
+    ofilename = os.path.join(mod_path, zip_filename)
+    with zipfile.ZipFile(ofilename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        zipf.write(os.path.join(mod_path, 'thumbnail.jpg'), os.path.basename('thumbnail.jpg'))
+        resource_path = 'resources'
+        for root, dirs, files in os.walk(os.path.join(mod_path, resource_path)):
+            for file in files:
+                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), mod_path))
+    return ofilename
 
 
 if __name__ == '__main__':

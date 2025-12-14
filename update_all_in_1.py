@@ -2,6 +2,7 @@ import os
 import zipfile
 
 import constants
+import utils
 from add_switch import adding_switch
 from civ_bonuses import add_civ_bonuses
 from civ_switch import add_civ_switch
@@ -13,19 +14,7 @@ from unique_techs import add_unique_techs
 
 def update_all_in_1(debug = True):
     origin_file_name = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat\empires2_x2_p1.dat'
-    user_path = r'C:\Users'
-    for user in os.listdir(user_path):
-        if user in ('.', 'Public'):
-            continue
-        game_path = os.path.join(user_path, user, 'Games', 'Age of Empires 2 DE')
-        if os.path.isdir(game_path):
-            break
-    for steam_account in os.listdir(game_path):
-        if steam_account == '0' or not steam_account.isnumeric():
-            continue
-        mod_path = os.path.join(game_path, steam_account, 'mods', 'local', 'All Civ Bonus Test')
-        if os.path.isdir(mod_path):
-            break
+    mod_path = utils.get_mod_path()
     print(mod_path)
     target_file_name = os.path.join(mod_path, 'resources', '_common', 'dat', 'empires2_x2_p1.dat')
     print('Loading data...')
@@ -61,13 +50,7 @@ def update_all_in_1(debug = True):
     print('Saving Data...')
     data.save(target_file_name)
     print('Data saved.')
-    ofilename = r'allin1.zip'
-    with zipfile.ZipFile(os.path.join(mod_path, ofilename), 'w', zipfile.ZIP_DEFLATED) as zipf:
-        zipf.write(os.path.join(mod_path, 'thumbnail.jpg'), os.path.basename('thumbnail.jpg'))
-        resource_path = 'resources'
-        for root, dirs, files in os.walk(os.path.join(mod_path, resource_path)):
-            for file in files:
-                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), mod_path))
+    utils.create_mod_zip(mod_path)
     print('Zip file created.')
     os.startfile(mod_path)
     print('All in 1 finished.')

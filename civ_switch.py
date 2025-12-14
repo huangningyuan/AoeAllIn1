@@ -1,4 +1,5 @@
 import copy
+import os
 from tkinter.filedialog import SaveAs
 
 from genieutils.datfile import DatFile
@@ -11,6 +12,7 @@ from constants import CHRONICLE_CIV_IDS
 from ftt import move_tech_button
 from ftt import move_unit_button
 from unique_techs import get_ut
+import utils
 from utils import append_tech, set_unit_attribute
 from utils import enable_unit
 from utils import force_tech
@@ -444,8 +446,9 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
 
 
 if __name__ == '__main__':
-    en_file_name = r'C:\Users\huang\Games\Age of Empires 2 DE\76561198141916001\mods\local\All Civ Bonus Description\resources\en\strings\key-value\key-value-modded-strings-utf8.txt'
-    zh_file_name = r'C:\Users\huang\Games\Age of Empires 2 DE\76561198141916001\mods\local\All Civ Bonus Description\resources\zh\strings\key-value\key-value-modded-strings-utf8.txt'
+    mod_path = utils.get_mod_path('All Civ Bonus Description')
+    en_file_name = os.path.join(mod_path, 'resources', 'en', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
+    zh_file_name = os.path.join(mod_path, 'resources', 'zh', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
     offset = 26800
     civ_en_zh_dict = {'Britons': '不列颠', 'Franks': '法兰克', 'Goths': '哥特', 'Teutons': '条顿', 'Japanese': '日本',
                       'Chinese': '中国', 'Byzantines': '拜占庭', 'Persians': '波斯', 'Saracens': '萨拉森',
@@ -464,7 +467,8 @@ if __name__ == '__main__':
     zh = open(zh_file_name, 'w', encoding='utf-8')
     en.write('26800 "enable all civ bonus"\n')
     zh.write('26800 "激活全文明特性"\n')
-    file_name = r'C:\Users\huang\Games\Age of Empires 2 DE\76561198141916001\mods\local\All Civ Bonus Test\resources\_common\dat\empires2_x2_p1.dat'
+    mod_path = utils.get_mod_path()
+    file_name = os.path.join(mod_path, 'resources', '_common', 'dat', 'empires2_x2_p1.dat')
     data = DatFile.parse(file_name)
     civs = data.civs
     for i in range(1, len(civs)):
