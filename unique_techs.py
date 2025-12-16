@@ -6,7 +6,7 @@ from genieutils.unit import ResourceCost
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import DONJON_ID, SQUIRES_ICON_ID, siege_units, siege_workshop_units, elephant_units
+from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, elephant_units
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from mutex import Mutex, add_mutex
@@ -912,9 +912,15 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.GUILDS_ICON_ID
     effect = get_new_effect(name)
-    wood = 25 * 0.8 * 0.5  # Mayans, Koreans
-    gold = 45 * 0.8 * 0.8  # Mayans, Portuguese
-    wood += gold * 35 / 45
+    wood = 25 * MAYAN_AGE3_DISCOUNT * KOREANS_SOLDIER_DISCOUNT  # Mayans, Koreans
+    gold = 45 * MAYAN_AGE3_DISCOUNT * PORTGUESE_DISCOUNT  # Mayans, Portuguese
+    kama_effect = effects[tech.effect_id]
+    for command in kama_effect.effect_commands:
+        if command.c == 105:
+            gold_cost = -command.d
+        elif command.c == 104:
+            wood_cost = -command.d
+    wood += gold * wood_cost / gold_cost
     set_unit_attribute(effect, 4, -1, 104, wood)
     set_unit_attribute(effect, 24, -1, 104, wood)
     set_unit_attribute(effect, 492, -1, 104, wood)
@@ -926,9 +932,9 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, tech_id)
     effect = get_new_effect(name)
-    wood = 25 * 0.7 * 0.5  # Mayans, Koreans
-    gold = 45 * 0.7 * 0.8  # Mayans, Portuguese
-    wood += gold * 35 / 45
+    wood = 25 * MAYAN_AGE4_DISCOUNT * KOREANS_SOLDIER_DISCOUNT  # Mayans, Koreans
+    gold = 45 * MAYAN_AGE4_DISCOUNT * PORTGUESE_DISCOUNT  # Mayans, Portuguese
+    wood += gold * wood_cost / gold_cost
     set_unit_attribute(effect, 4, -1, 104, wood)
     set_unit_attribute(effect, 24, -1, 104, wood)
     set_unit_attribute(effect, 492, -1, 104, wood)
