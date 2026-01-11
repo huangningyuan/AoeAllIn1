@@ -13,5 +13,8 @@ if __name__ == '__main__':
     techs = data.techs
     tech_cost = list()
     units = data.civs[55].units
-    print(units[123].bird.drop_sites)
+    for effect in effects:
+        for command in effect.effect_commands:
+            if command.a == 13:
+                print(effect.name, command)
 

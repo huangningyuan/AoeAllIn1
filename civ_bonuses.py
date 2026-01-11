@@ -423,6 +423,11 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 effect.effect_commands = list(
                     filter(lambda effect_command: filter_vietnam_bonus(effect_command), effect.effect_commands))
 
+    for i in (13, 545, 17):
+        for civ in civs:
+            creatable = civ.units[i].creatable
+            creatable.train_locations.append(copy.deepcopy(creatable.train_locations[0]))
+            creatable.train_locations[1].unit_id = 2172
     sample_units = data.civs[0].units
     split_line_unit = get_new_unit(sample_units)
     for civ in data.civs:

@@ -3,6 +3,8 @@ from all_in_1_params import All_In_1_Params
 from genieutils.datfile import DatFile
 from genieutils.effect import Effect
 from genieutils.effect import EffectCommand
+
+from constants import PORT_IDS
 from utils import append_tech, enable_tech, append_tech
 from utils import get_new_effect
 from utils import get_new_tech
@@ -86,9 +88,6 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 2272, 6)
     # loom
     move_tech_button(effect, 22, 10)
-    # port
-    for i in constants.PORT_IDS:
-        move_unit_button(effect, i, 1)
     # spies
     enable_tech(effect, 408)
     move_tech_button(effect, 408, 14)

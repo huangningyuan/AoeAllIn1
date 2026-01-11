@@ -79,12 +79,12 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
 
     uu_tech_id_list = dict()
     uu_id_list = dict()
-    for i, tech in enumerate(techs):
+    for civ_id, tech in enumerate(techs):
         research_location_id = tech.research_locations[0].location_id
         research_button_id = tech.research_locations[0].button_id
         if (research_location_id == constants.CASTLE_NUM and research_button_id == 6
                 and tech.civ in range(1, current_civ_num)):
-            uu_tech_id_list[tech.civ] = i
+            uu_tech_id_list[tech.civ] = civ_id
             # for command in data.effects[tech.effect_id].effect_commands:
             #     if constants.CASTLE_NUM in list(map(lambda x: x.unit_id, units[command.a].creatable.train_locations)):
             #         uu_id_list[tech.civ] = command.a
@@ -99,9 +99,9 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 train_location = unit.creatable.train_locations[0]
                 if train_location.unit_id == constants.CASTLE_NUM and train_location.button_id == 1:
                     uu_id_list[tech.civ] = unit.id
-    for i in range(1, current_civ_num):
-        if i not in uu_id_list:
-            print(f'Failed to find uu for civ {i}')
+    for civ_id in range(1, current_civ_num):
+        if civ_id not in uu_id_list:
+            print(f'Failed to find uu for civ {civ_id}')
             exit(1)
 
     print(uu_id_list)
@@ -217,20 +217,20 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
     effect = get_new_effect(name)
-    for i in range(1, current_civ_num):
-        enable_unit(effect, uu_id_list[i])
+    for civ_id in range(1, current_civ_num):
+        enable_unit(effect, uu_id_list[civ_id])
     append_tech(data, tech, effect)
 
     civ_switch_unit_offset_id = len(units) - 1
     civ_switch_tech_offset_id = len(techs) - 1
-    for i in range(1, current_civ_num):
-        civ_name = get_civ_name(data.civs, i)
+    for civ_id in range(1, current_civ_num):
+        civ_name = get_civ_name(data.civs, civ_id)
         name = 'switch to ' + civ_name
         tech = get_new_tech(name)
         tech.required_tech_count = 1
         effect = get_new_effect(name)
         for j in range(1, current_civ_num):
-            if j == i:
+            if j == civ_id:
                 disable_unit(effect, civ_switch_unit_offset_id + j)
                 # enable_unit(effect, uu_id_list[j])
                 move_unit_button(effect, uu_id_list[j], 1)
@@ -308,7 +308,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             move_unit_button(effect, constants.DONJON_ID, 5)
             move_unit_button(effect, constants.SHIPYARD_ID, 5)
         # shipyard
-        elif i in constants.CHRONICLE_CIV_IDS:
+        elif civ_id in constants.CHRONICLE_CIV_IDS:
             move_unit_button(effect, constants.KREPOST_ID, -1)
             move_unit_button(effect, constants.DONJON_ID, -1)
             move_unit_button(effect, constants.SHIPYARD_ID, 5)
@@ -394,7 +394,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             move_unit_button(effect, 1889, 1)
             for i in constants.PORT_IDS:
                 move_unit_button(effect, i, -1)
-        elif i in CHRONICLE_CIV_IDS:
+        elif civ_id in CHRONICLE_CIV_IDS:
             move_unit_button(effect, 1889, -1)
             for i in constants.PORT_IDS:
                 move_unit_button(effect, i, 1)
@@ -403,17 +403,17 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     lfh_offset = 105800
     for civ in data.civs:
         pos = (constants.MULE_CART_ID, 1)
-        for i in range(1, current_civ_num):
+        for civ_id in range(1, current_civ_num):
             unit = get_dead_unit(units, )
-            unit.icon_id = units[uu_id_list[i]].icon_id
+            unit.icon_id = units[uu_id_list[civ_id]].icon_id
             unit.creatable.train_locations.append(TrainLocation(0, pos[0], pos[1], -1))
-            unit.building.tech_id = civ_switch_tech_offset_id + i
-            unit.name = 'switch to ' + get_civ_name(data.civs, i)
-            unit.id = i + civ_switch_unit_offset_id
-            unit.base_id = i + civ_switch_unit_offset_id
-            unit.copy_id = i + civ_switch_unit_offset_id
-            unit.language_dll_creation = lfc_offset + i
-            unit.language_dll_help = lfh_offset + i
+            unit.building.tech_id = civ_switch_tech_offset_id + civ_id
+            unit.name = 'switch to ' + get_civ_name(data.civs, civ_id)
+            unit.id = civ_id + civ_switch_unit_offset_id
+            unit.base_id = civ_id + civ_switch_unit_offset_id
+            unit.copy_id = civ_id + civ_switch_unit_offset_id
+            unit.language_dll_creation = lfc_offset + civ_id
+            unit.language_dll_help = lfh_offset + civ_id
             civ.units.append(unit)
             pos = get_next_position(pos)
 
@@ -421,26 +421,26 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
-    for i in range(civ_switch_unit_offset_id, civ_switch_unit_offset_id + current_civ_num - 1):
-        disable_unit(effect, i)
+    for civ_id in range(civ_switch_unit_offset_id, civ_switch_unit_offset_id + current_civ_num - 1):
+        disable_unit(effect, civ_id)
     append_tech(data, tech, effect)
 
-    for i in range(1, current_civ_num):
-        name = 'initialize civ switch ' + get_civ_name(data.civs, i)
+    for civ_id in range(1, current_civ_num):
+        name = 'initialize civ switch ' + get_civ_name(data.civs, civ_id)
         tech = get_new_tech(name)
-        tech.civ = i
+        tech.civ = civ_id
         set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
         effect = get_new_effect(name)
-        force_tech(effect, civ_switch_tech_offset_id + i)
-        research_tech(effect, civ_switch_tech_offset_id + i)
+        force_tech(effect, civ_switch_tech_offset_id + civ_id)
+        research_tech(effect, civ_switch_tech_offset_id + civ_id)
         append_tech(data, tech, effect)
 
     name = 'enable elite uu tech'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, 266)
     effect = get_new_effect(name)
-    for i in range(1, current_civ_num):
-        force_tech(effect, uu_tech_id_list[i])
+    for civ_id in range(1, current_civ_num):
+        force_tech(effect, uu_tech_id_list[civ_id])
     append_tech(data, tech, effect)
     print('Civ switches added.')
 
