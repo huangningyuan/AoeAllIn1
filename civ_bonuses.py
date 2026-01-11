@@ -5,7 +5,7 @@ from genieutils.effect import EffectCommand
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import ITALIANS_TECH_DISCOUNT
+from constants import ITALIANS_TECH_DISCOUNT, CHRONICLE_CIV_IDS
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button
@@ -423,11 +423,14 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 effect.effect_commands = list(
                     filter(lambda effect_command: filter_vietnam_bonus(effect_command), effect.effect_commands))
 
+    # port button
     for i in (13, 545, 17):
-        for civ in civs:
+        for civ_id,civ in enumerate(civs):
             creatable = civ.units[i].creatable
             creatable.train_locations.append(copy.deepcopy(creatable.train_locations[0]))
             creatable.train_locations[1].unit_id = 2172
+            if civ_id in CHRONICLE_CIV_IDS:
+                creatable.train_locations[0].unit_id = 45
     sample_units = data.civs[0].units
     split_line_unit = get_new_unit(sample_units)
     for civ in data.civs:

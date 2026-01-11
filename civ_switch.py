@@ -398,6 +398,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             move_unit_button(effect, 1889, -1)
             for i in constants.PORT_IDS:
                 move_unit_button(effect, i, 1)
+
         append_tech(data, tech, effect)
     lfc_offset = 6800
     lfh_offset = 105800

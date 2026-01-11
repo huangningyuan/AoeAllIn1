@@ -1,12 +1,12 @@
 import copy
-from operator import lshift
 
 from genieutils.datfile import DatFile
 from genieutils.unit import ResourceCost
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, elephant_units
+from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, elephant_units,\
+    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from mutex import Mutex, add_mutex
