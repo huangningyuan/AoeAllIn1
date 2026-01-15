@@ -34,6 +34,11 @@ BOMBARD_TOWER_ID = 236
 MILLITIA_LINE_IDS = [74, 75, 77, 473, 567, 1793, 2247, 2248, 2249, 2250]
 PORT_IDS = [2141, 2142, 2143, 2172]
 PAVILIONS_IDS = [624, 625, 626]
+LUMBER_CAMP_ID = 562
+MINING_CAMP_ID = 584
+FOLWALK_ID = 1734
+
+
 gunpowder_units = []
 siege_units = []
 siege_workshop_units = []
