@@ -72,6 +72,14 @@ def adding_switch(data: DatFile):
     activate_switch_tech.research_locations.append(ResearchLocation(constants.OUTPOST_ID, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.BLACKSMITH_ID, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.MARKET_NUM, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.UNIV_NUM, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.MONESTARY_NUM, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.MILL_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.LUMBER_CAMP_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.MULE_CART_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.DOCK_NUM, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.MINING_CAMP_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.KREPOST_ID, 1, 14, -1))
     for i in constants.PAVILIONS_IDS:
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 
