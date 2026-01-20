@@ -919,8 +919,9 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
         if command.c == 105:
             gold_cost = -command.d
         elif command.c == 104:
-            wood_cost = -command.d
+            wood_cost = command.d
     wood += gold * wood_cost / gold_cost
+    print(f'Wood cost: {wood_cost}, gold cost: {gold_cost}, wood: {wood}, gold: {gold}')
     set_unit_attribute(effect, 4, -1, 104, wood)
     set_unit_attribute(effect, 24, -1, 104, wood)
     set_unit_attribute(effect, 492, -1, 104, wood)
