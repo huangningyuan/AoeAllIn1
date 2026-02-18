@@ -1425,6 +1425,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     cur_tower_id = append_tech(data, tech)
     add_mutex(data, [cur_castle_id, cur_archery_id, cur_tower_id], [cur_effect_id])
 
+
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 

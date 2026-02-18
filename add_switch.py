@@ -71,7 +71,7 @@ def adding_switch(data: DatFile):
     activate_switch_tech.research_locations.append(ResearchLocation(constants.WONDER_ID, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.OUTPOST_ID, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.BLACKSMITH_ID, 1, 14, -1))
-    activate_switch_tech.research_locations.append(ResearchLocation(constants.MARKET_NUM, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.MARKET_NUM, 1, 4, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.UNIV_NUM, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.MONESTARY_NUM, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.MILL_ID, 1, 14, -1))
@@ -84,6 +84,9 @@ def adding_switch(data: DatFile):
     activate_switch_tech.research_locations.append(ResearchLocation(constants.SETTLEMENT_ID, 1, 14, -1))
 
     for i in constants.PAVILIONS_IDS:
+        activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
+
+    for i in constants.YURT_IDS:
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 
     force_research_tech(activate_effect, switch_tech_id)
