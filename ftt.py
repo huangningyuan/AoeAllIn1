@@ -17,8 +17,8 @@ def move_tech_button(effect: Effect, tech_id: int, button_id: int, location_inde
     effect.effect_commands.append(EffectCommand(8, tech_id, 5, location_index, button_id))
 
 
-def move_tech_building(effect: Effect, tech_id: int, building_id: int):
-    effect.effect_commands.append(EffectCommand(8, tech_id, 4, -1, building_id))
+def move_tech_building(effect: Effect, tech_id: int, building_id: int, location_index: int = -1):
+    effect.effect_commands.append(EffectCommand(8, tech_id, 4, location_index, building_id))
 
 
 def deal_ftt(data: DatFile, params: All_In_1_Params):

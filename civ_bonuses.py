@@ -23,7 +23,7 @@ TECH_TO_REMOVE = [70, 95, 223, 224, 225, 226, 227, 228, 259, 260, 261, 286, 287,
                   609, 641, 649, 664, 699, 700, 701, 702, 788, 789, 792, 809, 810, 811, 806, 807, 808, 856, 957,
                   510, 721, 731, 732, 733, 288, 388, 323, 324, 326, 299, 303, 305, 310, 449, 867, 868, 1071,
                   869, 241, 242, 1134, 1114, 1124, 1136, 1169, 1103, 354, 1077, 1079, 1058, 1059, 995, 1067, 1004, 355,
-                  1397]
+                  1397, 1353]
 
 
 def filter_vietnam_bonus(effect_command: EffectCommand):
@@ -388,15 +388,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * BULGARIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
-    name = 'Bulgarians + Jurchens heavy scorpion'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in [239]:
-        for cost in techs[i].resource_costs:
-            if cost.type == 0:
-                set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_TECH_DISCOUNT * BULGARIANS_TECH_DISCOUNT)
-    append_tech(data, tech, effect)
 
     name = 'Turks + Jurchens heavy rocket cart'
     tech = get_new_tech(name)
@@ -404,7 +395,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     for i in [980]:
         for cost in techs[i].resource_costs:
-            set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_TECH_DISCOUNT * TURKS_TECH_DISCOUNT)
+            if cost.type == -1:
+                continue
+            if cost.type == 1:
+                set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_TECH_DISCOUNT * TURKS_TECH_DISCOUNT)
+                continue
+            set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
     TUPI_TECH_DISCOUNT = 0.5

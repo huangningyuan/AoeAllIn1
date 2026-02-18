@@ -495,7 +495,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     force_tech(effect, tech_id)
     move_tech_building(effect, tech_id, constants.BARRACK_NUM)
     move_tech_button(effect, tech_id, 29)
-    for i in (759, 761):
+    for i in (41, 555):
         set_unit_attribute(effect, i, -1, 158, 1)
         move_unit_button(effect, i, 24)
         set_unit_attribute(effect, i, -1, 158, 0)
@@ -829,7 +829,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     force_tech(effect, tech_id)
     move_tech_building(effect, tech_id, constants.STABLE_NUM)
     move_tech_button(effect, tech_id, 26)
-    for i in (886, 887):
+    for i in (755, 757):
         set_unit_attribute(effect, i, -1, 158, 1)
         move_unit_button(effect, i, 21)
         set_unit_attribute(effect, i, -1, 158, 0)
@@ -1332,10 +1332,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 82, -1, 106, stone * 0.6)
     append_tech(data, tech, effect)
 
-
-
-
-
     # Fortified Bastions
     fb_tech_id = 996
     tech = get_ut(data, params, fb_tech_id)
@@ -1344,6 +1340,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech)
     effect = effects[tech.effect_id]
     origin_units = list(map(lambda command: command.a, effect.effect_commands))
+
+    # Circumnavigation
+    circum_tech_id = 1404
+    tech = get_ut(data, params, circum_tech_id)
+    tech.research_locations[0].location_id = constants.UNIV_NUM
+    tech.research_locations[0].button_id = 13
+    tech.icon_id = constants.SHIPWRIGHT_ICON_ID
+    append_tech(data, tech)
     for i in constants.TC_IDS:
         if i not in origin_units:
             plus_unit_attribute(effect, i, -1, 109, 500)
