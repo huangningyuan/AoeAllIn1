@@ -228,6 +228,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     for i in (2275, 2276, 2277):
         plus_unit_attack(effect, i, -1, 2, 3)
     st_castle_id = append_tech(data, tech)
+    # Curare
+    cur_id = 1393
+    tech = get_ut(data, params, cur_id, True)
+    tech.research_locations[0].button_id = 11
+    cur_effect_id = tech.effect_id
+    cur_castle_id = append_tech(data, tech)
+
     # name = 'First Crusade'
     tech = get_ut(data, params, 756, True)
     tech.research_locations[0].button_id = 21
@@ -1003,11 +1010,10 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     yeo_effect_id = tech.effect_id
     yeo_archery_id = append_tech(data, tech)
     # Curare
-    cur_id = 1393
     tech = get_ut(data, params, cur_id)
     tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
     tech.research_locations[0].button_id = 11
-    append_tech(data, tech)
+    cur_archery_id = append_tech(data, tech)
     # Herbalism
     tech = get_ut(data, params, herb_id)
     tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
@@ -1412,6 +1418,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech.research_locations[0].button_id = 7
     gw_effect_id = tech.effect_id
     gw_tower_id = append_tech(data, tech)
+    # Curare
+    tech = get_ut(data, params, cur_id)
+    tech.research_locations[0].location_id = constants.WATCH_TOWER_ID
+    tech.research_locations[0].button_id = 8
+    cur_tower_id = append_tech(data, tech)
+    add_mutex(data, [cur_castle_id, cur_archery_id, cur_tower_id], [cur_effect_id])
+
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 
