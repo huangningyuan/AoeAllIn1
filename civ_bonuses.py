@@ -36,7 +36,7 @@ def filter_vietnam_bonus(effect_command: EffectCommand):
         case _:
             return True
 
-def filter_dravadian_bonus(effect_command: EffectCommand):
+def filter_101discount_bonus(effect_command: EffectCommand):
     match effect_command.type:
         case 101:
             return False
@@ -495,8 +495,16 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     filter(lambda effect_command: filter_vietnam_bonus(effect_command), effect.effect_commands))
             case 'Dravidians Bonus':
                 effect.effect_commands = list(
-                    filter(lambda effect_command: filter_dravadian_bonus(effect_command), effect.effect_commands))
-
+                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
+            case 'Burgundians Bonus':
+                effect.effect_commands = list(
+                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
+            case 'Bulgarians Bonus':
+                effect.effect_commands = list(
+                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
+            case 'Turks Bonus':
+                effect.effect_commands = list(
+                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
     # port button
     for i in (13, 545, 17):
         for civ_id,civ in enumerate(civs):

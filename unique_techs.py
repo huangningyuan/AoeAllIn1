@@ -5,8 +5,9 @@ from genieutils.unit import ResourceCost
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, elephant_units,\
-    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT
+from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, \
+    elephant_units, \
+    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, TECH_NUM
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from mutex import Mutex, add_mutex
@@ -52,6 +53,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Castle UTs----'), get_new_effect('----Castle UTs----'))
 
     vedic_teaching_id = 1309
+    vedic_effect_id = techs[vedic_teaching_id].effect_id
     name = 'Vedic Teachings'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, 266)
@@ -59,16 +61,26 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     force_tech(effect, vedic_teaching_id)
     move_tech_button(effect, vedic_teaching_id, 7)
     append_tech(data, tech, effect)
-    name = 'Bombard Tower for Vedic Teachings'
-    tech = get_new_tech(name)
-    set_require_techs(tech, 1309, 64)
-    append_tech(data, tech)
 
-    effect = effects[tech.effect_id]
+    effect = effects[vedic_effect_id]
     multiply_resource(effect, 502, 1.02) # Shu+Athenians
     multiply_resource(effect, 267, 1.02) # Portuguese
     multiply_resource(effect, 241, 1.02) # Poles
     multiply_resource(effect, 512, 1.02) # Puru
+
+    current_vedic_univ_techs = list()
+    for i in range(constants.TECH_NUM):
+        required_techs = techs[i].required_techs
+        if vedic_teaching_id in required_techs:
+            current_vedic_univ_techs.append(required_techs[0])
+    print('Current Vedic Univ Techs:', current_vedic_univ_techs)
+    for i in constants.university_techs:
+        if constants.university_techs[i] not in current_vedic_univ_techs:
+            name = f'{i} Researched for Vedic Teachings'
+            tech = get_new_tech(name)
+            set_require_techs(tech, constants.university_techs[i], vedic_teaching_id)
+            tech.effect_id = vedic_effect_id
+            append_tech(data, tech)
 
 
     # Kasbah

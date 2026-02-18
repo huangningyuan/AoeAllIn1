@@ -547,6 +547,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             enable_unit(effect, 2556)
             move_unit_button(effect, 2556, 1)
+            force_research_tech(effect, 1353)
             append_tech(data, tech, effect)
             name = 'enable Champi'
             tech = get_new_tech(name)
