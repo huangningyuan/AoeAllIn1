@@ -80,6 +80,9 @@ def adding_switch(data: DatFile):
     activate_switch_tech.research_locations.append(ResearchLocation(constants.DOCK_NUM, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.MINING_CAMP_ID, 1, 14, -1))
     activate_switch_tech.research_locations.append(ResearchLocation(constants.KREPOST_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.FOLWALK_ID, 1, 14, -1))
+    activate_switch_tech.research_locations.append(ResearchLocation(constants.SETTLEMENT_ID, 1, 14, -1))
+
     for i in constants.PAVILIONS_IDS:
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 

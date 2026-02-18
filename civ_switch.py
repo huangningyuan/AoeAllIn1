@@ -8,7 +8,8 @@ from genieutils.unit import TrainLocation
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import CHRONICLE_CIV_IDS
+from constants import CHRONICLE_CIV_IDS, SOUTH_MESO_CIV_IDS, PASTURE_ID, SETTLEMENT_ID, FLEMISH_MILITIA_ID, \
+    TEMPLE_GUARD_IDS, ELITE_TEMPLE_GUARD_TECH_ID, ELITE_IBIRAPEMA_TEMP_TECH_ID, PHALANGITE_IDS
 from ftt import move_tech_button
 from ftt import move_unit_button
 from unique_techs import get_ut
@@ -80,15 +81,13 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     uu_tech_id_list = dict()
     uu_id_list = dict()
     for civ_id, tech in enumerate(techs):
+        if len(tech.research_locations) == 0:
+            continue
         research_location_id = tech.research_locations[0].location_id
         research_button_id = tech.research_locations[0].button_id
         if (research_location_id == constants.CASTLE_NUM and research_button_id == 6
                 and tech.civ in range(1, current_civ_num)):
             uu_tech_id_list[tech.civ] = civ_id
-            # for command in data.effects[tech.effect_id].effect_commands:
-            #     if constants.CASTLE_NUM in list(map(lambda x: x.unit_id, units[command.a].creatable.train_locations)):
-            #         uu_id_list[tech.civ] = command.a
-            #         break
         if tech.effect_id == -1 or tech.civ == -1:
             continue
         effect = effects[tech.effect_id]
@@ -246,57 +245,49 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                     move_tech_button(effect, additional_ut_ids[j], -1, 0)
         # dromon
         if civ_name in ('Huns', 'Byzantines', 'Armenians', 'Romans', 'Goths'):
-            move_unit_button(effect, constants.DROMON_ID, 23)
+            move_unit_button(effect, constants.DROMON_ID, 9)
             move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
             move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
             move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
+            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
             move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
         # lou chuan
         elif civ_name in ('Wei', 'Shu', 'Wu', 'Chinese', 'Jurchens'):
-            move_unit_button(effect, constants.LOU_CHUAN_ID, 23)
-            move_tech_button(effect, params.other_params.get('bm_dock_id'), 28)
-            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), 28)
-            move_tech_button(effect, params.other_params.get('tb_dock_id'), 28)
-            move_tech_button(effect, params.other_params.get('roc_dock_id'), 28)
+            move_unit_button(effect, constants.LOU_CHUAN_ID, 9)
+            move_tech_button(effect, params.other_params.get('bm_dock_id'), 14)
+            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), 14)
+            move_tech_button(effect, params.other_params.get('tb_dock_id'), 14)
+            move_tech_button(effect, params.other_params.get('roc_dock_id'), 14)
             move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
             move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
             move_unit_button(effect, constants.DROMON_ID, -1)
-        # cannon galleon
-        else:
+            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
+        # Catapult
+        elif civ_name in ('Cumans', 'Mayans', 'Aztecs', 'Incas', 'Muisca', 'Mapuche', 'Tupi'):
+            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, 9)
+            move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
+            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
             move_unit_button(effect, constants.DROMON_ID, -1)
-            move_unit_button(effect, constants.CANNON_GALLEON_ID, 23)
-            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, 23)
             move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
             move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
             move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
+        # cannon galleon
+        else:
+            move_unit_button(effect, constants.DROMON_ID, -1)
+            move_unit_button(effect, constants.CANNON_GALLEON_ID, 9)
+            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, 9)
+            move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
+            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
+            move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
+            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
+            move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
+            move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
 
-        bog_dock_id = params.other_params['bog_dock_id']
-        # e turtle
-        if civ_name == 'Koreans':
-            move_tech_button(effect, constants.E_TURTLE_TECH_ID, 29)
-            move_tech_button(effect, params.other_params['shin_dock_id'], 29)
-            move_tech_button(effect, constants.E_CARAVEL_TECH_ID, -1)
-            move_tech_button(effect, constants.E_LONGBOAT_TECH_ID, -1)
-            move_tech_button(effect, bog_dock_id, -1)
-        # caravel
-        elif civ_name == 'Portuguese':
-            move_tech_button(effect, constants.E_TURTLE_TECH_ID, -1)
-            move_tech_button(effect, params.other_params['shin_dock_id'], -1)
-            move_tech_button(effect, constants.E_CARAVEL_TECH_ID, 29)
-            move_tech_button(effect, constants.E_LONGBOAT_TECH_ID, -1)
-            move_tech_button(effect, bog_dock_id, -1)
-        # longboat
-        elif civ_name == 'Vikings':
-            move_tech_button(effect, constants.E_TURTLE_TECH_ID, -1)
-            move_tech_button(effect, params.other_params['shin_dock_id'], -1)
-            move_tech_button(effect, constants.E_CARAVEL_TECH_ID, -1)
-            move_tech_button(effect, constants.E_LONGBOAT_TECH_ID, 29)
-            move_tech_button(effect, bog_dock_id, 29)
         # krepost
         if civ_name == 'Bulgarians':
             move_unit_button(effect, constants.KREPOST_ID, 5)
@@ -312,18 +303,21 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             move_unit_button(effect, constants.KREPOST_ID, -1)
             move_unit_button(effect, constants.DONJON_ID, -1)
             move_unit_button(effect, constants.SHIPYARD_ID, 5)
+
         if civ_name == 'Huns':
             move_unit_button(effect, 886, 1)
             move_unit_button(effect, 887, 1)
         else:
             move_unit_button(effect, 886, -1)
             move_unit_button(effect, 887, -1)
+
         if civ_name == 'Goths':
             move_unit_button(effect, 759, 1)
             move_unit_button(effect, 761, 1)
         else:
             move_unit_button(effect, 759, -1)
             move_unit_button(effect, 761, -1)
+
         if civ_name == 'Sicilians':
             move_unit_button(effect, 1659, 1)
         else:
@@ -390,16 +384,90 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             move_unit_button(effect, PALADIN_ID, 2)
             move_tech_button(effect, PALADIN_TECH_ID, 7)
             move_unit_button(effect, XOLOTL_ID, -1)
+
         if civ_name == 'Khitans':
-            move_unit_button(effect, 1889, 1)
+            move_unit_button(effect, PASTURE_ID, 1)
             for i in constants.PORT_IDS:
                 move_unit_button(effect, i, -1)
+            for i in constants.SETTLEMENT_IDS:
+                move_unit_button(effect, i, -1)
         elif civ_id in CHRONICLE_CIV_IDS:
-            move_unit_button(effect, 1889, -1)
+            move_unit_button(effect, PASTURE_ID, -1)
             for i in constants.PORT_IDS:
                 move_unit_button(effect, i, 1)
-
+            for i in constants.SETTLEMENT_IDS:
+                move_unit_button(effect, i, -1)
+        elif civ_id in SOUTH_MESO_CIV_IDS:
+            for i in constants.SETTLEMENT_IDS:
+                move_unit_button(effect, i, 1)
+            for i in constants.PORT_IDS:
+                move_unit_button(effect, i, -1)
+            move_unit_button(effect, PASTURE_ID, -1)
         append_tech(data, tech, effect)
+
+        # unique infantry
+        pez_tech_id = params.other_params['pez_tech_id']
+        if civ_name == 'Wu':
+            for i in constants.JIAN_IDS:
+                move_unit_button(effect, i, 31)
+            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
+            for i in constants.IBIRAPEMA_IDS:
+                move_unit_button(effect, i, -1)
+            for i in TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, -1)
+            for i in PHALANGITE_IDS:
+                move_unit_button(effect, i, -1)
+        elif civ_name == 'Burgundians':
+            for i in constants.JIAN_IDS:
+                move_unit_button(effect, i, -1)
+            for i in constants.IBIRAPEMA_IDS:
+                move_unit_button(effect, i, -1)
+            move_unit_button(effect, FLEMISH_MILITIA_ID, 31)
+            for i in TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, -1)
+            for i in PHALANGITE_IDS:
+                move_unit_button(effect, i, -1)
+        elif civ_name == 'Tupi':
+            for i in constants.JIAN_IDS:
+                move_unit_button(effect, i, -1)
+            for i in constants.IBIRAPEMA_IDS:
+                move_unit_button(effect, i, 31)
+            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
+            for i in TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, -1)
+            for i in PHALANGITE_IDS:
+                move_unit_button(effect, i, -1)
+            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
+            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
+            move_tech_button(effect, pez_tech_id, -1)
+        elif civ_name == 'Muisca':
+            for i in constants.JIAN_IDS:
+                move_unit_button(effect, i, -1)
+            for i in constants.IBIRAPEMA_IDS:
+                move_unit_button(effect, i, -1)
+            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
+            for i in TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, 31)
+            for i in PHALANGITE_IDS:
+                move_unit_button(effect, i, -1)
+            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
+            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32)
+            move_tech_button(effect, pez_tech_id, -1)
+        elif civ_name == 'Macedonians':
+            for i in constants.JIAN_IDS:
+                move_unit_button(effect, i, -1)
+            for i in constants.IBIRAPEMA_IDS:
+                move_unit_button(effect, i, -1)
+            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
+            for i in TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, -1)
+            for i in PHALANGITE_IDS:
+                move_unit_button(effect, i, 31)
+            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
+            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
+            move_tech_button(effect, pez_tech_id, 32)
+
+
     lfc_offset = 6800
     lfh_offset = 105800
     for civ in data.civs:
@@ -463,7 +531,8 @@ if __name__ == '__main__':
                       'Dravidians': '达罗毗荼', 'Bengalis': '孟加拉', 'Gurjaras': '瞿折罗', 'Romans': '罗马',
                       'Armenians': '亚美尼亚', 'Georgians': '格鲁吉亚', 'Achaemenids': '阿契美尼德',
                       'Athenians': '雅典', 'Spartans': '斯巴达', 'Wei': '魏', 'Shu': '蜀', 'Wu': '吴',
-                      'Jurchens': '女真', 'Khitans': '契丹', 'Puru': '普鲁', 'Thracians': '色雷斯', 'Macedonians': '马其顿'}
+                      'Jurchens': '女真', 'Khitans': '契丹', 'Puru': '普鲁', 'Thracians': '色雷斯', 'Macedonians': '马其顿',
+                      'Muisca': '穆伊斯卡', 'Mapuche': '马普切', 'Tupi': '图皮'}
     en = open(en_file_name, 'w')
     zh = open(zh_file_name, 'w', encoding='utf-8')
     en.write('26800 "enable all civ bonus"\n')
