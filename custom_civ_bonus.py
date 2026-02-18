@@ -7,7 +7,7 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 import constants
 from all_in_1_params import All_In_1_Params
 from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
-    ELITE_TEMPLE_GUARD_TECH_ID
+    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import disable_tech, extend_effect, force_research_tech, disable_unit
@@ -922,7 +922,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            set_resource(effect, 267, 10.4753 * 1.05 * 1.15)
+            forager_wood_prod_rate = effects[510].effect_commands[0].d
+            set_resource(effect, 267, forager_wood_prod_rate * ROMAN_CIV_WORK_RATE * FRANKS_FORAGER_WORK_RATE * MAPUCHE_FORAGER_WORK_RATE)
             append_tech(data, tech, effect)
             name = 'enable Feitoria'
             tech = get_new_tech(name)
