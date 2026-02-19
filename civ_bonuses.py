@@ -36,6 +36,7 @@ def filter_vietnam_bonus(effect_command: EffectCommand):
         case _:
             return True
 
+
 def filter_101discount_bonus(effect_command: EffectCommand):
     match effect_command.type:
         case 101:
@@ -92,7 +93,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             continue
         research_location = tech.research_locations[0]
         if research_location.location_id == constants.CASTLE_NUM and (
-                research_location.button_id in (7, 8) or (research_location.button_id in (12, 13) and tech.civ in constants.CHRONICLE_CIV_IDS)):
+                research_location.button_id in (7, 8) or (
+                research_location.button_id in (12, 13) and tech.civ in constants.CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
         if research_location.location_id >= 0:
@@ -365,7 +367,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     cannon_galleon_tech_id = 376
     for cost in techs[cannon_galleon_tech_id].resource_costs:
         if cost.type in (0, 2):
-            set_tech_cost(effect, cannon_galleon_tech_id, cost.type, cost.amount * TURKS_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
+            set_tech_cost(effect, cannon_galleon_tech_id, cost.type,
+                          cost.amount * TURKS_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
 
     name = 'Burgundians + Poles stable tech'
     tech = get_new_tech(name)
@@ -387,7 +390,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             if cost.type == 0:
                 set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * BULGARIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
-
 
     name = 'Turks + Jurchens heavy rocket cart'
     tech = get_new_tech(name)
@@ -425,18 +427,21 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     if cost.type == -1:
                         continue
                     if cost.type == 0:
-                        set_tech_cost(effect, hca_tech_id, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT * TUPI_TECH_DISCOUNT)
+                        set_tech_cost(effect, hca_tech_id, cost.type,
+                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT * TUPI_TECH_DISCOUNT)
                     else:
-                        set_tech_cost(effect, hca_tech_id, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT)
+                        set_tech_cost(effect, hca_tech_id, cost.type,
+                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT)
                 continue
-            if i in free_archery_techs: # free
+            if i in free_archery_techs:  # free
                 continue
-            if i in shu_cheap_range_techs: # shu
+            if i in shu_cheap_range_techs:  # shu
                 for cost in tech.resource_costs:
                     if cost.type == -1:
                         continue
                     if cost.type == 0:
-                        set_tech_cost(effect, i, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT * TUPI_TECH_DISCOUNT)
+                        set_tech_cost(effect, i, cost.type,
+                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * TUPI_TECH_DISCOUNT)
                     else:
                         set_tech_cost(effect, i, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT)
                 continue
@@ -481,6 +486,16 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     set_tech_cost(effect, i, j.type, j.amount * 0.5)
     append_tech(data, tech, effect)
 
+    name = 'Italians + Burgundians Dock Tech'
+
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    for i in (65, 906):
+        set_tech_cost(effect, i, 0, techs[i].resource_costs[
+            0].amount * constants.BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
+    append_tech(data, tech, effect)
+
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 
@@ -503,7 +518,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
     # port button
     for i in (13, 545, 17):
-        for civ_id,civ in enumerate(civs):
+        for civ_id, civ in enumerate(civs):
             creatable = civ.units[i].creatable
             creatable.train_locations.append(copy.deepcopy(creatable.train_locations[0]))
             creatable.train_locations[1].unit_id = 2172

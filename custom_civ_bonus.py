@@ -342,7 +342,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            for i in (48, 65, 1012, 1013, 1014):
+            for i in (48, 1012, 1013, 1014):
                 set_tech_discount(effect, i, 0, 0.67)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
@@ -1332,14 +1332,14 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            for i in (65, 1012, 1013, 1014):
+            for i in (65, 906, 1012, 1013, 1014):
                 set_tech_cost(effect, i, 1, 0)
             append_tech(data, tech, effect)
             name = 'Eco Techs 1/2 time'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            for i in (1012, 1013, 1014):
+            for i in (65, 906, 1012, 1013, 1014):
                 set_tech_time_discount(effect, i, 0.5)
             append_tech(data, tech, effect)
         case 'Wei':

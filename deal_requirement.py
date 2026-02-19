@@ -5,7 +5,7 @@ from utils import get_new_tech
 from utils import replace_tuple
 from utils import set_require_techs
 
-SWITCH_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 433, 659, 660, 661, 666, 667, 668, 755]
+FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 433, 659, 660, 661, 666, 667, 668, 755, 906]
 CASTLE_AGE_REQUIRE_TECH_LIST = [13, 48, 65, 162, 182, 197, 203, 207, 249, 279, 384, 1137]
 IMPERIAL_AGE_REQUIRE_TECH_LIST = [12, 47, 96, 209, 217, 221, 264, 429, 436, 85, 377, 218]
 EAGLE_WARRIOR_TECH_NUM = 384
@@ -16,7 +16,7 @@ FLEMISH_REVOLUTION_TECH_NUM = 755
 def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):
     print('Dealing Required tech...')
     for i, tech in enumerate(data.techs):
-        if i in SWITCH_REQUIRE_TECH_LIST:
+        if i in FEUDAL_REQUIRE_TECH_LIST:
             tech.required_techs = replace_tuple(tech.required_techs, -1, params.switch_tech_id)
         elif i in CASTLE_AGE_REQUIRE_TECH_LIST:
             tech.required_techs = replace_tuple(tech.required_techs, -1, params.feudal_duplicate_tech_id)
