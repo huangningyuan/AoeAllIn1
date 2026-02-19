@@ -23,12 +23,6 @@ def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):
         elif i in IMPERIAL_AGE_REQUIRE_TECH_LIST:
             tech.required_techs = replace_tuple(tech.required_techs, -1, params.castle_duplicate_tech_id)
 
-    elite_eagle_requirement_tech = get_new_tech('Elite Eagle Requirement')
-    set_require_techs(elite_eagle_requirement_tech, params.castle_duplicate_tech_id, EAGLE_WARRIOR_TECH_NUM)
-    elite_eagle_requirement_tech_num = append_tech(data, elite_eagle_requirement_tech)
-    elite_eagle_require_techs = data.techs[ELITE_EAGLE_TECH_NUM].required_techs
-    data.techs[ELITE_EAGLE_TECH_NUM].required_techs = replace_tuple(elite_eagle_require_techs, -1, elite_eagle_requirement_tech_num)
-
     flemish_revolution_tech = data.techs[FLEMISH_REVOLUTION_TECH_NUM]
     flemish_revolution_tech.required_techs = (115, params.switch_tech_id, 758, -1, -1, -1)
     flemish_revolution_tech.required_tech_count = 2

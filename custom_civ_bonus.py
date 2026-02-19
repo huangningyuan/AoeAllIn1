@@ -110,12 +110,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_research_tech(effect, 837)
             force_research_tech(effect, 480)
             append_tech(data, tech, effect)
-            name = 'append_tech elite eagle warrior'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
-            effect = get_new_effect(name)
-            force_tech(effect, 434)
-            append_tech(data, tech, effect)
             tech = get_new_tech('Macedonians')
             tech.civ = 54
             macedonians_id = append_tech(data, tech)
@@ -241,6 +235,18 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             for i in (23, 44, 47):
                 multiply_unit_attribute(effect, -1, i, 101, 1 / 1.15)
+            append_tech(data, tech, effect)
+            name = 'enable Eagle Warrior'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 433)
+            append_tech(data, tech, effect)
+            name = 'append_tech elite eagle warrior'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
+            effect = get_new_effect(name)
+            force_tech(effect, 434)
             append_tech(data, tech, effect)
         case 'Bengalis':
             effect = effects[865]
@@ -567,27 +573,36 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             enable_unit(effect, 2550)
+            force_research_tech(effect, 1350)
             enable_unit(effect, 74)
             move_unit_button(effect, 2550, 33)
             move_unit_button(effect, 2588, 33)
             move_unit_button(effect, 2552, 33)
             move_unit_button(effect, 2554, 33)
-            force_tech(effect, 1402)
-            move_tech_button(effect, 1402, 34)
+            append_tech(data, tech, effect)
+            name = 'Champi Runner'
+            champi_runner_tech_id = 1402
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_tech(effect, champi_runner_tech_id)
+            move_tech_button(effect, champi_runner_tech_id, 34)
             append_tech(data, tech, effect)
             name = 'Champi Warrior'
+            champi_warrior_tech_id = 1351
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 1402, params.feudal_duplicate_tech_id)
+            set_require_techs(tech, params.switch_tech_id, champi_runner_tech_id, params.feudal_duplicate_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1351)
-            move_tech_button(effect, 1351, 34)
+            force_tech(effect, champi_warrior_tech_id)
+            move_tech_button(effect, champi_warrior_tech_id, 34)
             append_tech(data, tech, effect)
             name = 'Elite Champi Warrior'
+            elite_champi_warrior_tech_id = 1352
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 1351, params.castle_duplicate_tech_id)
+            set_require_techs(tech, params.switch_tech_id, champi_runner_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1352)
-            move_tech_button(effect, 1352, 34)
+            force_tech(effect, elite_champi_warrior_tech_id)
+            move_tech_button(effect, elite_champi_warrior_tech_id, 34)
             append_tech(data, tech, effect)
         case 'Italians':
             # cheap gunpowder units ext
@@ -837,6 +852,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
             force_tech(effect, ELITE_TEMPLE_GUARD_TECH_ID)
+            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 34)
             append_tech(data, tech, effect)
             # archer armor ext
             for i in (2301, 2302):
