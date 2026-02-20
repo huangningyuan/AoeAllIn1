@@ -213,12 +213,17 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     sh_castle_id = append_tech(data, tech)
     # stronghold + Thracian
     effect = effects[sh_effect_id]
+    multiply_unit_attribute(effect, 2418, -1, 10, 0.75)
     plus_unit_attribute(effect, 82, -1, 63, -32)
     plus_unit_attribute(effect, 2418, -1, 63, -32)
     # name = 'Citadels'
     tech = get_ut(data, params, 7, True)
     tech.research_locations[0].button_id = 11
     append_tech(data, tech)
+    effect = effects[tech.effect_id]
+    plus_unit_attack(effect, 2418, -1, 4, 3)
+    plus_unit_attack(effect, 2418, -1, 3, 1)
+    plus_unit_attack(effect, 2418, -1, 3, 17)
     # name = 'Svan Towers'
     st_id = 923
     tech = get_ut(data, params, st_id, True)
@@ -235,6 +240,11 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech.research_locations[0].button_id = 11
     cur_effect_id = tech.effect_id
     cur_castle_id = append_tech(data, tech)
+    cur_effect = effects[cur_effect_id]
+    citadel_projectile_id = 1830
+    set_unit_attribute(cur_effect, citadel_projectile_id, -1, 145, 2610)
+    set_unit_attribute(cur_effect, citadel_projectile_id, -1, 146, 2)
+    set_unit_attribute(cur_effect, citadel_projectile_id, -1, 147, 0.05)
 
     # name = 'First Crusade'
     tech = get_ut(data, params, 756, True)
