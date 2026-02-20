@@ -1365,7 +1365,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
             plus_unit_attribute(effect, i, -1, 109, 500)
     if 1251 not in origin_units:
         plus_unit_attribute(effect, 1251, -1, 109, 500)
-    plus_unit_attack(effect, 2418, -1, 109, 500)
+    plus_unit_attribute(effect, 2418, -1, 109, 500)
 
     # Circumnavigation
     circum_tech_id = 1404
