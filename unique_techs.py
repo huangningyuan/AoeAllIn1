@@ -506,6 +506,12 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     for i in (41, 555):
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
+    name = 'move elite_huskarl_button'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, anarchy_tech_id)
+    effect = get_new_effect(name)
+    move_tech_button(effect, 365, 29, 1)
+    append_tech(data, tech, effect)
 
     # name = 'El Dorado'
     tech = get_ut(data, params, 4)
