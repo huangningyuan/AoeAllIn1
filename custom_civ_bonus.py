@@ -573,7 +573,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             enable_unit(effect, 2550)
-            force_research_tech(effect, 1350)
             enable_unit(effect, 74)
             move_unit_button(effect, 2550, 33)
             move_unit_button(effect, 2588, 33)
