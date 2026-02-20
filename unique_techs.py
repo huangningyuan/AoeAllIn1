@@ -19,6 +19,7 @@ from utils import get_new_tech
 from utils import set_resource, set_unit_attribute, plus_unit_attack, multiply_resource, \
     plus_unit_attribute, multiply_unit_attribute, plus_unit_armor, set_tech_cost, upgrade_unit
 
+CASTLE_BUILT_TECH_ID = 266
 
 def get_ut(data: DatFile, params: All_In_1_Params, tech_id: int, in_castle=False):
     tech = copy.deepcopy(data.techs[tech_id])
@@ -496,16 +497,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     name = 'enable Anarchy'
     tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 266)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, CASTLE_BUILT_TECH_ID)
     effect = get_new_effect(name)
-    tech_id = 16
-    force_tech(effect, tech_id)
-    move_tech_building(effect, tech_id, constants.BARRACK_NUM)
-    move_tech_button(effect, tech_id, 29)
+    anarchy_tech_id = 16
+    force_tech(effect, anarchy_tech_id)
+    move_tech_building(effect, anarchy_tech_id, constants.BARRACK_NUM)
+    move_tech_button(effect, anarchy_tech_id, 29)
     for i in (41, 555):
-        set_unit_attribute(effect, i, -1, 158, 1)
-        move_unit_button(effect, i, 24)
-        set_unit_attribute(effect, i, -1, 158, 0)
+        move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
 
     # name = 'El Dorado'
@@ -835,11 +834,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech_id = 483
     force_tech(effect, tech_id)
     move_tech_building(effect, tech_id, constants.STABLE_NUM)
-    move_tech_button(effect, tech_id, 26)
     for i in (755, 757):
-        set_unit_attribute(effect, i, -1, 158, 1)
-        move_unit_button(effect, i, 21)
-        set_unit_attribute(effect, i, -1, 158, 0)
+        move_unit_button(effect, i, 21, 1)
     append_tech(data, tech, effect)
 
     # Scythed Chariots
@@ -1743,20 +1739,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
-
-    # Add mutex resources
-    mutex = Mutex()
-    name = 'Add mutex resources'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    append_tech(data, tech, effect)
-    for i in range(mutex._mutex_start + 1, mutex.get_mutex_id()):
-        if i in range(400, 409):
-            continue
-        elif i in range(425, 434):
-            continue
-        set_resource(effect, i, 3)
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())

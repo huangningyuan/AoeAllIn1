@@ -10,8 +10,19 @@ from utils import get_new_effect
 from utils import get_new_tech
 
 
-def move_unit_button(effect: Effect, unit_id: int, button_id: int):
+def move_unit_button(effect: Effect, unit_id: int, button_id: int, index: int = 0):
+    if index > 0:
+        effect.effect_commands.append(EffectCommand(0, unit_id, -1, 158, index))
     effect.effect_commands.append(EffectCommand(0, unit_id, -1, 43, button_id))
+    if index > 0:
+        effect.effect_commands.append(EffectCommand(0, unit_id, -1, 158, 0))
+
+def move_unit_train_location(effect: Effect, unit_id: int, location_id: int, index: int = 0):
+    if index > 0:
+        effect.effect_commands.append(EffectCommand(0, unit_id, -1, 158, index))
+    effect.effect_commands.append(EffectCommand(0, unit_id, -1, 42, location_id))
+    if index > 0:
+        effect.effect_commands.append(EffectCommand(0, unit_id, -1, 158, 0))
 
 def move_tech_button(effect: Effect, tech_id: int, button_id: int, location_index: int = -1):
     effect.effect_commands.append(EffectCommand(8, tech_id, 5, location_index, button_id))

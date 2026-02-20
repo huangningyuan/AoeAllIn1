@@ -1,5 +1,6 @@
 import os
 import zipfile
+import json
 
 import constants
 import utils
@@ -10,11 +11,13 @@ from constants import gunpowder_units, siege_units, siege_workshop_units, elepha
 from ftt import deal_ftt
 from genieutils.datfile import DatFile
 from unique_techs import add_unique_techs
+import mutex
 
 
 def update_all_in_1(debug = True):
-    origin_file_name = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat\empires2_x2_p1.dat'
-    mod_path = utils.get_mod_path()
+    origin_file_name = os.path.join(constants.GAME_DATA_PATH, 'empires2_x2_p1.dat')
+    constants.MOD_PATH = utils.get_mod_path()
+    mod_path = constants.MOD_PATH
     print(mod_path)
     target_file_name = os.path.join(mod_path, 'resources', '_common', 'dat', 'empires2_x2_p1.dat')
     print('Loading data...')
@@ -50,6 +53,14 @@ def update_all_in_1(debug = True):
     print('Saving Data...')
     data.save(target_file_name)
     print('Data saved.')
+    
+    # Save updated linkedTechs.json to mod path
+    mod_linked_techs_path = os.path.join(mod_path, 'resources', '_common', 'dat', 'linkedTechs.json')
+    print('Saving updated linkedTechs.json...')
+    with open(mod_linked_techs_path, 'w', encoding='utf-8') as f:
+        json.dump(mutex.LINKED_TECHS, f, indent=2, ensure_ascii=False)
+    print('linkedTechs.json saved.')
+    
     utils.create_mod_zip(mod_path)
     print('Zip file created.')
     os.startfile(mod_path)

@@ -202,15 +202,13 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
 
     # huskarl
     tech = techs[365]
-    new_location = ResearchLocation(constants.BARRACK_NUM, tech.research_locations[0].research_time, 0, -1)
+    new_location = ResearchLocation(constants.BARRACK_NUM, tech.research_locations[0].research_time, 29, -1)
     tech.research_locations.append(new_location)
-    move_tech_button(effects[462], 365, 29, 1)
 
     # tarkan
     tech = techs[2]
-    new_location = ResearchLocation(constants.STABLE_NUM, tech.research_locations[0].research_time, 0, -1)
+    new_location = ResearchLocation(constants.STABLE_NUM, tech.research_locations[0].research_time, 26, -1)
     tech.research_locations.append(new_location)
-    move_tech_button(effects[538], 2, 26, 1)
 
     name = 'enable all uus'
     tech = get_new_tech(name)
@@ -231,14 +229,12 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         for j in range(1, current_civ_num):
             if j == civ_id:
                 disable_unit(effect, civ_switch_unit_offset_id + j)
-                # enable_unit(effect, uu_id_list[j])
                 move_unit_button(effect, uu_id_list[j], 1)
                 move_tech_button(effect, uu_tech_id_list[j], 6, 0)
                 if j in additional_ut_ids.keys():
                     move_tech_button(effect, additional_ut_ids[j], 6, 0)
             else:
                 enable_unit(effect, civ_switch_unit_offset_id + j)
-                # disable_unit(effect, uu_id_list[j])
                 move_unit_button(effect, uu_id_list[j], -1)
                 move_tech_button(effect, uu_tech_id_list[j], -1, 0)
                 if j in additional_ut_ids.keys():

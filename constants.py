@@ -133,3 +133,7 @@ ROMAN_CIV_WORK_RATE = 1.05
 FRANKS_FORAGER_WORK_RATE = 1.15
 MAPUCHE_FORAGER_WORK_RATE = 1.2
 
+# paths
+GAME_DATA_PATH = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat'
+MOD_PATH = ''
+

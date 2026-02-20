@@ -7,7 +7,7 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 import constants
 from all_in_1_params import All_In_1_Params
 from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
-    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE
+    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_NUM
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import disable_tech, extend_effect, force_research_tech, disable_unit
@@ -846,13 +846,20 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, 1400)
+            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
+            elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
+            elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
+            elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_NUM
+            elite_temple_guard_tech.research_locations[1].button_id = 29
+            for i in constants.TEMPLE_GUARD_IDS:
+                move_unit_button(effect, i, 31, 0)
+                move_unit_button(effect, i, 24, 1)
             append_tech(data, tech, effect)
             name = 'Elite Temple Guard'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
             force_tech(effect, ELITE_TEMPLE_GUARD_TECH_ID)
-            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 34)
             append_tech(data, tech, effect)
             # archer armor ext
             for i in (2301, 2302):
