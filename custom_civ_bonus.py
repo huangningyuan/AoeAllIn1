@@ -343,12 +343,11 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     set_tech_discount(effect, i, -1, 0.5)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-
             name = 'Cheap Eco Techs'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            for i in (48, 1012, 1013, 1014):
+            for i in (1012, 1013, 1014):
                 set_tech_discount(effect, i, 0, 0.67)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
@@ -358,6 +357,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             research_tech(effect, 773)
             move_unit_button(effect, 1699, 31)
+            append_tech(data, tech, effect)
+            name = 'Feudal Gillnets'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, 906)
+            effect = get_new_effect(name)
+            force_tech(effect, 65)
             append_tech(data, tech, effect)
         case 'Burmese':
             name = 'Cheap Monastery Techs'
@@ -1350,18 +1355,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if constants.ARCHERY_RANGE_NUM in list(map(lambda x: x.unit_id,
                                                            unit.creatable.train_locations)) and i not in origin_units:
                     multiply_unit_hp(effect, i, -1, 1.2)
-            name = 'Eco Techs no wood'
+            name = 'Eco Techs no wood, 1/2 time'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            for i in (65, 906, 1012, 1013, 1014):
+            for i in (1012, 1013, 1014):
                 set_tech_cost(effect, i, 1, 0)
-            append_tech(data, tech, effect)
-            name = 'Eco Techs 1/2 time'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (65, 906, 1012, 1013, 1014):
                 set_tech_time_discount(effect, i, 0.5)
             append_tech(data, tech, effect)
         case 'Wei':

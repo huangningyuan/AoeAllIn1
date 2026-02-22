@@ -26,17 +26,6 @@ TECH_TO_REMOVE = [70, 95, 223, 224, 225, 226, 227, 228, 259, 260, 261, 286, 287,
                   1397, 1353]
 
 
-def filter_vietnam_bonus(effect_command: EffectCommand):
-    match effect_command.type:
-        case 103:
-            if effect_command.a in (65, 315):
-                return True
-            else:
-                return False
-        case _:
-            return True
-
-
 def filter_101discount_bonus(effect_command: EffectCommand):
     match effect_command.type:
         case 101:
@@ -501,9 +490,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
 
     for effect in effects:
         match effect.name:
-            case 'Vietnamese Bonus':
-                effect.effect_commands = list(
-                    filter(lambda effect_command: filter_vietnam_bonus(effect_command), effect.effect_commands))
             case 'Dravidians Bonus':
                 effect.effect_commands = list(
                     filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
