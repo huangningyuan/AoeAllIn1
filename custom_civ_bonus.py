@@ -10,7 +10,7 @@ from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_unit
     ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_NUM
 from ftt import move_tech_button
 from ftt import move_unit_button
-from utils import disable_tech, extend_effect, force_research_tech, disable_unit
+from utils import append_tech_effect, disable_tech, extend_effect, force_research_tech, disable_unit
 from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
@@ -46,7 +46,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_research_tech(effect, 1169)
             move_unit_button(effect, 2150, 31)
             move_unit_button(effect, 2151, 31)
-            move_tech_button(effect, 1171, 32)
+            move_tech_button(effect, e_war_chariot_tech_id, 32)
+            disable_tech(effect, e_war_chariot_tech_id)
             append_tech(data, tech, effect)
             append_tech_tech_id = 1138
             achaemenids_tech_id = 1103
@@ -61,11 +62,19 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
             name = 'Elite War Chariot'
-            tech = get_new_tech(name)
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+            # effect = get_new_effect(name)
+            # force_tech(effect, e_war_chariot_tech_id)
+            # append_tech_effect(data, tech, effect)
+            tech = copy.deepcopy(techs[e_war_chariot_tech_id])
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+            tech.research_locations[0].button_id = 32
+            tech.resource_costs[0].amount = 300
+            tech.resource_costs[1].amount = 250
             effect = get_new_effect(name)
-            force_tech(effect, e_war_chariot_tech_id)
-            append_tech(data, tech, effect)
+            force_research_tech(effect, e_war_chariot_tech_id)
+            append_tech_effect(data, tech, effect)
             name = 'enable dock, port'
             append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
             tech = get_new_tech(name)

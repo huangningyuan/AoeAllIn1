@@ -868,6 +868,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tarkan_ids = [755, 757]
     force_tech(effect, marauder_id)
     move_tech_building(effect, marauder_id, constants.STABLE_NUM)
+    move_tech_button(effect, marauder_id, 26)
     for i in tarkan_ids:
         move_unit_button(effect, i, 21, 1)
     append_tech(data, tech, effect)
