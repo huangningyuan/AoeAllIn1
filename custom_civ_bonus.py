@@ -593,7 +593,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = copy.deepcopy(techs[champi_runner_tech_id])
             tech.research_locations[0].button_id = 34
             tech.resource_costs[0].amount = 25
-            tech.resource_costs[1].amount = 15
+            tech.resource_costs[1].amount = 30
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, champi_runner_tech_id)
