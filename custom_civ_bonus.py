@@ -581,14 +581,22 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 2588, 33)
             move_unit_button(effect, 2552, 33)
             move_unit_button(effect, 2554, 33)
+            disable_tech(effect, 1402)
             append_tech(data, tech, effect)
             name = 'Champi Runner'
             champi_runner_tech_id = 1402
-            tech = get_new_tech(name)
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id)
+            # effect = get_new_effect(name)
+            # force_tech(effect, champi_runner_tech_id)
+            # move_tech_button(effect, champi_runner_tech_id, 34)
+            tech = copy.deepcopy(techs[champi_runner_tech_id])
+            tech.research_locations[0].button_id = 34
+            tech.resource_costs[0].amount = 25
+            tech.resource_costs[1].amount = 15
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, champi_runner_tech_id)
-            move_tech_button(effect, champi_runner_tech_id, 34)
+            force_research_tech(effect, champi_runner_tech_id)
             append_tech(data, tech, effect)
             name = 'Champi Warrior'
             champi_warrior_tech_id = 1351
