@@ -404,15 +404,15 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     hca_tech_id = 218
     free_archery_techs = (98, 436, 437)
     shu_cheap_range_techs = (100, 237, 437, 199, 200, 201, 211, 212, 219, 436, 218)
-    for i, tech in enumerate(techs):
+    for i, tech1 in enumerate(techs):
         if i > constants.TECH_NUM:
             break
-        if len(tech.research_locations) == 0:
+        if len(tech1.research_locations) == 0:
             continue
-        research_location_id = tech.research_locations[0].location_id
+        research_location_id = tech1.research_locations[0].location_id
         if research_location_id == constants.ARCHERY_RANGE_NUM:
             if i == hca_tech_id:
-                for cost in tech.resource_costs:
+                for cost in tech1.resource_costs:
                     if cost.type == -1:
                         continue
                     if cost.type == 0:
@@ -425,7 +425,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             if i in free_archery_techs:  # free
                 continue
             if i in shu_cheap_range_techs:  # shu
-                for cost in tech.resource_costs:
+                for cost in tech1.resource_costs:
                     if cost.type == -1:
                         continue
                     if cost.type == 0:
@@ -434,7 +434,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     else:
                         set_tech_cost(effect, i, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT)
                 continue
-            for cost in tech.resource_costs:
+            for cost in tech1.resource_costs:
                 if cost.type == 0:
                     set_tech_cost(effect, i, cost.type, cost.amount * TUPI_TECH_DISCOUNT)
 
@@ -457,16 +457,16 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
-    for i, tech in enumerate(techs):
+    for i, tech1 in enumerate(techs):
         if i > constants.TECH_NUM:
             break
-        if len(tech.research_locations) == 0:
+        if len(tech1.research_locations) == 0:
             continue
-        research_location_id = tech.research_locations[0].location_id
+        research_location_id = tech1.research_locations[0].location_id
         if research_location_id == constants.BARRACK_NUM:
             if i in (197, 207, 217, 222, 264, 716, 875, 885, 602, 1173, 1174):
                 continue
-            for j in tech.resource_costs:
+            for j in tech1.resource_costs:
                 if j.type == -1:
                     continue
                 if j.type == 0:
