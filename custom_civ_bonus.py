@@ -43,9 +43,10 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1169)
-            research_tech(effect, 1169)
-            disable_tech(effect, e_war_chariot_tech_id)
+            force_research_tech(effect, 1169)
+            move_unit_button(effect, 2150, 31)
+            move_unit_button(effect, 2151, 31)
+            move_tech_button(effect, 1171, 32)
             append_tech(data, tech, effect)
             append_tech_tech_id = 1138
             achaemenids_tech_id = 1103
@@ -60,13 +61,10 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
             name = 'Elite War Chariot'
-            tech = copy.deepcopy(techs[e_war_chariot_tech_id])
-            tech.civ = -1
-            tech.research_locations[0].button_id = 32
+            tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             effect = get_new_effect(name)
             force_tech(effect, e_war_chariot_tech_id)
-            research_tech(effect, e_war_chariot_tech_id)
             append_tech(data, tech, effect)
             name = 'enable dock, port'
             append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]

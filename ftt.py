@@ -74,10 +74,6 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 2187, 3)
     move_unit_button(effect, 2188, 3)
     move_tech_button(effect, 1137, 8)
-    # war chariot
-    move_unit_button(effect, 2150, 31)
-    move_unit_button(effect, 2151, 31)
-    move_tech_button(effect, 1171, 32)
     # Condottiero
     move_unit_button(effect, 882, 23)
     # Achaemenids TC techs
