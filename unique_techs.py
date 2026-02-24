@@ -510,10 +510,11 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, CASTLE_BUILT_TECH_ID)
     effect = get_new_effect(name)
     anarchy_tech_id = 16
+    huskarl_ids = [41, 555]
     force_tech(effect, anarchy_tech_id)
     move_tech_building(effect, anarchy_tech_id, constants.BARRACK_NUM)
     move_tech_button(effect, anarchy_tech_id, 29)
-    for i in (41, 555):
+    for i in huskarl_ids:
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
     name = 'move elite_huskarl_button'
@@ -521,6 +522,22 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, anarchy_tech_id)
     effect = get_new_effect(name)
     move_tech_button(effect, 365, 29, 1)
+    append_tech(data, tech, effect)
+    name = 'Anarchy + Malians + Teutons'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, anarchy_tech_id)
+    effect = get_new_effect(name)
+    for i in huskarl_ids:
+        plus_unit_armor(effect, i, -1, 1, 3)
+        plus_unit_armor(effect, i, -1, 2, 4)
+    append_tech(data, tech, effect)
+    name = 'Anarchy + Malians + Teutons Imp'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, anarchy_tech_id, params.imp_duplicate_tech_id)
+    effect = get_new_effect(name)
+    for i in huskarl_ids:
+        plus_unit_armor(effect, i, -1, 1, 3)
+        plus_unit_armor(effect, i, -1, 1, 4)
     append_tech(data, tech, effect)
 
     # name = 'El Dorado'
@@ -845,13 +862,25 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     name = 'enable Marauders'
     tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 266)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, CASTLE_BUILT_TECH_ID)
     effect = get_new_effect(name)
-    tech_id = 483
-    force_tech(effect, tech_id)
-    move_tech_building(effect, tech_id, constants.STABLE_NUM)
-    for i in (755, 757):
+    marauder_id = 483
+    tarkan_ids = [755, 757]
+    force_tech(effect, marauder_id)
+    move_tech_building(effect, marauder_id, constants.STABLE_NUM)
+    for i in tarkan_ids:
         move_unit_button(effect, i, 21, 1)
+    append_tech(data, tech, effect)
+    name = 'Marauders + Teutons'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, marauder_id)
+    effect = get_new_effect(name)
+    for i in tarkan_ids:
+        move_unit_button(effect, i, 4, 1)
+    append_tech(data, tech, effect)
+    name = 'Marauders + Teutons Imp'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, marauder_id, params.imp_duplicate_tech_id)
     append_tech(data, tech, effect)
 
     # Scythed Chariots
