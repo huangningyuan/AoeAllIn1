@@ -877,7 +877,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, marauder_id)
     effect = get_new_effect(name)
     for i in tarkan_ids:
-        move_unit_button(effect, i, 4, 1)
+        plus_unit_armor(effect, i, -1, 1, 4)
     append_tech(data, tech, effect)
     name = 'Marauders + Teutons Imp'
     tech = get_new_tech(name)

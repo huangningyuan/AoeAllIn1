@@ -62,6 +62,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
             name = 'Elite War Chariot'
+            # bug upgrade
             # tech = get_new_tech(name)
             # set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             # effect = get_new_effect(name)
@@ -1208,20 +1209,23 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1136)
             research_tech(effect, 1136)
             e_hoplite_tech_id = 1137
-            # disable_tech(effect, e_hoplite_tech_id)
+            disable_tech(effect, e_hoplite_tech_id)
             append_tech(data, tech, effect)
             name = 'Elite Hoplite'
-            # tech = copy.deepcopy(techs[e_hoplite_tech_id])
-            # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            # tech.civ = -1
-            # tech.research_locations[0].button_id = 8
-            # effect = get_new_effect(name)
-            # force_tech(effect, e_hoplite_tech_id)
-            # research_tech(effect, e_hoplite_tech_id)
-            tech = get_new_tech(name)
+            tech = copy.deepcopy(techs[e_hoplite_tech_id])
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+            tech.civ = -1
+            tech.research_locations[0].button_id = 8
+            tech.resource_costs[0].amount = 150
+            tech.resource_costs[1].amount = 275
             effect = get_new_effect(name)
             force_tech(effect, e_hoplite_tech_id)
+            research_tech(effect, e_hoplite_tech_id)
+            # bug upgrade
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+            # effect = get_new_effect(name)
+            # force_tech(effect, e_hoplite_tech_id)
             append_tech(data, tech, effect)
 
             name = 'enable Spartans TC Techs'
