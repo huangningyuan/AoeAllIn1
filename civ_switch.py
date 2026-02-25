@@ -3,13 +3,23 @@ import os
 from tkinter.filedialog import SaveAs
 
 from genieutils.datfile import DatFile
+from genieutils.effect import EffectCommand
 from genieutils.tech import ResearchLocation
 from genieutils.unit import TrainLocation
 
-import constants
 from all_in_1_params import All_In_1_Params
-from constants import CHRONICLE_CIV_IDS, SOUTH_MESO_CIV_IDS, PASTURE_ID, SETTLEMENT_ID, FLEMISH_MILITIA_ID, \
-    TEMPLE_GUARD_IDS, ELITE_TEMPLE_GUARD_TECH_ID, ELITE_IBIRAPEMA_TEMP_TECH_ID, PHALANGITE_IDS
+import constants
+from constants import (
+    CHRONICLE_CIV_IDS,
+    ELITE_IBIRAPEMA_TEMP_TECH_ID,
+    ELITE_TEMPLE_GUARD_TECH_ID,
+    FLEMISH_MILITIA_ID,
+    PASTURE_ID,
+    PHALANGITE_IDS,
+    SETTLEMENT_ID,
+    SOUTH_MESO_CIV_IDS,
+    TEMPLE_GUARD_IDS,
+)
 from ftt import move_tech_button
 from ftt import move_unit_button
 from unique_techs import get_ut
@@ -18,7 +28,13 @@ from utils import append_tech, set_unit_attribute
 from utils import enable_unit
 from utils import force_tech
 from utils import get_dead_unit
-from utils import get_new_effect, get_tech_id_by_name, set_require_techs, get_civ_name, disable_unit
+from utils import (
+    disable_unit,
+    get_civ_name,
+    get_new_effect,
+    get_tech_id_by_name,
+    set_require_techs,
+)
 from utils import get_new_tech
 from utils import research_tech
 
@@ -78,16 +94,18 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     units = data.civs[0].units
     append_tech(data, get_new_tech('----Civ switches----'), get_new_effect('----Civ switches----'))
 
-    uu_tech_id_list = dict()
-    uu_id_list = dict()
-    for civ_id, tech in enumerate(techs):
+    uu_tech_id_list: dict[int, int] = dict()
+    uu_id_list: dict[int, int] = dict()
+    elite_uu_id_list: dict[int, int] = dict()
+    for tech_id, tech in enumerate(techs):
+        civ_id = tech.civ
         if len(tech.research_locations) == 0:
             continue
         research_location_id = tech.research_locations[0].location_id
         research_button_id = tech.research_locations[0].button_id
         if (research_location_id == constants.CASTLE_NUM and research_button_id == 6
-                and tech.civ in range(1, current_civ_num)):
-            uu_tech_id_list[tech.civ] = civ_id
+                and civ_id in range(1, current_civ_num)):
+            uu_tech_id_list[civ_id] = tech_id
         if tech.effect_id == -1 or tech.civ == -1:
             continue
         effect = effects[tech.effect_id]
@@ -97,11 +115,26 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 unit = units[command.a]
                 train_location = unit.creatable.train_locations[0]
                 if train_location.unit_id == constants.CASTLE_NUM and train_location.button_id == 1:
-                    uu_id_list[tech.civ] = unit.id
+                    uu_id_list[civ_id] = command.a
+        if tech.name.startswith('Elite') and civ_id in uu_id_list:            
+            for command in effect.effect_commands:
+                if command.type == 3 and command.a == uu_id_list[civ_id]:
+                    elite_uu_id_list[civ_id] = command.b
+
+    but_id = 1380
+    effect = effects[but_id]
+    but_uu_id_list = list[int]()
+    for command in effect.effect_commands:
+        if command.type == 15:
+            but_uu_id_list.append(command.a)
     for civ_id in range(1, current_civ_num):
         if civ_id not in uu_id_list:
             print(f'Failed to find uu for civ {civ_id}')
             exit(1)
+        if uu_id_list[civ_id] not in but_uu_id_list:
+            effect.effect_commands.append(EffectCommand(15, uu_id_list[civ_id], -1, 100, 0.85))
+            effect.effect_commands.append(EffectCommand(15, elite_uu_id_list[civ_id], -1, 100, 0.85))
+        
 
     print(uu_id_list)
     additional_ut_ids = dict()
