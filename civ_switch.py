@@ -19,6 +19,7 @@ from constants import (
     SETTLEMENT_ID,
     SOUTH_MESO_CIV_IDS,
     TEMPLE_GUARD_IDS,
+    ELITE_PHALANGITE_TECH_ID,
 )
 from ftt import move_tech_button
 from ftt import move_unit_button
@@ -468,6 +469,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 move_unit_button(effect, i, -1)
             move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
             move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
+            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, -1)
             move_tech_button(effect, pez_tech_id, -1)
         elif civ_name == 'Muisca':
             for i in constants.JIAN_IDS:
@@ -481,6 +483,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 move_unit_button(effect, i, -1)
             move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
             move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32)
+            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, -1)
             move_tech_button(effect, pez_tech_id, -1)
         elif civ_name == 'Macedonians':
             for i in constants.JIAN_IDS:
@@ -494,6 +497,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 move_unit_button(effect, i, 31)
             move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
             move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
+            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, 32)
             move_tech_button(effect, pez_tech_id, 32)
 
 

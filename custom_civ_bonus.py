@@ -745,8 +745,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1291)
-            move_tech_button(effect, 1291, -1)
+            force_tech(effect, constants.ELITE_PHALANGITE_TECH_ID)
+            move_tech_button(effect, constants.ELITE_PHALANGITE_TECH_ID, -1)
             append_tech(data, tech, effect)
             # Druzhina + Phalangite
             effect = effects[569]
