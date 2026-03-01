@@ -683,6 +683,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Pezhetairoi'
     tech = get_ut(data, params, 1286)
     tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].button_id = 32
     pez_tech_id = append_tech(data, tech)
     pez_effect_id = tech.effect_id
     add_mutex(data, [sar_castle_id, pez_tech_id], [sar_effect_id, pez_effect_id])
