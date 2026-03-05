@@ -17,8 +17,14 @@ if __name__ == '__main__':
     techs = data.techs
     tech_cost = list()
     units = data.civs[55].units
-    for effect in effects:
-        for command in effect.effect_commands:
-            if command.a == 1137:
-                print(effect.name, command)
+    class_set = set()
+    for unit in units:
+        if not unit:
+            continue
+        creatable = unit.creatable
+        if creatable and len(creatable.train_locations) > 0 \
+                and creatable.train_locations[0].button_id > 0 \
+                and creatable.train_locations[0].unit_id > 0:
+            class_set.add(unit.class_)
+    print(class_set)
 

@@ -136,5 +136,6 @@ MAPUCHE_FORAGER_WORK_RATE = 1.2
 
 # paths
 GAME_DATA_PATH = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat'
+GAME_XS_PATH = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\xs'
 MOD_PATH = r'C:\Users\huang\Games\Age of Empires 2 DE\76561198141916001\mods\local\All Civ Bonus Test\resources\_common\dat'
 

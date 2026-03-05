@@ -8,6 +8,7 @@ from add_switch import adding_switch
 from civ_bonuses import add_civ_bonuses
 from civ_switch import add_civ_switch
 from constants import gunpowder_units, siege_units, siege_workshop_units, elephant_units
+from deal_xs import deal_xs
 from ftt import deal_ftt
 from genieutils.datfile import DatFile
 from unique_techs import add_unique_techs
@@ -65,6 +66,7 @@ def update_all_in_1(debug = True):
     print('Zip file created.')
     os.startfile(mod_path)
     print('All in 1 finished.')
+    deal_xs(units)
 
 if __name__ == '__main__':
     update_all_in_1(False)
