@@ -32,8 +32,8 @@ def deal_xs(units: list[unit.Unit]):
     if section_end != -1:
         section_content = section_content[:section_end]
     
-    # 从section_content中提取所有extern const int定义
-    class_matches = re.findall(r'extern const int (c\w+)Class = (\d+);', section_content)
+    # 从section_content中提取所有extern const int定义，直接匹配完整的变量名
+    class_matches = re.findall(r'extern const int (c\w+) = (\d+);', section_content)
     
     if not class_matches:
         raise ValueError("No class definitions found in Object Classes section")
@@ -43,11 +43,11 @@ def deal_xs(units: list[unit.Unit]):
     
     if not class_matches:
         raise ValueError("No class definitions found after filtering")
-    
-    # 创建类名列表，不做任何转换，直接使用原始类名
+
+    # 创建类名列表，直接使用完整的变量名
     class_list = []
     for class_name, value in class_matches:
-        class_list.append(class_name + 'Class')
+        class_list.append(class_name)
 
     creatable_class_set = set()
     for unit in units:
@@ -58,13 +58,13 @@ def deal_xs(units: list[unit.Unit]):
                 and creatable.train_locations[0].button_id > 0 \
                 and creatable.train_locations[0].unit_id > 0:
             creatable_class_set.add(unit.class_)
-
+    print(class_list)
     exclude_class_set = {'cBuildingClass', 'cGateClass', 'cFarmClass', 'cTowerClass', 'cWallClass'}
     valid_class_set = set()
     for class_id in creatable_class_set:
         if class_id < len(class_list) and class_list[class_id] not in exclude_class_set:
             valid_class_set.add(class_list[class_id])
-    
+
     # 处理Effects.xs文件
     effects_xs_path = os.path.join(xs_path, 'Effects.xs')
     mod_effects_xs_path = os.path.join(mod_xs_path, 'Effects.xs')
