@@ -919,7 +919,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech = get_ut(data, params, si_ar_id)
     tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
     tech.research_locations[0].button_id = 13
-    tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
+    tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = si_ar_effect_id
     si_ar_archery_id = append_tech(data, tech)
     add_mutex(data, [si_ar_stable_id, si_ar_archery_id], [si_ar_effect_id])

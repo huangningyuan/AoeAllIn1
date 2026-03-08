@@ -101,5 +101,4 @@ def deal_xs(units: list[unit.Unit]):
     else:
         print(f"Effects.xs not found at {effects_xs_path}")
     
-    print("Valid classes:", valid_class_set)
     return valid_class_set
