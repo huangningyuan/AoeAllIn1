@@ -7,7 +7,8 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 import constants
 from all_in_1_params import All_In_1_Params
 from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
-    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_NUM
+    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_NUM, \
+    HOUSE_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import append_tech_effect, disable_tech, extend_effect, force_research_tech, disable_unit
@@ -546,6 +547,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             techs[242].civ = -1
             effect = effects[231]
             disable_tech(effect, get_tech_id_by_name(data, 'Start w/ Horse'))
+            name = '[ftt] house'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            move_unit_button(effect, HOUSE_ID, -1)
+            append_tech(data, tech, effect)
         case 'Incas':
             name = 'enable slinger'
             tech = get_new_tech(name)

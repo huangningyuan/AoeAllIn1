@@ -139,6 +139,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     continue
                 else:
                     tech_tree_bonus_effect_commands.append(effect_command)
+            elif effect_command.type == 2 and effect_command.b == 0:
+                continue
             else:
                 tech_tree_bonus_effect_commands.append(effect_command)
 
