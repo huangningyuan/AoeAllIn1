@@ -528,16 +528,16 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, anarchy_tech_id)
     effect = get_new_effect(name)
     for i in huskarl_ids:
-        plus_unit_armor(effect, i, -1, 1, 3)
-        plus_unit_armor(effect, i, -1, 2, 4)
+        plus_unit_armor(effect, i, -1, 1, 4)
+        plus_unit_armor(effect, i, -1, 2, 3)
     append_tech(data, tech, effect)
     name = 'Anarchy + Malians + Teutons Imp'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, anarchy_tech_id, params.imp_duplicate_tech_id)
     effect = get_new_effect(name)
     for i in huskarl_ids:
-        plus_unit_armor(effect, i, -1, 1, 3)
         plus_unit_armor(effect, i, -1, 1, 4)
+        plus_unit_armor(effect, i, -1, 1, 3)
     append_tech(data, tech, effect)
 
     # name = 'El Dorado'
