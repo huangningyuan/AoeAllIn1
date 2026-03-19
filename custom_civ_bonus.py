@@ -547,11 +547,11 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             techs[242].civ = -1
             effect = effects[231]
             disable_tech(effect, get_tech_id_by_name(data, 'Start w/ Horse'))
-            name = '[ftt] house'
+            name = 'disable house'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            move_unit_button(effect, HOUSE_ID, -1)
+            disable_unit(effect, HOUSE_ID)
             append_tech(data, tech, effect)
         case 'Incas':
             name = 'enable slinger'
@@ -688,22 +688,25 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 1923, 34)
             append_tech(data, tech, effect)
             name = 'enable Domestication'
+            domestication_tech_id = 1014
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.switch_tech_id)
+            set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1014)
+            force_tech(effect, domestication_tech_id)
             append_tech(data, tech, effect)
             name = 'enable Pastoralism'
+            pastoralism_tech_id = 1013
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.switch_tech_id, params.feudal_duplicate_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, domestication_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1013)
+            force_tech(effect, pastoralism_tech_id)
             append_tech(data, tech, effect)
             name = 'enable Transhumance'
+            transhumance_tech_id = 1012
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.switch_tech_id, params.castle_duplicate_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, pastoralism_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1012)
+            force_tech(effect, transhumance_tech_id)
             append_tech(data, tech, effect)
         case 'Lithuanians':
             name = '+100f'
