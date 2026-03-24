@@ -89,6 +89,9 @@ def adding_switch(data: DatFile):
     for i in constants.YURT_IDS:
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 
+    for i in constants.HUTS_IDS:
+        activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
+
     force_research_tech(activate_effect, switch_tech_id)
     append_tech(data, activate_switch_tech, activate_effect)
 
