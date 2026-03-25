@@ -253,7 +253,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # name = 'Cuman Mercenaries'
     tech = get_ut(data, params, 690, True)
     tech.research_locations[0].button_id = 9
-    append_tech(data, tech)
+    cm_tech_id = append_tech(data, tech)
+    name = 'Chronical civs Elite Kipchak'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, cm_tech_id, params.other_params['chronicle_civs_requirement'])
+    effect = get_new_effect(name)
+    move_unit_button(effect, 1260, 9)
+    append_tech(data, tech, effect)
     # name = 'Atheism'
     tech = get_ut(data, params, 21, True)
     tech.research_locations[0].button_id = 22

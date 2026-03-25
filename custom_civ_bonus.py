@@ -128,29 +128,30 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech('Puru')
             tech.civ = 56
             puru_id = append_tech(data, tech)
-            name = 'any append_tech civ'
+            name = 'Chronicle civs requirement'
             tech = get_new_tech(name)
             set_require_techs(tech, 1258, 1259, 1260, macedonians_id, thracians_id, puru_id)
             tech.required_tech_count = 1
-            any_append_tech_civ_tech_id = append_tech(data, tech)
+            chronicle_civs_requirement = append_tech(data, tech)
+            params.other_params['chronicle_civs_requirement'] = chronicle_civs_requirement
             name = 'append_tech Gambesons'
             gambeson_tech_id = 875
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, any_append_tech_civ_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, chronicle_civs_requirement)
             tech.required_tech_count = 3
             effect = get_new_effect(name)
             force_research_tech(effect, gambeson_tech_id)
             append_tech(data, tech, effect)
             name = 'free append_tech paragons'
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, any_append_tech_civ_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, chronicle_civs_requirement)
             effect = get_new_effect(name)
             research_tech(effect, 1173)
             research_tech(effect, 1174)
             append_tech(data, tech, effect)
             name = 'append_tech siege onagers'
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 257, any_append_tech_civ_tech_id)
+            set_require_techs(tech, params.switch_tech_id, 257, chronicle_civs_requirement)
             effect = get_new_effect(name)
             force_tech(effect, 320)
             append_tech(data, tech, effect)
