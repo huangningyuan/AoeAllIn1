@@ -18,13 +18,22 @@ if __name__ == '__main__':
     tech_cost = list()
     units = data.civs[55].units
     class_set = set()
-    for unit in units:
-        if not unit:
-            continue
-        creatable = unit.creatable
-        if creatable and len(creatable.train_locations) > 0 \
-                and creatable.train_locations[0].button_id > 0 \
-                and creatable.train_locations[0].unit_id > 0:
-            class_set.add(unit.class_)
-    print(class_set)
-
+    
+    # 收集研发时间大于1的科技
+    techs_with_time = []
+    for tech in techs:
+        tech_name = tech.name
+        research_time = tech.research_locations[0].research_time
+        if research_time > 1:
+            techs_with_time.append((tech_name, research_time))
+    
+    # 按研发时间从短到长排序
+    techs_with_time.sort(key=lambda x: x[1])
+    
+    # 输出科技名和时间
+    print("\n研发时间大于1的科技（按时间从短到长排序）：")
+    print("-" * 60)
+    for i, (tech_name, research_time) in enumerate(techs_with_time, 1):
+        print(f"排名: {i}, 科技名: {tech_name}, 研发时间: {research_time}")
+    print("-" * 60)
+    print(f"总计: {len(techs_with_time)} 个科技")

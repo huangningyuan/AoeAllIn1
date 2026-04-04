@@ -48,7 +48,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 2150, 31)
             move_unit_button(effect, 2151, 31)
             move_tech_button(effect, e_war_chariot_tech_id, 32)
-            disable_tech(effect, e_war_chariot_tech_id)
+            # disable_tech(effect, e_war_chariot_tech_id)
             append_tech(data, tech, effect)
             append_tech_tech_id = 1138
             achaemenids_tech_id = 1103
@@ -588,49 +588,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, 1356)
-            append_tech(data, tech, effect)
-            name = 'enable Champi'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 2550)
-            enable_unit(effect, 74)
-            move_unit_button(effect, 2550, 33)
-            move_unit_button(effect, 2588, 33)
-            move_unit_button(effect, 2552, 33)
-            move_unit_button(effect, 2554, 33)
-            disable_tech(effect, 1402)
-            append_tech(data, tech, effect)
-            name = 'Champi Runner'
-            champi_runner_tech_id = 1402
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id)
-            # effect = get_new_effect(name)
-            # force_tech(effect, champi_runner_tech_id)
-            # move_tech_button(effect, champi_runner_tech_id, 34)
-            tech = copy.deepcopy(techs[champi_runner_tech_id])
-            tech.research_locations[0].button_id = 34
-            tech.resource_costs[0].amount = 25
-            tech.resource_costs[1].amount = 30
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, champi_runner_tech_id)
-            append_tech(data, tech, effect)
-            name = 'Champi Warrior'
-            champi_warrior_tech_id = 1351
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, champi_runner_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, champi_warrior_tech_id)
-            move_tech_button(effect, champi_warrior_tech_id, 34)
-            append_tech(data, tech, effect)
-            name = 'Elite Champi Warrior'
-            elite_champi_warrior_tech_id = 1352
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, champi_warrior_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, elite_champi_warrior_tech_id)
-            move_tech_button(effect, elite_champi_warrior_tech_id, 34)
             append_tech(data, tech, effect)
         case 'Italians':
             # cheap gunpowder units ext
@@ -1217,9 +1174,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
             effect = get_new_effect(name)
-            force_tech(effect, 1136)
-            research_tech(effect, 1136)
+            force_research_tech(effect, 1136)
             e_hoplite_tech_id = 1137
+            move_tech_button(effect, e_hoplite_tech_id, 8)
             disable_tech(effect, e_hoplite_tech_id)
             append_tech(data, tech, effect)
             name = 'Elite Hoplite'
@@ -1237,7 +1194,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
             # effect = get_new_effect(name)
             # force_tech(effect, e_hoplite_tech_id)
-            append_tech(data, tech, effect)
+            # append_tech(data, tech, effect)
 
             name = 'enable Spartans TC Techs'
             tech = get_new_tech(name)

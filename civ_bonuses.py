@@ -495,6 +495,42 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             0].amount * constants.BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
+    name = 'enable Champi'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    enable_unit(effect, 2550)
+    enable_unit(effect, 74)
+    move_unit_button(effect, 2550, 33)
+    move_unit_button(effect, 2588, 33)
+    move_unit_button(effect, 2552, 33)
+    move_unit_button(effect, 2554, 33)
+    append_tech(data, tech, effect)
+    name = 'Champi Runner'
+    champi_runner_tech_id = 1402
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, champi_runner_tech_id)
+    move_tech_button(effect, champi_runner_tech_id, 34)
+    append_tech(data, tech, effect)
+    name = 'Champi Warrior'
+    champi_warrior_tech_id = 1351
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, champi_runner_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, champi_warrior_tech_id)
+    move_tech_button(effect, champi_warrior_tech_id, 34)
+    append_tech(data, tech, effect)
+    name = 'Elite Champi Warrior'
+    elite_champi_warrior_tech_id = 1352
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, champi_warrior_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, elite_champi_warrior_tech_id)
+    move_tech_button(effect, elite_champi_warrior_tech_id, 34)
+    append_tech(data, tech, effect)
+
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 
