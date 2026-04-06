@@ -81,7 +81,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if tech.effect_id == -1:
             continue
         research_location = tech.research_locations[0]
-        if research_location.location_id == constants.CASTLE_NUM and (
+        if research_location.location_id == constants.CASTLE_ID and (
                 research_location.button_id in (7, 8) or (
                 research_location.button_id in (12, 13) and tech.civ in constants.CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
@@ -420,7 +420,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if len(tech1.research_locations) == 0:
             continue
         research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == constants.ARCHERY_RANGE_NUM:
+        if research_location_id == constants.ARCHERY_RANGE_ID:
             if i == hca_tech_id:
                 for cost in tech1.resource_costs:
                     if cost.type == -1:
@@ -473,7 +473,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if len(tech1.research_locations) == 0:
             continue
         research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == constants.BARRACK_NUM:
+        if research_location_id == constants.BARRACK_ID:
             if i in (197, 207, 217, 222, 264, 716, 875, 885, 602, 1173, 1174):
                 continue
             for j in tech1.resource_costs:

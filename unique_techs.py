@@ -419,25 +419,25 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Barrack UTs----'), get_new_effect('----Barrack UTs----'))
     # name = 'Perfusion'
     tech = get_ut(data, params, 457)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.CONSCRIPTION_ICON_ID
     append_tech(data, tech)
     # name = 'Garland Wars'
     tech = get_ut(data, params, 24)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
     # name = 'Druzhina'
     tech = get_ut(data, params, 513)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
     # name = 'Chieftains'
     tech = get_ut(data, params, 463)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     tech_id = append_tech(data, tech)
     name = 'Grand Trunk Road + Chieftains'
@@ -448,7 +448,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
     # name = 'Fereters'
     tech = get_ut(data, params, 921)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     effect = effects[tech.effect_id]
     plus_unit_attribute(effect, 1786, -1, 0, -30)
@@ -458,14 +458,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Lamellar Armor
     la_id = 1006
     tech = get_ut(data, params, la_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     la_effect_id = tech.effect_id
     la_barrack_id = append_tech(data, tech)
     # Dii Plunderers
     dp_id = 1297
     tech = get_ut(data, params, dp_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 11
     dp_effect_id = tech.effect_id
     dp_barrack_id = append_tech(data, tech)
@@ -473,7 +473,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     name = 'Forced Levy'
     tech = get_ut(data, params, 625)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.GUILDS_ICON_ID
     effect = get_new_effect(name)
@@ -494,20 +494,20 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
     # name = 'Bagains'
     tech = get_ut(data, params, 686)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.INFANTRY_ARMOR_ICON_ID
     append_tech(data, tech)
     # Comitatenses
     tech = get_ut(data, params, comitatenses_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     tech.effect_id = comitatenses_effect_id
     comitatenses_barrack_id = append_tech(data, tech)
     # Bessian Metalworking
     tech = get_ut(data, params, be_me_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 6
     be_me_barrack_id = append_tech(data, tech)
 
@@ -518,7 +518,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     anarchy_tech_id = 16
     huskarl_ids = [41, 555]
     force_tech(effect, anarchy_tech_id)
-    move_tech_building(effect, anarchy_tech_id, constants.BARRACK_NUM)
+    move_tech_building(effect, anarchy_tech_id, constants.BARRACK_ID)
     move_tech_button(effect, anarchy_tech_id, 29)
     for i in huskarl_ids:
         move_unit_button(effect, i, 24, 1)
@@ -548,14 +548,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'El Dorado'
     tech = get_ut(data, params, 4)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 9
     tech.icon_id = constants.IUT_ICON_ID
     append_tech(data, tech)
 
     # Fabric Shields
     tech = get_ut(data, params, fs_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 34
     tech.icon_id = constants.INFANTRY_ARMOR_ICON_ID
     tech.effect_id = fs_effect_id
@@ -563,7 +563,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Cacique
     cacique_id = 1392
     tech = get_ut(data, params, cacique_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 34
     cacique_effect_id = tech.effect_id
     cacique_barrack_id = append_tech(data, tech)
@@ -571,7 +571,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Herbalism
     herb_id = 1365
     tech = get_ut(data, params, herb_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 34
     tech.icon_id = constants.SQUIRES_ICON_ID
     herb_effect_id = tech.effect_id
@@ -580,14 +580,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # name = 'Tower Shields'
     ts_id = 692
     tech = get_ut(data, params, ts_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.INFANTRY_ARMOR_ICON_ID
     ts_effect_id = tech.effect_id
     ts_barrack_id = append_tech(data, tech)
     # Coiled Serpent Array
     tech = get_ut(data, params, csa_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 7
     csa_barrack_id = append_tech(data, tech)
     add_mutex(data, [csa_castle_id, csa_barrack_id], [csa_effect_id])
@@ -595,7 +595,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     hl_id = 1130
     name = 'Helot Levies'
     tech = get_ut(data, params, hl_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 7
     hl_effect_id = tech.effect_id
     hl_barrack_id = append_tech(data, tech)
@@ -603,7 +603,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Sparabaras'
     tech.name = name
     tech = get_ut(data, params, sp_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 7
     sp_barrack_id = append_tech(data, tech)
 
@@ -611,12 +611,12 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     xyphos_id = 1132
     tech = get_ut(data, params, xyphos_id)
     tech.name = 'Xyphos'
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 8
     xyphos_barrack_id = append_tech(data, tech)
     # Eisphora
     tech = get_ut(data, params, 1122)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 8
     effect = get_new_effect('Eisphora')
     hoplite_id = 2110
@@ -645,7 +645,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     ago_id = 1131
     tech = get_ut(data, params, ago_id)
     tech.name = name
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 8
     ago_effect_id = tech.effect_id
     ago_barrack_id = append_tech(data, tech)
@@ -653,7 +653,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # arquebus
     arq_id = 573
     tech = get_ut(data, params, arq_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 27
     tech.icon_id = constants.BALLISTICS_ICON_ID
     arq_effect_id = tech.effect_id
@@ -680,7 +680,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     arq_barrack_id = append_tech(data, tech)
     # Wagenburg Tactics
     tech = get_ut(data, params, wa_ta_id)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 27
     tech.icon_id = SQUIRES_ICON_ID
     wa_ta_barrack_id = append_tech(data, tech)
@@ -688,7 +688,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Pezhetairoi
     name = 'Pezhetairoi'
     tech = get_ut(data, params, 1286)
-    tech.research_locations[0].location_id = constants.BARRACK_NUM
+    tech.research_locations[0].location_id = constants.BARRACK_ID
     tech.research_locations[0].button_id = 32
     pez_tech_id = append_tech(data, tech)
     pez_effect_id = tech.effect_id
@@ -702,71 +702,71 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Stable UTs----'), get_new_effect('----Stable UTs----'))
     # name = 'Chivalry'
     tech = get_ut(data, params, 493)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     tech.icon_id = constants.CONSCRIPTION_ICON_ID
     append_tech(data, tech)
     # name = 'Farimba'
     tech = get_ut(data, params, 577)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
     # name = 'Stirrups'
     tech = get_ut(data, params, 685)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
     # Ming Guang Armor
     mga_id = 1062
     tech = get_ut(data, params, mga_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     mga_effect_id = tech.effect_id
     mga_stable_id = append_tech(data, tech)
     # name = 'Manipur Cavalry'
     tech = get_ut(data, params, 627)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     append_tech(data, tech)
     # Aznauri Cavalry
     azn_id = 924
     tech = get_ut(data, params, azn_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     azn_effect_id = tech.effect_id
     azn_stable_id = append_tech(data, tech)
     # Sagaris
     sagaris_id = 1113
     tech = get_ut(data, params, sagaris_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     sagaris_effect_id = tech.effect_id
     sagaris_stable_id = append_tech(data, tech)
     # Ordo Cavalry
     oc_id = 1007
     tech = get_ut(data, params, oc_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 12
     append_tech(data, tech)
 
     # name = 'Tusk Swords'
     tech = get_ut(data, params, 622)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 14
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
     # name = 'Howdah'
     tech = get_ut(data, params, 626)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 14
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     append_tech(data, tech)
     # name = 'Chatras'
     tech = get_ut(data, params, 628)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 14
     tech.icon_id = constants.BLOODLINE_ICON_ID
     append_tech(data, tech)
@@ -774,7 +774,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # medical corps
     me_co_id = 831
     tech = get_ut(data, params, me_co_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 9
     me_co_effect_id = tech.effect_id
     effect = effects[me_co_effect_id]
@@ -787,7 +787,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     me_co_stable_id = append_tech(data, tech)
     # Paiks
     tech = get_ut(data, params, paiks_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 9
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     tech.effect_id = paiks_effect_id
@@ -796,7 +796,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Lechitic Legacy'
     tech = get_ut(data, params, 783)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     append_tech(data, tech)
@@ -804,7 +804,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Silk Armor
     si_ar_id = 687
     tech = get_ut(data, params, si_ar_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     si_ar_effect_id = tech.effect_id
@@ -812,7 +812,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Steppe Husbandry
     st_hu_id = 689
     tech = get_ut(data, params, st_hu_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.CONSCRIPTION_ICON_ID
     st_hu_effect_id = tech.effect_id
@@ -821,7 +821,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Frontier Guards
     fr_gu_id = 836
     tech = get_ut(data, params, fr_gu_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 8
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     fr_gu_effect_id = tech.effect_id
@@ -829,14 +829,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Maghrebi Camels
     tech = get_ut(data, params, ma_ca_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 13
     tech.effect_id = ma_ca_effect_id
     ma_ca_stable_id = append_tech(data, tech)
     add_mutex(data, [ma_ca_stable_id, ma_ca_castle_id], [ma_ca_effect_id])
     # Royal Heirs
     tech = get_ut(data, params, ro_he_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     tech.effect_id = ro_he_effect_id
@@ -845,25 +845,25 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Hauberk'
     tech = get_ut(data, params, 757)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.CAVALRY_ARMOR_ICON_ID
     append_tech(data, tech)
     # name = 'Szlachta Privileges'
     tech = get_ut(data, params, 782)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 7
     append_tech(data, tech)
     # Comitatenses
     tech = get_ut(data, params, comitatenses_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 7
     tech.effect_id = comitatenses_effect_id
     comitatenses_stable_id = append_tech(data, tech)
     add_mutex(data, [comitatenses_castle_id, comitatenses_barrack_id, comitatenses_stable_id], [comitatenses_effect_id])
     # Bessian Metalworking
     tech = get_ut(data, params, be_me_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 7
     be_me_stable_id = append_tech(data, tech)
 
@@ -874,7 +874,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     marauder_id = 483
     tarkan_ids = [755, 757]
     force_tech(effect, marauder_id)
-    move_tech_building(effect, marauder_id, constants.STABLE_NUM)
+    move_tech_building(effect, marauder_id, constants.STABLE_ID)
     move_tech_button(effect, marauder_id, 26)
     for i in tarkan_ids:
         move_unit_button(effect, i, 21, 1)
@@ -895,7 +895,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     sc_id = 1112
     tech = get_ut(data, params, sc_id)
     tech.name = 'Scythed Chariots'
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 32
     sc_effect_id = tech.effect_id
     sc_tech_id = append_tech(data, tech)
@@ -904,7 +904,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Vadhavadha
     vad_id = 1307
     tech = get_ut(data, params, vad_id)
-    tech.research_locations[0].location_id = constants.STABLE_NUM
+    tech.research_locations[0].location_id = constants.STABLE_ID
     tech.research_locations[0].button_id = 28
     vad_effect_id = tech.effect_id
     vad_stable_id = append_tech(data, tech)
@@ -917,13 +917,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Archery UTs----'), get_new_effect('----Archery UTs----'))
     # name = 'Recurve Bow'
     tech = get_ut(data, params, 515)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.BRACER_ICON_ID
     append_tech(data, tech)
     # Silk Armor
     tech = get_ut(data, params, si_ar_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = si_ar_effect_id
@@ -931,13 +931,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [si_ar_stable_id, si_ar_archery_id], [si_ar_effect_id])
     # name = 'Sipahi'
     tech = get_ut(data, params, 491)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.BLOODLINE_ICON_ID
     append_tech(data, tech)
     # Ming Guang Armor
     tech = get_ut(data, params, mga_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = mga_effect_id
@@ -945,7 +945,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [mga_stable_id, mga_archery_id], [mga_effect_id])
     # Aznauri Cavalry
     tech = get_ut(data, params, azn_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 13
     tech.effect_id = azn_effect_id
     azn_archery_id = append_tech(data, tech)
@@ -953,20 +953,20 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Paiks
     tech = get_ut(data, params, paiks_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 28
     tech.icon_id = constants.BRACER_ICON_ID
     tech.effect_id = paiks_effect_id
     paiks_archery_id = append_tech(data, tech)
     # Medical corps
     tech = get_ut(data, params, me_co_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 28
     tech.effect_id = me_co_effect_id
     me_co_archery_id = append_tech(data, tech)
     # Frontier Guards
     tech = get_ut(data, params, fr_gu_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 28
     tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = fr_gu_effect_id
@@ -975,32 +975,32 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # arquebus
     tech = get_ut(data, params, arq_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 14
     tech.icon_id = constants.BALLISTICS_ICON_ID
     arq_archery_id = append_tech(data, tech)
     # Wagenburg Tactics
     tech = get_ut(data, params, wa_ta_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 14
     tech.effect_id = wa_ta_effect_id
     wa_ta_archery_id = append_tech(data, tech)
 
     # name = 'Shatagni'
     tech = get_ut(data, params, 507)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 9
     tech.icon_id = constants.BRACER_ICON_ID
     append_tech(data, tech)
     # Pirotechnia
     tech = get_ut(data, params, 902)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 9
     append_tech(data, tech)
 
     name = 'Kamandaran'
     tech = get_ut(data, params, 488)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.GUILDS_ICON_ID
     effect = get_new_effect(name)
@@ -1035,7 +1035,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Bogsveigar
     bog_id = 49
     tech = get_ut(data, params, bog_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.BRACER_ICON_ID
     bog_effect_id = tech.effect_id
@@ -1045,7 +1045,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     bm_id = 1069
     tech = get_ut(data, params, bm_id)
     bm_effect_id = tech.effect_id
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 6
     tech.icon_id = constants.BRACER_ICON_ID
     bm_archery_id = append_tech(data, tech)
@@ -1053,19 +1053,19 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Yeomen
     yeo_id = 3
     tech = get_ut(data, params, yeo_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 11
     tech.icon_id = constants.BRACER_ICON_ID
     yeo_effect_id = tech.effect_id
     yeo_archery_id = append_tech(data, tech)
     # Curare
     tech = get_ut(data, params, cur_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 11
     cur_archery_id = append_tech(data, tech)
     # Herbalism
     tech = get_ut(data, params, herb_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 11
     herb_archery_id = append_tech(data, tech)
     add_mutex(data, [herb_barrack_id, herb_archery_id], [herb_effect_id])
@@ -1074,11 +1074,11 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     ra_id = 1111
     tech = get_ut(data, params, ra_id)
     tech.name = name
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 11
     effect = effects[tech.effect_id]
     unique_foot_archer_ids = list(map(lambda x: x.id, filter(
-        lambda x: x and x.class_ == 0 and x.creatable and constants.CASTLE_NUM in list(
+        lambda x: x and x.class_ == 0 and x.creatable and constants.CASTLE_ID in list(
             map(lambda x: x.unit_id, x.creatable.train_locations)),
         units)))
     for i in unique_foot_archer_ids:
@@ -1089,7 +1089,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Steppe Husbandry
     tech = get_ut(data, params, st_hu_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 8
     tech.icon_id = constants.CONSCRIPTION_ICON_ID
     tech.effect_id = st_hu_effect_id
@@ -1099,19 +1099,19 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Huaracas
     hua_id = 1366
     tech = get_ut(data, params, hua_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 26
     tech.icon_id = constants.BRACER_ICON_ID
     append_tech(data, tech)
     # Cacique
     tech = get_ut(data, params, cacique_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 26
     cacique_archery_id = append_tech(data, tech)
     add_mutex(data, [cacique_barrack_id, cacique_archery_id], [cacique_effect_id])
     # Fabric Shields
     tech = get_ut(data, params, fs_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 26
     tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = fs_effect_id
@@ -1120,19 +1120,19 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Atlatl'
     tech = get_ut(data, params, 460)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.BRACER_ICON_ID
     append_tech(data, tech)
     # name = "Hul'che Javelineers"
     tech = get_ut(data, params, 485)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.BRACER_ICON_ID
     append_tech(data, tech)
     # Peltasts
     tech = get_ut(data, params, 1299)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.BRACER_ICON_ID
     pel_archery_id = append_tech(data, tech)
@@ -1140,7 +1140,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [be_me_castle_id, be_me_barrack_id, be_me_stable_id, pel_archery_id], [be_me_effect_id, pel_effect_id])
     # Tower Shields
     tech = get_ut(data, params, ts_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.ARCHER_ARMOR_ICON_ID
     tech.effect_id = ts_effect_id
@@ -1148,41 +1148,41 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [ts_barrack_id, ts_archery_id], [ts_effect_id])
     # Lamellar Armor
     tech = get_ut(data, params, la_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     la_archery_id = append_tech(data, tech)
     add_mutex(data, [la_barrack_id, la_archery_id], [la_effect_id])
     # Helot Levies
     tech = get_ut(data, params, hl_id)
     tech.name = 'Helot Levies'
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 7
     hl_archery_id = append_tech(data, tech)
 
     # name = 'Andean Sling'
     tech = get_ut(data, params, 516)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 12
     append_tech(data, tech)
 
     # Malon
     malon_id = 1379
     tech = get_ut(data, params, malon_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 12
     append_tech(data, tech)
 
     # Thunderclap Bombs
     tb_id = 997
     tech = get_ut(data, params, tb_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 32
     tb_effect_id = tech.effect_id
     tb_archery_id = append_tech(data, tech)
 
     # Butalmapu
     tech = get_ut(data, params, but_id)
-    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_NUM
+    tech.research_locations[0].location_id = constants.ARCHERY_RANGE_ID
     tech.research_locations[0].button_id = 34
     but_archery_id = append_tech(data, tech)
     add_mutex(data, [but_castle_id, but_archery_id], [but_effect_id])
@@ -1194,7 +1194,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Siege UTs----'), get_new_effect('----Siege UTs----'))
     # Paiks
     tech = get_ut(data, params, paiks_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 31
     tech.icon_id = constants.BLAST_FURNACE_ICON_ID
     tech.effect_id = paiks_effect_id
@@ -1202,7 +1202,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [paiks_castle_id, paiks_archery_id, paiks_stable_id, paiks_siege_id], [paiks_effect_id])
     # Medical Corps
     tech = get_ut(data, params, me_co_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 31
     tech.effect_id = me_co_effect_id
     me_co_siege_id = append_tech(data, tech)
@@ -1210,7 +1210,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Torsion Engines'
     tech = get_ut(data, params, 575)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 11
     effect = effects[tech.effect_id]
     for i in (1744, 1746, 1263, 1923):
@@ -1221,7 +1221,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech)
     # name = 'Drill'
     tech = get_ut(data, params, 6)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 11
     effect = effects[tech.effect_id]
     origin_class = set(map(lambda command: command.b, effect.effect_commands))
@@ -1233,7 +1233,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Furor Celtica
     fc_tech = get_ut(data, params, 5)
-    fc_tech.research_locations[0].location_id = constants.SIEGE_NUM
+    fc_tech.research_locations[0].location_id = constants.SIEGE_ID
     fc_tech.research_locations[0].button_id = 11
     fc_effect = effects[fc_tech.effect_id]
     origin_units = set(map(lambda command: command.a, fc_effect.effect_commands))
@@ -1245,7 +1245,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Ironclad'
     tech = get_ut(data, params, 489)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 11
     effect = effects[tech.effect_id]
     origin_class = set(map(lambda command: command.b, effect.effect_commands))
@@ -1258,7 +1258,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Artillery
     art_id = 10
     tech = get_ut(data, params, art_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 9
     tech.icon_id = constants.SIEGE_ENGINEERS_ICON_ID
     art_effect_id = tech.effect_id
@@ -1266,7 +1266,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Arquebus
     tech = get_ut(data, params, arq_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 32
     tech.icon_id = constants.BALLISTICS_ICON_ID
     tech.effect_id = arq_effect_id
@@ -1274,7 +1274,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [arq_barrack_id, arq_archery_id, arq_siege_id], [arq_effect_id])
     # Wagenburg Tactics
     tech = get_ut(data, params, wa_ta_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 32
     tech.effect_id = wa_ta_effect_id
     wa_ta_siege_id = append_tech(data, tech)
@@ -1283,20 +1283,20 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # name = 'Shinkichon'
     shin_id = 445
     tech = get_ut(data, params, shin_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 27
     tech.icon_id = constants.SIEGE_ENGINEERS_ICON_ID
     shin_effect_id = tech.effect_id
     shin_siege_id = append_tech(data, tech)
     # Thunderclap Bombs
     tech = get_ut(data, params, tb_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 27
     tb_siege_id = append_tech(data, tech)
 
     # Counterweights
     tech = get_ut(data, params, cw_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 7
     tech.effect_id = cw_effect_id
     cw_siege_id = append_tech(data, tech)
@@ -1304,7 +1304,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Double Crossbow
     tech = get_ut(data, params, dc_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 8
     tech.effect_id = dc_effect_id
     dc_siege_id = append_tech(data, tech)
@@ -1312,14 +1312,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Rocketry
     roc_id = 52
     tech = get_ut(data, params, roc_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 8
     roc_effect_id = tech.effect_id
     roc_siege_id = append_tech(data, tech)
     # Ballistas
     bal_id = 883
     tech = get_ut(data, params, bal_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 8
     tech.icon_id = constants.SIEGE_ENGINEERS_ICON_ID
     bal_effect_id = tech.effect_id
@@ -1327,14 +1327,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Bolt Magazine
     tech = get_ut(data, params, bm_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 28
     bm_siege_id = append_tech(data, tech)
 
     # Sitting Tiger
     sit_t_id = 1081
     tech = get_ut(data, params, sit_t_id)
-    tech.research_locations[0].location_id = constants.SIEGE_NUM
+    tech.research_locations[0].location_id = constants.SIEGE_ID
     tech.research_locations[0].button_id = 29
     sit_t_siege_id = append_tech(data, tech)
     sit_t_effect_id = tech.effect_id
@@ -1346,7 +1346,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----University UTs----'), get_new_effect('----University UTs----'))
     name = 'Detinets'
     tech = get_ut(data, params, 455)
-    tech.research_locations[0].location_id = constants.UNIV_NUM
+    tech.research_locations[0].location_id = constants.UNIV_ID
     tech.research_locations[0].button_id = 7
     tech.icon_id = constants.GUILDS_ICON_ID
     inca_discount = 0.85
@@ -1392,7 +1392,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Fortified Bastions
     fb_tech_id = 996
     tech = get_ut(data, params, fb_tech_id)
-    tech.research_locations[0].location_id = constants.UNIV_NUM
+    tech.research_locations[0].location_id = constants.UNIV_ID
     tech.research_locations[0].button_id = 1
     append_tech(data, tech)
     effect = effects[tech.effect_id]
@@ -1407,7 +1407,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Circumnavigation
     circum_tech_id = 1404
     tech = get_ut(data, params, circum_tech_id)
-    tech.research_locations[0].location_id = constants.UNIV_NUM
+    tech.research_locations[0].location_id = constants.UNIV_ID
     tech.research_locations[0].button_id = 13
     tech.icon_id = constants.SHIPWRIGHT_ICON_ID
     append_tech(data, tech)
@@ -1512,7 +1512,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----TC UTs----'), get_new_effect('----TC UTs----'))
     name = 'Hill Forts'
     tech = get_ut(data, params, 691)
-    tech.research_locations[0].location_id = constants.TC_NUM
+    tech.research_locations[0].location_id = constants.TC_ID
     tech.research_locations[0].button_id = 10
     tech.icon_id = constants.BRACER_ICON_ID
     effect = get_new_effect(name)
@@ -1523,7 +1523,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
     name = 'Tigui'
     tech = get_ut(data, params, 576)
-    tech.research_locations[0].location_id = constants.TC_NUM
+    tech.research_locations[0].location_id = constants.TC_ID
     tech.research_locations[0].button_id = 10
     tech.icon_id = constants.BRACER_ICON_ID
     effect = get_new_effect(name)
@@ -1534,13 +1534,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Supremacy'
     tech = get_ut(data, params, 440)
-    tech.research_locations[0].location_id = constants.TC_NUM
+    tech.research_locations[0].location_id = constants.TC_ID
     tech.research_locations[0].button_id = 11
     append_tech(data, tech)
 
     # Helot Levies
     tech = get_ut(data, params, hl_id)
-    tech.research_locations[0].location_id = constants.TC_NUM
+    tech.research_locations[0].location_id = constants.TC_ID
     tech.research_locations[0].button_id = 10
     hl_tc_id = append_tech(data, tech)
     name = '[FTT] helot levies and loom'
@@ -1559,7 +1559,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
                 get_new_effect('----Monastery UTs----'))
     name = 'Hussite Reforms'
     tech = get_ut(data, params, 785)
-    tech.research_locations[0].location_id = constants.MONESTARY_NUM
+    tech.research_locations[0].location_id = constants.MONESTARY_ID
     tech.research_locations[0].button_id = 21
     tech.icon_id = constants.GUILDS_ICON_ID
     effect = get_new_effect(name)
@@ -1568,7 +1568,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
             continue
         research_location_id = tech1.research_locations[0].location_id
         research_button_id = tech1.research_locations[0].button_id
-        if research_location_id == constants.MONESTARY_NUM and research_button_id > 0:
+        if research_location_id == constants.MONESTARY_ID and research_button_id > 0:
             if tech1.name in ('Herbal Medicine'):
                 continue
             else:
@@ -1603,13 +1603,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Inquisition'
     tech = get_ut(data, params, 492)
-    tech.research_locations[0].location_id = constants.MONESTARY_NUM
+    tech.research_locations[0].location_id = constants.MONESTARY_ID
     tech.research_locations[0].button_id = 22
     append_tech(data, tech)
 
     # name = 'Bimaristan'
     tech = get_ut(data, params, 28)
-    tech.research_locations[0].location_id = constants.MONESTARY_NUM
+    tech.research_locations[0].location_id = constants.MONESTARY_ID
     tech.research_locations[0].button_id = 23
     append_tech(data, tech)
 
@@ -1620,7 +1620,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Dock UTs----'), get_new_effect('----Dock UTs----'))
     # Greek Fire
     tech = get_ut(data, params, gre_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 31
     tech.effect_id = gre_effect_id
     gre_dock_id = append_tech(data, tech)
@@ -1630,7 +1630,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # name = 'Cilician Fleet'
     tech = get_ut(data, params, 922)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 10
     append_tech(data, tech)
 
@@ -1641,12 +1641,12 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tha_tech_id = 624
     force_tech(effect, tha_tech_id)
     move_tech_button(effect, tha_tech_id, 10)
-    move_tech_building(effect, tha_tech_id, constants.DOCK_NUM)
+    move_tech_building(effect, tha_tech_id, constants.DOCK_ID)
     append_tech(data, tech, effect)
 
     # Artillery
     tech = get_ut(data, params, art_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 14
     tech.icon_id = constants.SIEGE_ENGINEERS_ICON_ID
     tech.effect_id = art_effect_id
@@ -1654,14 +1654,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [art_siege_id, art_bbt_id, art_dock_id], [art_effect_id])
     # Bolt Magazine
     tech = get_ut(data, params, bm_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 14
     bm_dock_id = append_tech(data, tech)
     add_mutex(data, [bm_siege_id, bm_archery_id, bm_dock_id], [bm_effect_id])
     params.other_params['bm_dock_id'] = bm_dock_id
     # Rocketry
     tech = get_ut(data, params, roc_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 14
     roc_dock_id = append_tech(data, tech)
     add_mutex(data, [roc_siege_id, roc_dock_id], [roc_effect_id])
@@ -1670,14 +1670,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     techs[1015].required_techs = (47, 52, roc_siege_id, roc_dock_id, -1, -1)
     # Sitting Tiger
     tech = get_ut(data, params, sit_t_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 14
     sit_t_dock_id = append_tech(data, tech)
     add_mutex(data, [sit_t_siege_id, sit_t_dock_id], [sit_t_effect_id])
     params.other_params['sit_t_dock_id'] = sit_t_dock_id
     # Thunderclap Bombs
     tech = get_ut(data, params, tb_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 14
     tb_dock_id = append_tech(data, tech)
     effect = effects[tech.effect_id]
@@ -1690,7 +1690,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Ballistas
     tech = get_ut(data, params, bal_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 12
     tech.icon_id = constants.BRACER_ICON_ID
     tech.effect_id = bal_effect_id
@@ -1699,7 +1699,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # Bogsveigar
     tech = get_ut(data, params, bog_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 26
     tech.icon_id = constants.BRACER_ICON_ID
     tech.effect_id = bog_effect_id
@@ -1707,14 +1707,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     add_mutex(data, [bog_dock_id, bog_archery_id], [bog_effect_id])
     # Shinkichon
     tech = get_ut(data, params, shin_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 27
     shin_dock_id = append_tech(data, tech)
     add_mutex(data, [shin_dock_id, shin_siege_id], [shin_effect_id])
 
     # Red Cliffs Tactics
     tech = get_ut(data, params, rct_id)
-    tech.research_locations[0].location_id = constants.DOCK_NUM
+    tech.research_locations[0].location_id = constants.DOCK_ID
     tech.research_locations[0].button_id = 13
     rct_dock_id = append_tech(data, tech)
     add_mutex(data, [rct_dock_id, rct_castle_id], [rct_effect_id])
@@ -1726,7 +1726,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, get_new_tech('----Market UTs----'), get_new_effect('----Market UTs----'))
     # name = 'Silk Road'
     tech = get_ut(data, params, 499)
-    tech.research_locations[0].location_id = constants.MARKET_NUM
+    tech.research_locations[0].location_id = constants.MARKET_ID
     tech.research_locations[0].button_id = 4
     append_tech(data, tech)
 

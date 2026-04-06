@@ -7,7 +7,7 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 import constants
 from all_in_1_params import All_In_1_Params
 from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
-    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_NUM, \
+    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_ID, \
     HOUSE_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
@@ -82,9 +82,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            enable_unit(effect, constants.DOCK_NUM)
-            set_unit_attribute(effect, constants.PORT_NUM, -1, 58, -1)
-            enable_unit(effect, constants.PORT_NUM)
+            enable_unit(effect, constants.DOCK_ID)
+            set_unit_attribute(effect, constants.PORT_ID, -1, 58, -1)
+            enable_unit(effect, constants.PORT_ID)
             force_tech(effect, 1143)
             research_tech(effect, 1143)
             append_tech(data, tech, effect)
@@ -302,7 +302,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if len(tech1.research_locations) == 0:
                     continue
                 research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == constants.SIEGE_NUM:
+                if research_location_id == constants.SIEGE_ID:
                     set_tech_discount(effect, i, 0, 0.5)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
@@ -347,7 +347,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if len(tech1.research_locations) == 0:
                     continue
                 research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == constants.STABLE_NUM:
+                if research_location_id == constants.STABLE_ID:
                     if i in (254, 428):
                         continue
                     set_tech_discount(effect, i, -1, 0.5)
@@ -383,7 +383,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if len(tech1.research_locations) == 0:
                     continue
                 research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == constants.MONESTARY_NUM and i != 441:
+                if research_location_id == constants.MONESTARY_ID and i != 441:
                     set_tech_discount(effect, i, -1, 0.5)
             append_tech(data, tech, effect)
             name = 'Burmese TB'
@@ -728,13 +728,22 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             origin_units = set(map(lambda command: command.a, effects[618].effect_commands))
             target_units = []
             for i, unit in enumerate(units):
-                if unit and unit.creatable and constants.BARRACK_NUM in list(
+                if unit and unit.creatable and constants.BARRACK_ID in list(
                         map(lambda x: x.unit_id, unit.creatable.train_locations)) and i not in origin_units:
                     target_units.append(i)
             for i in (618, 619, 620):
                 effect = effects[i]
                 for j in target_units:
                     plus_unit_armor(effect, j, -1, 1, 3)
+        case 'Mapuche':
+            effect = effects[1383]
+            b_wp_with_relic = False
+            for command in effect.effect_commands:
+                if command.a == constants.WP_WITH_RELIC_ID:
+                    b_wp_with_relic = True
+                    break
+            if not b_wp_with_relic:
+                extend_effect(effect, [constants.WP_WITH_RELIC_ID])
         case 'Mayans':
             origin_units = (763, 765)
             ext_units = list()
@@ -743,7 +752,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             for i, unit in enumerate(data.civs[1].units):
-                if unit and unit.class_ == 0 and unit.creatable and constants.CASTLE_NUM in list(
+                if unit and unit.class_ == 0 and unit.creatable and constants.CASTLE_ID in list(
                         map(lambda x: x.unit_id, unit.creatable.train_locations)) and i not in origin_units:
                     multiply_unit_cost(effect, i, -1, 0.9)
                     ext_units.append(i)
@@ -837,7 +846,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
             elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
             elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
-            elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_NUM
+            elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_ID
             elite_temple_guard_tech.research_locations[1].button_id = 29
             for i in constants.TEMPLE_GUARD_IDS:
                 move_unit_button(effect, i, 31, 0)
@@ -1279,8 +1288,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     continue
                 if unit.creatable.hero_mode == 1:
                     continue
-                if bool(set(map(lambda x: x.unit_id, unit.creatable.train_locations)) & {constants.BARRACK_NUM,
-                                                                                         constants.STABLE_NUM}) and i not in origin_units:
+                if bool(set(map(lambda x: x.unit_id, unit.creatable.train_locations)) & {constants.BARRACK_ID,
+                                                                                         constants.STABLE_ID}) and i not in origin_units:
                     ext_units.append(i)
             for i in (333, 334):
                 effect = effects[i]
@@ -1343,7 +1352,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     continue
                 if unit is None or unit.creatable is None or len(unit.creatable.train_locations) == 0:
                     continue
-                if constants.ARCHERY_RANGE_NUM in list(map(lambda x: x.unit_id,
+                if constants.ARCHERY_RANGE_ID in list(map(lambda x: x.unit_id,
                                                            unit.creatable.train_locations)) and i not in origin_units:
                     multiply_unit_hp(effect, i, -1, 1.2)
             name = 'Eco Techs no wood, 1/2 time'

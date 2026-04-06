@@ -32,7 +32,7 @@ def update_all_in_1(debug = True):
     units = data.civs[0].units
     for i, unit in enumerate(units):
         if unit and unit.creatable and len(unit.creatable.train_locations) > 0:
-            if constants.SIEGE_NUM in list(map(lambda x: x.unit_id ,unit.creatable.train_locations)):
+            if constants.SIEGE_ID in list(map(lambda x: x.unit_id ,unit.creatable.train_locations)):
                 siege_workshop_units.append(i)
             if 20 in list(map(lambda armor: armor.class_, unit.type_50.armours)):
                 siege_units.append(i)

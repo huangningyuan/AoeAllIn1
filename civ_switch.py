@@ -104,7 +104,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             continue
         research_location_id = tech.research_locations[0].location_id
         research_button_id = tech.research_locations[0].button_id
-        if (research_location_id == constants.CASTLE_NUM and research_button_id == 6
+        if (research_location_id == constants.CASTLE_ID and research_button_id == 6
                 and civ_id in range(1, current_civ_num)):
             uu_tech_id_list[civ_id] = tech_id
         if tech.effect_id == -1 or tech.civ == -1:
@@ -115,7 +115,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             if command.type == 2:
                 unit = units[command.a]
                 train_location = unit.creatable.train_locations[0]
-                if train_location.unit_id == constants.CASTLE_NUM and train_location.button_id == 1:
+                if train_location.unit_id == constants.CASTLE_ID and train_location.button_id == 1:
                     uu_id_list[civ_id] = command.a
         if tech.name.startswith('Elite') and civ_id in uu_id_list:            
             for command in effect.effect_commands:
@@ -236,12 +236,12 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
 
     # huskarl
     tech = techs[365]
-    new_location = ResearchLocation(constants.BARRACK_NUM, tech.research_locations[0].research_time, 29, -1)
+    new_location = ResearchLocation(constants.BARRACK_ID, tech.research_locations[0].research_time, 29, -1)
     tech.research_locations.append(new_location)
 
     # tarkan
     tech = techs[2]
-    new_location = ResearchLocation(constants.STABLE_NUM, tech.research_locations[0].research_time, 26, -1)
+    new_location = ResearchLocation(constants.STABLE_ID, tech.research_locations[0].research_time, 26, -1)
     tech.research_locations.append(new_location)
 
     name = 'enable all uus'
@@ -552,24 +552,24 @@ if __name__ == '__main__':
     en_file_name = os.path.join(mod_path, 'resources', 'en', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
     zh_file_name = os.path.join(mod_path, 'resources', 'zh', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
     offset = 26800
-    civ_en_zh_dict = {'Britons': '不列颠', 'Franks': '法兰克', 'Goths': '哥特', 'Teutons': '条顿', 'Japanese': '日本',
-                      'Chinese': '中国', 'Byzantines': '拜占庭', 'Persians': '波斯', 'Saracens': '萨拉森',
-                      'Turks': '土耳其', 'Vikings': '维京', 'Mongols': '蒙古', 'Celts': '凯尔特', 'Spanish': '西班牙',
-                      'Aztecs': '阿兹特克', 'Mayans': '玛雅', 'Huns': '匈人', 'Koreans': '高丽', 'Italians': '意大利',
-                      'Hindustanis': '印度斯坦', 'Incas': '印加', 'Magyars': '马扎尔', 'Slavs': '斯拉夫',
-                      'Portuguese': '葡萄牙', 'Ethiopians': '埃塞俄比亚', 'Malians': '马里', 'Berbers': '柏柏尔',
-                      'Khmer': '高棉', 'Malay': '马来', 'Burmese': '缅甸', 'Vietnamese': '越南',
-                      'Bulgarians': '保加利亚', 'Tatars': '鞑靼', 'Cumans': '库曼', 'Lithuanians': '立陶宛',
-                      'Burgundians': '勃艮第', 'Sicilians': '西西里', 'Poles': '波兰', 'Bohemians': '波西米亚',
-                      'Dravidians': '达罗毗荼', 'Bengalis': '孟加拉', 'Gurjaras': '瞿折罗', 'Romans': '罗马',
-                      'Armenians': '亚美尼亚', 'Georgians': '格鲁吉亚', 'Achaemenids': '阿契美尼德',
-                      'Athenians': '雅典', 'Spartans': '斯巴达', 'Wei': '魏', 'Shu': '蜀', 'Wu': '吴',
-                      'Jurchens': '女真', 'Khitans': '契丹', 'Puru': '普鲁', 'Thracians': '色雷斯', 'Macedonians': '马其顿',
-                      'Muisca': '穆伊斯卡', 'Mapuche': '马普切', 'Tupi': '图皮'}
+    civ_en_zh_dict = {'Britons': 'ÃƒÂ¤Ã‚Â¸Ã‚ÂÃƒÂ¥Ã‹â€ Ã¢â‚¬â€ÃƒÂ©Ã‚Â¢Ã‚Â ', 'Franks': 'ÃƒÂ¦Ã‚Â³Ã¢â‚¬Â¢ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â°ÃƒÂ¥Ã¢â‚¬Â¦Ã¢â‚¬Â¹', 'Goths': 'ÃƒÂ¥Ã¢â‚¬Å“Ã‚Â¥ÃƒÂ§Ã¢â‚¬Â°Ã‚Â¹', 'Teutons': 'ÃƒÂ¦Ã‚ÂÃ‚Â¡ÃƒÂ©Ã‚Â¡Ã‚Â¿', 'Japanese': 'ÃƒÂ¦Ã¢â‚¬â€Ã‚Â¥ÃƒÂ¦Ã…â€œÃ‚Â¬',
+                      'Chinese': 'ÃƒÂ¤Ã‚Â¸Ã‚Â­ÃƒÂ¥Ã¢â‚¬ÂºÃ‚Â½', 'Byzantines': 'ÃƒÂ¦Ã¢â‚¬Â¹Ã…â€œÃƒÂ¥Ã‚ÂÃ‚Â ÃƒÂ¥Ã‚ÂºÃ‚Â­', 'Persians': 'ÃƒÂ¦Ã‚Â³Ã‚Â¢ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯', 'Saracens': 'ÃƒÂ¨Ã‚ÂÃ‚Â¨ÃƒÂ¦Ã¢â‚¬Â¹Ã¢â‚¬Â°ÃƒÂ¦Ã‚Â£Ã‚Â®',
+                      'Turks': 'ÃƒÂ¥Ã…â€œÃ…Â¸ÃƒÂ¨Ã¢â€šÂ¬Ã‚Â³ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â¶', 'Vikings': 'ÃƒÂ§Ã‚Â»Ã‚Â´ÃƒÂ¤Ã‚ÂºÃ‚Â¬', 'Mongols': 'ÃƒÂ¨Ã¢â‚¬â„¢Ã¢â€žÂ¢ÃƒÂ¥Ã‚ÂÃ‚Â¤', 'Celts': 'ÃƒÂ¥Ã¢â‚¬Â¡Ã‚Â¯ÃƒÂ¥Ã‚Â°Ã¢â‚¬ÂÃƒÂ§Ã¢â‚¬Â°Ã‚Â¹', 'Spanish': 'ÃƒÂ¨Ã‚Â¥Ã‚Â¿ÃƒÂ§Ã‚ÂÃ‚Â­ÃƒÂ§Ã¢â‚¬Â°Ã¢â€žÂ¢',
+                      'Aztecs': 'ÃƒÂ©Ã‹Å“Ã‚Â¿ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â¹ÃƒÂ§Ã¢â‚¬Â°Ã‚Â¹ÃƒÂ¥Ã¢â‚¬Â¦Ã¢â‚¬Â¹', 'Mayans': 'ÃƒÂ§Ã…Â½Ã¢â‚¬ÂºÃƒÂ©Ã¢â‚¬ÂºÃ¢â‚¬Â¦', 'Huns': 'ÃƒÂ¥Ã…â€™Ã‹â€ ÃƒÂ¤Ã‚ÂºÃ‚Âº', 'Koreans': 'ÃƒÂ©Ã‚Â«Ã‹Å“ÃƒÂ¤Ã‚Â¸Ã‚Â½', 'Italians': 'ÃƒÂ¦Ã¢â‚¬Å¾Ã‚ÂÃƒÂ¥Ã‚Â¤Ã‚Â§ÃƒÂ¥Ã‹â€ Ã‚Â©',
+                      'Hindustanis': 'ÃƒÂ¥Ã‚ÂÃ‚Â°ÃƒÂ¥Ã‚ÂºÃ‚Â¦ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯ÃƒÂ¥Ã‚ÂÃ‚Â¦', 'Incas': 'ÃƒÂ¥Ã‚ÂÃ‚Â°ÃƒÂ¥Ã…Â Ã‚Â ', 'Magyars': 'ÃƒÂ©Ã‚Â©Ã‚Â¬ÃƒÂ¦Ã¢â‚¬Â°Ã…Â½ÃƒÂ¥Ã‚Â°Ã¢â‚¬Â', 'Slavs': 'ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯ÃƒÂ¦Ã¢â‚¬Â¹Ã¢â‚¬Â°ÃƒÂ¥Ã‚Â¤Ã‚Â«',
+                      'Portuguese': 'ÃƒÂ¨Ã¢â‚¬ËœÃ‚Â¡ÃƒÂ¨Ã‚ÂÃ¢â‚¬Å¾ÃƒÂ§Ã¢â‚¬Â°Ã¢â€žÂ¢', 'Ethiopians': 'ÃƒÂ¥Ã…Â¸Ã†â€™ÃƒÂ¥Ã‚Â¡Ã…Â¾ÃƒÂ¤Ã‚Â¿Ã¢â‚¬Å¾ÃƒÂ¦Ã‚Â¯Ã¢â‚¬ÂÃƒÂ¤Ã‚ÂºÃ…Â¡', 'Malians': 'ÃƒÂ©Ã‚Â©Ã‚Â¬ÃƒÂ©Ã¢â‚¬Â¡Ã…â€™', 'Berbers': 'ÃƒÂ¦Ã…Â¸Ã‚ÂÃƒÂ¦Ã…Â¸Ã‚ÂÃƒÂ¥Ã‚Â°Ã¢â‚¬Â',
+                      'Khmer': 'ÃƒÂ©Ã‚Â«Ã‹Å“ÃƒÂ¦Ã‚Â£Ã¢â‚¬Â°', 'Malay': 'ÃƒÂ©Ã‚Â©Ã‚Â¬ÃƒÂ¦Ã‚ÂÃ‚Â¥', 'Burmese': 'ÃƒÂ§Ã‚Â¼Ã¢â‚¬Â¦ÃƒÂ§Ã¢â‚¬ÂÃ‚Â¸', 'Vietnamese': 'ÃƒÂ¨Ã‚Â¶Ã…Â ÃƒÂ¥Ã‚ÂÃ¢â‚¬â€',
+                      'Bulgarians': 'ÃƒÂ¤Ã‚Â¿Ã‚ÂÃƒÂ¥Ã…Â Ã‚Â ÃƒÂ¥Ã‹â€ Ã‚Â©ÃƒÂ¤Ã‚ÂºÃ…Â¡', 'Tatars': 'ÃƒÂ©Ã…Â¾Ã¢â‚¬ËœÃƒÂ©Ã‚ÂÃ‚Â¼', 'Cumans': 'ÃƒÂ¥Ã‚ÂºÃ¢â‚¬Å“ÃƒÂ¦Ã¢â‚¬ÂºÃ‚Â¼', 'Lithuanians': 'ÃƒÂ§Ã‚Â«Ã¢â‚¬Â¹ÃƒÂ©Ã¢â€žÂ¢Ã‚Â¶ÃƒÂ¥Ã‚Â®Ã¢â‚¬Âº',
+                      'Burgundians': 'ÃƒÂ¥Ã¢â‚¬Â¹Ã†â€™ÃƒÂ¨Ã¢â‚¬Â°Ã‚Â®ÃƒÂ§Ã‚Â¬Ã‚Â¬', 'Sicilians': 'ÃƒÂ¨Ã‚Â¥Ã‚Â¿ÃƒÂ¨Ã‚Â¥Ã‚Â¿ÃƒÂ©Ã¢â‚¬Â¡Ã…â€™', 'Poles': 'ÃƒÂ¦Ã‚Â³Ã‚Â¢ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â°', 'Bohemians': 'ÃƒÂ¦Ã‚Â³Ã‚Â¢ÃƒÂ¨Ã‚Â¥Ã‚Â¿ÃƒÂ§Ã‚Â±Ã‚Â³ÃƒÂ¤Ã‚ÂºÃ…Â¡',
+                      'Dravidians': 'ÃƒÂ¨Ã‚Â¾Ã‚Â¾ÃƒÂ§Ã‚Â½Ã¢â‚¬â€ÃƒÂ¦Ã‚Â¯Ã¢â‚¬â€ÃƒÂ¨Ã‚ÂÃ‚Â¼', 'Bengalis': 'ÃƒÂ¥Ã‚Â­Ã…Â¸ÃƒÂ¥Ã…Â Ã‚Â ÃƒÂ¦Ã¢â‚¬Â¹Ã¢â‚¬Â°', 'Gurjaras': 'ÃƒÂ§Ã…Â¾Ã‚Â¿ÃƒÂ¦Ã…Â Ã‹Å“ÃƒÂ§Ã‚Â½Ã¢â‚¬â€', 'Romans': 'ÃƒÂ§Ã‚Â½Ã¢â‚¬â€ÃƒÂ©Ã‚Â©Ã‚Â¬',
+                      'Armenians': 'ÃƒÂ¤Ã‚ÂºÃ…Â¡ÃƒÂ§Ã‚Â¾Ã…Â½ÃƒÂ¥Ã‚Â°Ã‚Â¼ÃƒÂ¤Ã‚ÂºÃ…Â¡', 'Georgians': 'ÃƒÂ¦Ã‚Â Ã‚Â¼ÃƒÂ©Ã‚Â²Ã‚ÂÃƒÂ¥Ã‚ÂÃ¢â‚¬Â°ÃƒÂ¤Ã‚ÂºÃ…Â¡', 'Achaemenids': 'ÃƒÂ©Ã‹Å“Ã‚Â¿ÃƒÂ¥Ã‚Â¥Ã¢â‚¬ËœÃƒÂ§Ã‚Â¾Ã…Â½ÃƒÂ¥Ã‚Â°Ã‚Â¼ÃƒÂ¥Ã‚Â¾Ã‚Â·',
+                      'Athenians': 'ÃƒÂ©Ã¢â‚¬ÂºÃ¢â‚¬Â¦ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â¸', 'Spartans': 'ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯ÃƒÂ¥Ã‚Â·Ã‚Â´ÃƒÂ¨Ã‚Â¾Ã‚Â¾', 'Wei': 'ÃƒÂ©Ã‚Â­Ã‚Â', 'Shu': 'ÃƒÂ¨Ã…â€œÃ¢â€šÂ¬', 'Wu': 'ÃƒÂ¥Ã‚ÂÃ‚Â´',
+                      'Jurchens': 'ÃƒÂ¥Ã‚Â¥Ã‚Â³ÃƒÂ§Ã…â€œÃ…Â¸', 'Khitans': 'ÃƒÂ¥Ã‚Â¥Ã¢â‚¬ËœÃƒÂ¤Ã‚Â¸Ã‚Â¹', 'Puru': 'ÃƒÂ¦Ã¢â€žÂ¢Ã‚Â®ÃƒÂ©Ã‚Â²Ã‚Â', 'Thracians': 'ÃƒÂ¨Ã¢â‚¬Â°Ã‚Â²ÃƒÂ©Ã¢â‚¬ÂºÃ‚Â·ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯', 'Macedonians': 'ÃƒÂ©Ã‚Â©Ã‚Â¬ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â¶ÃƒÂ©Ã‚Â¡Ã‚Â¿',
+                      'Muisca': 'ÃƒÂ§Ã‚Â©Ã¢â‚¬Â ÃƒÂ¤Ã‚Â¼Ã…Â ÃƒÂ¦Ã¢â‚¬â€œÃ‚Â¯ÃƒÂ¥Ã‚ÂÃ‚Â¡', 'Mapuche': 'ÃƒÂ©Ã‚Â©Ã‚Â¬ÃƒÂ¦Ã¢â€žÂ¢Ã‚Â®ÃƒÂ¥Ã‹â€ Ã¢â‚¬Â¡', 'Tupi': 'ÃƒÂ¥Ã¢â‚¬ÂºÃ‚Â¾ÃƒÂ§Ã…Â¡Ã‚Â®'}
     en = open(en_file_name, 'w')
     zh = open(zh_file_name, 'w', encoding='utf-8')
     en.write('26800 "enable all civ bonus"\n')
-    zh.write('26800 "激活全文明特性"\n')
+    zh.write('26800 "ÃƒÂ¦Ã‚Â¿Ã¢â€šÂ¬ÃƒÂ¦Ã‚Â´Ã‚Â»ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â¨ÃƒÂ¦Ã¢â‚¬â€œÃ¢â‚¬Â¡ÃƒÂ¦Ã‹Å“Ã…Â½ÃƒÂ§Ã¢â‚¬Â°Ã‚Â¹ÃƒÂ¦Ã¢â€šÂ¬Ã‚Â§"\n')
     mod_path = utils.get_mod_path()
     file_name = os.path.join(mod_path, 'resources', '_common', 'dat', 'empires2_x2_p1.dat')
     data = DatFile.parse(file_name)
@@ -577,7 +577,7 @@ if __name__ == '__main__':
     for i in range(1, len(civs)):
         civ_name = get_civ_name(civs, i)
         en.write('%d "switch to %s"\n' % (offset + i, civ_name))
-        zh.write('%d "切换到%s"\n' % (offset + i, civ_en_zh_dict[civ_name]))
+        zh.write('%d "ÃƒÂ¥Ã‹â€ Ã¢â‚¬Â¡ÃƒÂ¦Ã‚ÂÃ‚Â¢ÃƒÂ¥Ã‹â€ Ã‚Â°%s"\n' % (offset + i, civ_en_zh_dict[civ_name]))
 
     en.close()
     zh.close()
