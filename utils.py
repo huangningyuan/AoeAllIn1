@@ -245,6 +245,10 @@ def get_tech_id_by_name(data: DatFile, name: str):
 def extend_effect(effect: Effect, unit_ids = [], class_ids=[]):
     command_set = set(map(lambda command: (command.type, command.c, command.d), effect.effect_commands))
     for command in command_set:
+        if isinstance(unit_ids, int):
+            unit_ids = [unit_ids]
+        if isinstance(class_ids, int):
+            class_ids = [class_ids]
         for unit_id in unit_ids:
             effect.effect_commands.append(EffectCommand(command[0], unit_id, -1, command[1], command[2]))
         for class_id in class_ids:

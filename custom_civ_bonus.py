@@ -1462,5 +1462,14 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             research_tech(effect, 1083)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-
+            # regeneration of wp with relic
+            for i in range(1085, 1087):
+                effect = effects[i]
+                b_wp_with_relic = False
+                for command in effect.effect_commands:
+                    if command.a == constants.WP_WITH_RELIC_ID:
+                        b_wp_with_relic = True
+                        break
+                if not b_wp_with_relic:
+                    extend_effect(effect, constants.WP_WITH_RELIC_ID)
     return reverse_tech_ids
