@@ -1196,14 +1196,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.resource_costs[0].amount = 150
             tech.resource_costs[1].amount = 275
             effect = get_new_effect(name)
-            force_tech(effect, e_hoplite_tech_id)
-            research_tech(effect, e_hoplite_tech_id)
+            force_research_tech(effect, e_hoplite_tech_id)
             # bug upgrade
             # tech = get_new_tech(name)
             # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
             # effect = get_new_effect(name)
             # force_tech(effect, e_hoplite_tech_id)
-            # append_tech(data, tech, effect)
+            append_tech(data, tech, effect)
 
             name = 'enable Spartans TC Techs'
             tech = get_new_tech(name)
