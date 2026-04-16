@@ -30,15 +30,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
     units = data.civs[0].units
     match civ_name:
         case 'Achaemenids':
-            name = 'Achaemenids Bonuses'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for command in effects[1103].effect_commands:
-                if command.a not in (254, 428):
-                    effect.effect_commands.append(command)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'enable War Chariot'
             e_war_chariot_tech_id = 1171
             tech = get_new_tech(name)
