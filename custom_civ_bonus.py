@@ -223,13 +223,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     command.b = 1
                     break
         case 'Aztecs':
-            name = '+50g'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 3, 50)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            # reverse_tech_ids.append(tech_id)
             name = 'military units train faster ext'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -410,14 +403,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_attribute(effect, i, -1, 10, 0.8)
         case 'Chinese':
-            name = '-200f, -50w'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 639, 307, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 0, -200)
-            plus_resource(effect, 1, -50)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'TC Pop and LoS ext'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -528,13 +513,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 521)
             append_tech(data, tech, effect)
         case 'Huns':
-            name = '-100w'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 639, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 1, -100)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             techs[241].civ = -1
             techs[242].civ = -1
             effect = effects[231]
@@ -762,13 +740,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in ext_units:
                 multiply_unit_cost(effect, i, -1, 0.7 / 0.8)
             append_tech(data, tech, effect)
-            name = '-50f'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 0, -50)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
         case 'Mongols':
             name = 'remove origin Light Cavalry HP + BL'
             tech = get_new_tech(name)
@@ -853,14 +824,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (2301, 2302):
                 plus_unit_attribute(effects[1369], i, -1, 4, 1)
         case 'Persians':
-            name = '+50f +50w'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 639, 307)
-            effect = get_new_effect(name)
-            plus_resource(effect, 0, 50)
-            plus_resource(effect, 1, 50)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'Super Harbor'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -1100,13 +1063,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1033)
             append_tech(data, tech, effect)
         case 'Sicilians':
-            name = '+100s'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 2, 100)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'enable Serjant'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
@@ -1323,16 +1279,16 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1391)
             move_tech_button(effect, 1391, -1)
             append_tech(data, tech, effect)
-            name = '+25 res'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            plus_resource(effect, 0, 25)
-            plus_resource(effect, 1, 25)
-            plus_resource(effect, 2, 25)
-            plus_resource(effect, 3, 25)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
+            # name = '+25 res'
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id)
+            # effect = get_new_effect(name)
+            # plus_resource(effect, 0, 25)
+            # plus_resource(effect, 1, 25)
+            # plus_resource(effect, 2, 25)
+            # plus_resource(effect, 3, 25)
+            # tech_id, effect_id = append_tech(data, tech, effect)
+            # reverse_tech_ids.append(tech_id)
         case 'Vietnamese':
             # Archers +20% HP ext
             effect = effects[672]

@@ -19,7 +19,7 @@ from utils import get_new_tech
 from utils import replace_tuple
 from utils import research_tech
 
-TECH_TO_REMOVE = [286, 287, 323, 324, 326, 500,
+TECH_TO_REMOVE = [286, 287, 500,
                   641, 649, 664, 699, 700, 701,
                   702, 788, 789, 792, 809, 810,
                   811, 806, 807, 808, 957,
@@ -237,7 +237,28 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 required_techs = replace_tuple(required_techs, -1, params.switch_tech_id)
                 tech.required_tech_count += 1
                 tech.required_techs = required_techs
-                disable_tech(reverse_effect, append_tech(data, tech))
+                effect = effects[tech.effect_id]
+                if len(effect.effect_commands) > 0:
+                    first_command = effect.effect_commands[0]
+                else:
+                    first_command = None
+                if first_command and first_command.type == 1 and first_command.a in (91, 92, 93, 94):
+                    new_effect = copy.deepcopy(effect)
+                    for command in new_effect.effect_commands:
+                        if command.type == 1:
+                            match command.a:
+                                case 91:
+                                    command.a = 0
+                                case 92:
+                                    command.a = 1
+                                case 93:
+                                    command.a = 2
+                                case 94:
+                                    command.a = 3
+                    new_tech_id, effect_id = append_tech(data, tech, new_effect)
+                    disable_tech(reverse_effect, new_tech_id)
+                else:
+                    disable_tech(reverse_effect, append_tech(data, tech))
 
                 # Incas + Khitans/Romans Blacksmith upgrade
                 if tech_id in (474, 475, 476, 477, 478, 479):
