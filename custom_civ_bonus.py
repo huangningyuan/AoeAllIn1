@@ -202,7 +202,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1202)
             force_tech(effect, 1203)
             force_tech(effect, 1204)
-            append_tech(data, tech, effect)
+            tech_id, effect_id = append_tech(data, tech, effect)
+            reverse_tech_ids.append(tech_id)
 
             name = 'Athenians + Armenians Age2'
             tech = get_new_tech(name)
