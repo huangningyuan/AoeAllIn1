@@ -969,14 +969,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             multiply_resource(effect, 512, 1.2 * 1.05)
             append_tech(data, tech, effect)
-            name = 'Cavalry Auras'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            for unit in units:
-                if unit and unit.class_ == 12 and unit.type_50 and unit.type_50.break_off_combat > 0:
-                    plus_unit_attribute(effect, unit.id, -1, 63, unit.type_50.break_off_combat)
-            append_tech(data, tech, effect)
         case 'Romans':
             name = 'Legionary'
             tech = copy.deepcopy(techs[885])
