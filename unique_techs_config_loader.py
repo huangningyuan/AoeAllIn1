@@ -4,7 +4,7 @@ import os
 from genieutils.datfile import DatFile
 
 import constants
-from utils import append_tech
+from utils import append_tech, get_new_tech, get_new_effect
 
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'unique_techs_config.json')
 
@@ -62,6 +62,10 @@ def generate_techs(data: DatFile, params, config=None):
     for section in config['sections']:
         building_id = _resolve_building(section['building'])
         is_castle_section = section['building'] == 'CASTLE_ID'
+
+        header = section.get('header')
+        if header:
+            append_tech(data, get_new_tech(header), get_new_effect(header))
 
         for entry in section['techs']:
             source_id = entry['source_id']

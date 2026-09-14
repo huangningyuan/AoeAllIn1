@@ -58,7 +58,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     params.civ_index_to_additional_uts = result['civ_index_to_additional_uts']
 
     # ===== FORCE TECH SERIES (complete copy from original) =====
-    append_tech(data, get_new_tech('----Castle UTs----'), get_new_effect('----Castle UTs----'))
 
     # --- Vedic Teachings ---
     vedic_teaching_id = 1309
@@ -568,8 +567,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # ===== FOOTER: spacer techs =====
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
-
-    append_tech(data, get_new_tech('----OutPost UTs----'), get_new_effect('----OutPost UTs----'))
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
