@@ -1,4 +1,5 @@
 import copy
+import json
 import os
 from tkinter.filedialog import SaveAs
 
@@ -38,6 +39,71 @@ from utils import (
 )
 from utils import get_new_tech
 from utils import research_tech
+
+_UNIT_SWITCH_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'unit_switch.json')
+with open(_UNIT_SWITCH_PATH, 'r', encoding='utf-8') as _f:
+    _UNIT_SWITCH_CATEGORIES = json.load(_f)
+
+
+def _resolve_id(raw_id, params):
+    if isinstance(raw_id, int):
+        return raw_id
+    if isinstance(raw_id, str):
+        return params.other_params.get(raw_id)
+    return None
+
+
+def _resolve_ids(raw_ids, params):
+    result = []
+    for raw_id in raw_ids:
+        resolved = _resolve_id(raw_id, params)
+        if resolved is not None:
+            result.append(resolved)
+    return result
+
+
+def _civ_matches(civ_match, civ_name, civ_id):
+    if civ_match is None:
+        return False
+    if civ_match.get('default', False):
+        return False
+    if civ_name in civ_match.get('civ_names', []):
+        return True
+    if civ_id in civ_match.get('civ_ids', []):
+        return True
+    return False
+
+
+def _execute_unit_switch(effect, civ_name, civ_id, params):
+    for category in _UNIT_SWITCH_CATEGORIES:
+        matched_sc = None
+        default_sc = None
+        for sc in category.get('switch_contents', []):
+            if sc.get('civ_match', {}).get('default', False):
+                default_sc = sc
+            elif _civ_matches(sc.get('civ_match'), civ_name, civ_id):
+                matched_sc = sc
+                break
+        target_sc = matched_sc if matched_sc is not None else default_sc
+        if target_sc is None:
+            continue
+
+        unit_button_id = category.get('unit_button_id')
+        tech_button_id = category.get('tech_button_id')
+
+        all_uids = set(_resolve_ids(category.get('all_unit_ids', []), params))
+        all_tids = set(_resolve_ids(category.get('all_tech_ids', []), params))
+        enable_uids = set(_resolve_ids(target_sc.get('unit_ids', []), params))
+        enable_tids = set(_resolve_ids(target_sc.get('tech_ids', []), params))
+
+        for uid in (all_uids - enable_uids):
+            move_unit_button(effect, uid, -1)
+        for tid in (all_tids - enable_tids):
+            move_tech_button(effect, tid, -1)
+        for uid in enable_uids:
+            move_unit_button(effect, uid, unit_button_id)
+        for tid in enable_tids:
+            move_tech_button(effect, tid, tech_button_id)
 
 
 def get_next_position(pos: tuple):
@@ -273,66 +339,17 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 move_tech_button(effect, uu_tech_id_list[j], -1, 0)
                 if j in additional_ut_ids.keys():
                     move_tech_button(effect, additional_ut_ids[j], -1, 0)
-        # dromon
-        if civ_name in ('Huns', 'Byzantines', 'Armenians', 'Romans', 'Goths'):
-            move_unit_button(effect, constants.DROMON_ID, 9)
-            move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
-            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
-            move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
-        # lou chuan
-        elif civ_name in ('Wei', 'Shu', 'Wu', 'Chinese', 'Jurchens'):
-            move_unit_button(effect, constants.LOU_CHUAN_ID, 9)
-            move_tech_button(effect, params.other_params.get('bm_dock_id'), 14)
-            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), 14)
-            move_tech_button(effect, params.other_params.get('tb_dock_id'), 14)
-            move_tech_button(effect, params.other_params.get('roc_dock_id'), 14)
-            move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.DROMON_ID, -1)
-            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
-        # Catapult
-        elif civ_name in ('Cumans', 'Mayans', 'Aztecs', 'Incas', 'Muisca', 'Mapuche', 'Tupi'):
-            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, 9)
-            move_unit_button(effect, constants.CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, -1)
-            move_unit_button(effect, constants.DROMON_ID, -1)
-            move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
-            move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
-        # cannon galleon
-        else:
-            move_unit_button(effect, constants.DROMON_ID, -1)
-            move_unit_button(effect, constants.CANNON_GALLEON_ID, 9)
-            move_unit_button(effect, constants.E_CANNON_GALLEON_ID, 9)
-            move_unit_button(effect, constants.LOU_CHUAN_ID, -1)
-            move_unit_button(effect, constants.CATAPULT_GALLEON_ID, -1)
-            move_tech_button(effect, params.other_params.get('bm_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('sit_t_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('tb_dock_id'), -1)
-            move_tech_button(effect, params.other_params.get('roc_dock_id'), -1)
+        _execute_unit_switch(effect, civ_name, civ_id, params)
+        append_tech(data, tech, effect)
 
-        # krepost
+        if civ_name == 'Sicilians':
+            move_unit_button(effect, 1659, 1)
+        else:
+            move_unit_button(effect, 1659, -1)
         if civ_name == 'Bulgarians':
-            move_unit_button(effect, constants.KREPOST_ID, 5)
-            move_unit_button(effect, constants.DONJON_ID, -1)
-            move_unit_button(effect, constants.SHIPYARD_ID, -1)
-        # donjon
-        elif civ_name == 'Sicilians':
-            move_unit_button(effect, constants.KREPOST_ID, -1)
-            move_unit_button(effect, constants.DONJON_ID, 5)
-            move_unit_button(effect, constants.SHIPYARD_ID, 5)
-        # shipyard
-        elif civ_id in constants.CHRONICLE_CIV_IDS:
-            move_unit_button(effect, constants.KREPOST_ID, -1)
-            move_unit_button(effect, constants.DONJON_ID, -1)
-            move_unit_button(effect, constants.SHIPYARD_ID, 5)
+            move_unit_button(effect, 1227, 1)
+        else:
+            move_unit_button(effect, 1227, -1)
 
         if civ_name == 'Huns':
             move_unit_button(effect, 886, 1)
@@ -347,158 +364,6 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         else:
             move_unit_button(effect, 759, -1)
             move_unit_button(effect, 761, -1)
-
-        if civ_name == 'Sicilians':
-            move_unit_button(effect, 1659, 1)
-        else:
-            move_unit_button(effect, 1659, -1)
-        if civ_name == 'Bulgarians':
-            move_unit_button(effect, 1227, 1)
-        else:
-            move_unit_button(effect, 1227, -1)
-        HEI_GUANG_ID = [1944, 1946]
-        HEAVY_HEI_GUANG_TECH_ID = 1033
-        KNIGHT_ID = [38, 283]
-        CAVALIER_TECH_ID = 209
-        PALADIN_ID = 569
-        PALADIN_TECH_ID = 265
-        SAVAR_ID = 1813
-        SAVAR_TECH_ID = 526
-        XOLOTL_ID = 1570
-        # hei guang
-        if civ_name in ('Wei', 'Shu', 'Wu'):
-            for i in HEI_GUANG_ID:
-                move_unit_button(effect, i, 2)
-            move_tech_button(effect, HEAVY_HEI_GUANG_TECH_ID, 7)
-            for i in KNIGHT_ID:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, CAVALIER_TECH_ID, -1)
-            move_unit_button(effect, PALADIN_ID, -1)
-            move_tech_button(effect, PALADIN_TECH_ID, -1)
-            move_unit_button(effect, SAVAR_ID, -1)
-            move_tech_button(effect, SAVAR_TECH_ID, -1)
-            move_unit_button(effect, XOLOTL_ID, -1)
-        elif civ_name == 'Persians':
-            for i in HEI_GUANG_ID:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, HEAVY_HEI_GUANG_TECH_ID, -1)
-            move_unit_button(effect, PALADIN_ID, -1)
-            move_tech_button(effect, PALADIN_TECH_ID, -1)
-            for i in KNIGHT_ID:
-                move_unit_button(effect, i, 2)
-            move_tech_button(effect, CAVALIER_TECH_ID, 7)
-            move_unit_button(effect, SAVAR_ID, 2)
-            move_tech_button(effect, SAVAR_TECH_ID, 7)
-            move_unit_button(effect, XOLOTL_ID, -1)
-        elif civ_name in ('Aztecs', 'Mayans', 'Incas'):
-            for i in HEI_GUANG_ID:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, HEAVY_HEI_GUANG_TECH_ID, -1)
-            for i in KNIGHT_ID:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, CAVALIER_TECH_ID, -1)
-            move_unit_button(effect, PALADIN_ID, -1)
-            move_tech_button(effect, PALADIN_TECH_ID, -1)
-            move_unit_button(effect, SAVAR_ID, -1)
-            move_tech_button(effect, SAVAR_TECH_ID, -1)
-            move_unit_button(effect, XOLOTL_ID, 2)
-        else:
-            for i in HEI_GUANG_ID:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, HEAVY_HEI_GUANG_TECH_ID, -1)
-            move_unit_button(effect, SAVAR_ID, -1)
-            move_tech_button(effect, SAVAR_TECH_ID, -1)
-            for i in KNIGHT_ID:
-                move_unit_button(effect, i, 2)
-            move_tech_button(effect, CAVALIER_TECH_ID, 7)
-            move_unit_button(effect, PALADIN_ID, 2)
-            move_tech_button(effect, PALADIN_TECH_ID, 7)
-            move_unit_button(effect, XOLOTL_ID, -1)
-
-        if civ_name == 'Khitans':
-            move_unit_button(effect, PASTURE_ID, 1)
-            for i in constants.PORT_IDS:
-                move_unit_button(effect, i, -1)
-            for i in constants.SETTLEMENT_IDS:
-                move_unit_button(effect, i, -1)
-        elif civ_id in CHRONICLE_CIV_IDS:
-            move_unit_button(effect, PASTURE_ID, -1)
-            for i in constants.PORT_IDS:
-                move_unit_button(effect, i, 1)
-            for i in constants.SETTLEMENT_IDS:
-                move_unit_button(effect, i, -1)
-        elif civ_id in SOUTH_MESO_CIV_IDS:
-            for i in constants.SETTLEMENT_IDS:
-                move_unit_button(effect, i, 1)
-            for i in constants.PORT_IDS:
-                move_unit_button(effect, i, -1)
-            move_unit_button(effect, PASTURE_ID, -1)
-        append_tech(data, tech, effect)
-
-        # unique infantry
-        pez_tech_id = params.other_params['pez_tech_id']
-        if civ_name == 'Wu':
-            for i in constants.JIAN_IDS:
-                move_unit_button(effect, i, 31)
-            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
-            for i in constants.IBIRAPEMA_IDS:
-                move_unit_button(effect, i, -1)
-            for i in TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, -1)
-            for i in PHALANGITE_IDS:
-                move_unit_button(effect, i, -1)
-        elif civ_name == 'Burgundians':
-            for i in constants.JIAN_IDS:
-                move_unit_button(effect, i, -1)
-            for i in constants.IBIRAPEMA_IDS:
-                move_unit_button(effect, i, -1)
-            move_unit_button(effect, FLEMISH_MILITIA_ID, 31)
-            for i in TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, -1)
-            for i in PHALANGITE_IDS:
-                move_unit_button(effect, i, -1)
-        elif civ_name == 'Tupi':
-            for i in constants.JIAN_IDS:
-                move_unit_button(effect, i, -1)
-            for i in constants.IBIRAPEMA_IDS:
-                move_unit_button(effect, i, 31)
-            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
-            for i in TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, -1)
-            for i in PHALANGITE_IDS:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
-            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
-            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, -1)
-            move_tech_button(effect, pez_tech_id, -1)
-        elif civ_name == 'Muisca':
-            for i in constants.JIAN_IDS:
-                move_unit_button(effect, i, -1)
-            for i in constants.IBIRAPEMA_IDS:
-                move_unit_button(effect, i, -1)
-            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
-            for i in TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, 31)
-            for i in PHALANGITE_IDS:
-                move_unit_button(effect, i, -1)
-            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
-            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32)
-            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, -1)
-            move_tech_button(effect, pez_tech_id, -1)
-        elif civ_name == 'Macedonians':
-            for i in constants.JIAN_IDS:
-                move_unit_button(effect, i, -1)
-            for i in constants.IBIRAPEMA_IDS:
-                move_unit_button(effect, i, -1)
-            move_unit_button(effect, FLEMISH_MILITIA_ID, -1)
-            for i in TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, -1)
-            for i in PHALANGITE_IDS:
-                move_unit_button(effect, i, 31)
-            move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, -1)
-            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, -1)
-            move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, 32)
-            move_tech_button(effect, pez_tech_id, 32)
 
 
     lfc_offset = 6800
