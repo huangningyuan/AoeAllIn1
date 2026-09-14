@@ -99,6 +99,10 @@ def generate_techs(data: DatFile, params, config=None):
             if is_castle_section and additional_ut_civ is not None:
                 civ_index_to_additional_uts.setdefault(additional_ut_civ, []).append(tech_id)
 
+            register_as = entry.get('register_as')
+            if register_as:
+                params.other_params[register_as] = tech_id
+
     return {
         'source_id_to_effect_id': source_id_to_effect_id,
         'source_id_to_first_tech_id': source_id_to_first_tech_id,

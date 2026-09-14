@@ -318,7 +318,6 @@
                 {
                     "source_id": 4,
                     "button": 9,
-                    "icon": "IUT_ICON_ID",
                     "tech_name": "El Dorado"
                 },
                 {
@@ -330,6 +329,7 @@
                 {
                     "source_id": 1392,
                     "button": 34,
+                    "icon": "BLAST_FURNACE_ICON_ID",
                     "tech_name": "Caciques"
                 },
                 {
@@ -389,7 +389,8 @@
                 {
                     "source_id": 1286,
                     "button": 32,
-                    "tech_name": "Pezhetairoi"
+                    "tech_name": "Pezhetairoi",
+                    "register_as": "pez_tech_id"
                 }
             ]
         },
@@ -509,22 +510,67 @@
                     "source_id": 757,
                     "button": 7,
                     "icon": "CAVALRY_ARMOR_ICON_ID",
-                    "tech_name": "Hauberk"
+                    "tech_name": "Hauberk",
+                    "register_as": "hauberk_id"
                 },
                 {
                     "source_id": 782,
                     "button": 7,
-                    "tech_name": "Szlachta Privileges"
+                    "tech_name": "Szlachta Privileges",
+                    "register_as": "szlachta_privileges_id"
                 },
                 {
                     "source_id": 884,
                     "button": 7,
-                    "tech_name": "Comitatenses"
+                    "tech_name": "Comitatenses",
+                    "register_as": "comitatenses_id"
                 },
                 {
                     "source_id": 1298,
                     "button": 7,
-                    "tech_name": "Bessian Metalworking"
+                    "tech_name": "Bessian Metalworking",
+                    "register_as": "bessian_metalworking_id"
+                },
+                {
+                    "source_id": 1380,
+                    "button": 7,
+                    "tech_name": "Butalmapu",
+                    "register_as": "butalmapu_id"
+                },
+                {
+                    "source_id": 4,
+                    "button": 7,
+                    "icon": "BLOODLINE_ICON_ID",
+                    "tech_name": "El Dorado",
+                    "register_as": "el_dorado_id"
+                },
+                {
+                    "source_id": 24,
+                    "button": 7,
+                    "icon": "BLAST_FURNACE_ICON_ID",
+                    "tech_name": "Garland Wars",
+                    "register_as": "garland_wars_id"
+                },
+                {
+                    "source_id": 517,
+                    "button": 7,
+                    "icon": "CAVALRY_ARMOR_ICON_ID",
+                    "tech_name": "Fabric Shields",
+                    "register_as": "fabric_shields_id"
+                },
+                {
+                    "source_id": 1392,
+                    "button": 7,
+                    "icon": "BLAST_FURNACE_ICON_ID",
+                    "tech_name": "Caciques",
+                    "register_as": "caciques_id"
+                },
+                {
+                    "source_id": 1365,
+                    "button": 7,
+                    "icon": "HUSBANDRY_ICON_ID",
+                    "tech_name": "Herbalism",
+                    "register_as": "herbalism_id"
                 },
                 {
                     "source_id": 1112,
@@ -573,20 +619,23 @@
                 },
                 {
                     "source_id": 833,
-                    "button": 28,
+                    "button": 8,
                     "icon": "BRACER_ICON_ID",
-                    "tech_name": "Paiks"
+                    "tech_name": "Paiks",
+                    "register_as": "paiks_id"
                 },
                 {
                     "source_id": 831,
-                    "button": 28,
-                    "tech_name": "Medical Corps"
+                    "button": 8,
+                    "tech_name": "Medical Corps",
+                    "register_as": "medical_corps_id"
                 },
                 {
                     "source_id": 836,
-                    "button": 28,
+                    "button": 8,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "tech_name": "Frontier Guards"
+                    "tech_name": "Frontier Guards",
+                    "register_as": "frontier_guards_id"
                 },
                 {
                     "source_id": 573,
@@ -664,6 +713,7 @@
                 {
                     "source_id": 1392,
                     "button": 26,
+                    "icon": "BRACER_ICON_ID",
                     "tech_name": "Caciques"
                 },
                 {
@@ -718,7 +768,7 @@
                 },
                 {
                     "source_id": 997,
-                    "button": 32,
+                    "button": 27,
                     "tech_name": "Thunderclap Bombs"
                 },
                 {
@@ -987,12 +1037,14 @@
                 {
                     "source_id": 1069,
                     "button": 14,
-                    "tech_name": "Bolt Magazine"
+                    "tech_name": "Bolt Magazine",
+                    "register_as": "bm_dock_id"
                 },
                 {
                     "source_id": 52,
                     "button": 14,
-                    "tech_name": "Rocketry"
+                    "tech_name": "Rocketry",
+                    "register_as": "roc_dock_id"
                 },
                 {
                     "source_id": 1081,

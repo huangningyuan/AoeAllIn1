@@ -544,14 +544,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     roc_siege_id, roc_dock_id = sid2all[52]
     techs[1015].required_techs = (47, 52, roc_siege_id, roc_dock_id, -1, -1)
 
-    # ===== OTHER_PARAMS assignments =====
-    bm_dock_id = sid2all[1069][-1]
-    params.other_params['bm_dock_id'] = bm_dock_id
-    params.other_params['roc_dock_id'] = roc_dock_id
-
-    pez_id = sid2first[1286]
-    params.other_params['pez_tech_id'] = pez_id
-
     pl_castle_id = sid2all[1133][0]
     pl_shipyard_id = sid2all[1133][-1]
 

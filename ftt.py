@@ -56,10 +56,6 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     # winged hussar
     move_tech_button(effect, 786, 6)
 
-    # elephant archer
-    move_unit_button(effect, 873, 23)
-    move_unit_button(effect, 875, 23)
-    move_tech_button(effect, 481, 28)
     # genitour
     move_unit_button(effect, 1010, 24)
     move_unit_button(effect, 1012, 24)

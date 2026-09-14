@@ -3,31 +3,60 @@
     "category_name": "siege warship",
     "unit_button_id": 9,
     "tech_button_id": 14,
-    "all_unit_ids": [1795, 420, 691, 1948, 2633],
-    "all_tech_ids": [376, "bm_dock_id", "sit_t_dock_id", "tb_dock_id", "roc_dock_id"],
     "switch_contents": [
       {
         "unit_name": "Dromon",
         "civ_match": {
-          "civ_names": ["Huns", "Byzantines", "Armenians", "Romans", "Goths"]
+          "civ_names": [
+            "Huns",
+            "Byzantines",
+            "Armenians",
+            "Romans",
+            "Goths"
+          ]
         },
-        "unit_ids": [1795],
+        "unit_ids": [
+          1795
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Lou Chuan",
         "civ_match": {
-          "civ_names": ["Wei", "Shu", "Wu", "Chinese", "Jurchens"]
+          "civ_names": [
+            "Wei",
+            "Shu",
+            "Wu",
+            "Chinese",
+            "Jurchens"
+          ]
         },
-        "unit_ids": [1948],
-        "tech_ids": ["bm_dock_id", "sit_t_dock_id", "tb_dock_id", "roc_dock_id"]
+        "unit_ids": [
+          1948
+        ],
+        "tech_ids": [
+          "bm_dock_id",
+          "sit_t_dock_id",
+          "tb_dock_id",
+          "roc_dock_id"
+        ]
       },
       {
         "unit_name": "Catapult Galleon",
         "civ_match": {
-          "civ_names": ["Cumans", "Mayans", "Aztecs", "Incas", "Muisca", "Mapuche", "Tupi"]
+          "civ_names": [
+            "Cumans",
+            "Mayans",
+            "Aztecs",
+            "Incas",
+            "Muisca",
+            "Mapuche",
+            "Tupi"
+          ]
         },
-        "unit_ids": [2633],
+        "unit_ids": [
+          2633
+        ],
         "tech_ids": []
       },
       {
@@ -35,39 +64,60 @@
         "civ_match": {
           "default": true
         },
-        "unit_ids": [420, 691],
-        "tech_ids": [376]
+        "unit_ids": [
+          420,
+          691
+        ],
+        "tech_ids": [
+          376
+        ]
       }
     ]
   },
   {
     "category_name": "unique building 1",
     "unit_button_id": 5,
-    "all_unit_ids": [1251, 1665, 2119],
-    "all_tech_ids": [],
     "switch_contents": [
       {
         "unit_name": "Krepost",
         "civ_match": {
-          "civ_names": ["Bulgarians"]
+          "civ_names": [
+            "Bulgarians"
+          ]
         },
-        "unit_ids": [1251],
+        "unit_ids": [
+          1251
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Donjon",
         "civ_match": {
-          "civ_names": ["Sicilians"]
+          "civ_names": [
+            "Sicilians"
+          ]
         },
-        "unit_ids": [1665, 2119],
+        "unit_ids": [
+          1665,
+          2119
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Shipyard",
         "civ_match": {
-          "civ_names": ["Achaemenids", "Athenians", "Spartans", "Macedonians", "Thracians", "Puru"]
+          "civ_names": [
+            "Achaemenids",
+            "Athenians",
+            "Spartans",
+            "Macedonians",
+            "Thracians",
+            "Puru"
+          ]
         },
-        "unit_ids": [2119],
+        "unit_ids": [
+          2119
+        ],
         "tech_ids": []
       }
     ]
@@ -76,71 +126,208 @@
     "category_name": "cavalry",
     "unit_button_id": 2,
     "tech_button_id": 7,
-    "all_unit_ids": [1944, 1946, 38, 283, 569, 1813, 1570],
-    "all_tech_ids": [1033, 209, 265, 526],
     "switch_contents": [
       {
         "unit_name": "Hei Guang",
         "civ_match": {
-          "civ_names": ["Wei", "Shu", "Wu"]
+          "civ_names": [
+            "Wei",
+            "Shu",
+            "Wu"
+          ]
         },
-        "unit_ids": [1944, 1946],
-        "tech_ids": [1033]
+        "unit_ids": [
+          1944,
+          1946
+        ],
+        "tech_ids": [
+          1033
+        ]
       },
       {
         "unit_name": "Persians",
         "civ_match": {
-          "civ_names": ["Persians"]
+          "civ_names": [
+            "Persians"
+          ]
         },
-        "unit_ids": [38, 283, 1813],
-        "tech_ids": [209, 526]
+        "unit_ids": [
+          38,
+          283,
+          1813
+        ],
+        "tech_ids": [
+          209,
+          526,
+          "hauberk_id",
+          "szlachta_privileges_id",
+          "comitatenses_id",
+          "bessian_metalworking_id"
+        ]
       },
       {
         "unit_name": "Xolotl",
         "civ_match": {
-          "civ_names": ["Aztecs", "Mayans", "Incas"]
+          "civ_names": [
+            "Aztecs",
+            "Mayans",
+            "Incas",
+            "Muisca",
+            "Tupi",
+            "Mapuche"
+          ]
         },
-        "unit_ids": [1570],
-        "tech_ids": []
+        "unit_ids": [
+          1570
+        ],
+        "tech_ids": [
+          "el_dorado_id",
+          "garland_wars_id",
+          "fabric_shields_id",
+          "butalmapu_id",
+          "caciques_id",
+          "herbalism_id"
+        ]
       },
       {
         "unit_name": "Default",
         "civ_match": {
           "default": true
         },
-        "unit_ids": [38, 283, 569],
-        "tech_ids": [209, 265]
+        "unit_ids": [
+          38,
+          283,
+          569
+        ],
+        "tech_ids": [
+          209,
+          265,
+          "hauberk_id",
+          "szlachta_privileges_id",
+          "comitatenses_id",
+          "bessian_metalworking_id"
+        ]
+      }
+    ]
+  },
+  {
+    "category_name": "cavalry archer",
+    "unit_button_id": 3,
+    "tech_button_id": 8,
+    "switch_contents": [
+      {
+        "unit_name": "Elephant Archers",
+        "civ_match": {
+          "civ_names": [
+            "Bengalis",
+            "Dravidians",
+            "Gurjaras"
+          ]
+        },
+        "unit_ids": [
+          873,
+          875
+        ],
+        "tech_ids": [
+          481,
+          "paiks_id",
+          "medical_corps_id",
+          "frontier_guards_id"
+        ]
+      },
+      {
+        "unit_name": "Xianbei Raider",
+        "civ_match": {
+          "civ_names": [
+            "Wei"
+          ]
+        },
+        "unit_ids": [
+          1952
+        ],
+        "tech_ids": []
+      },
+      {
+        "unit_name": "Bolas Rider",
+        "civ_match": {
+          "civ_names": [
+            "Mapuche"
+          ]
+        },
+        "unit_ids": [
+          2569,
+          2571
+        ],
+        "tech_ids": [
+          1378
+        ]
+      },
+      {
+        "unit_name": "Default",
+        "civ_match": {
+          "default": true
+        },
+        "unit_ids": [
+          39,
+          474
+        ],
+        "tech_ids": [
+          218
+        ]
       }
     ]
   },
   {
     "category_name": "unique building 2",
     "unit_button_id": 1,
-    "all_unit_ids": [1889, 2141, 2142, 2143, 2172, 2556, 2558, 2560],
-    "all_tech_ids": [],
     "switch_contents": [
       {
         "unit_name": "Pasture",
         "civ_match": {
-          "civ_names": ["Khitans"]
+          "civ_names": [
+            "Khitans"
+          ]
         },
-        "unit_ids": [1889],
+        "unit_ids": [
+          1889
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Port",
         "civ_match": {
-          "civ_names": ["Achaemenids", "Athenians", "Spartans", "Macedonians", "Thracians", "Puru"]
+          "civ_names": [
+            "Achaemenids",
+            "Athenians",
+            "Spartans",
+            "Macedonians",
+            "Thracians",
+            "Puru"
+          ]
         },
-        "unit_ids": [2141, 2142, 2143, 2172],
+        "unit_ids": [
+          2141,
+          2142,
+          2143,
+          2172
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Settlement",
         "civ_match": {
-          "civ_names": ["Incas", "Muisca", "Mapuche", "Tupi"]
+          "civ_names": [
+            "Incas",
+            "Muisca",
+            "Mapuche",
+            "Tupi"
+          ]
         },
-        "unit_ids": [2556, 2558, 2560],
+        "unit_ids": [
+          2556,
+          2558,
+          2560
+        ],
         "tech_ids": []
       }
     ]
@@ -149,48 +336,77 @@
     "category_name": "unique infantry",
     "unit_button_id": 31,
     "tech_button_id": 32,
-    "all_unit_ids": [1974, 1976, 1699, 2582, 2584, 2586, 2587, 2384, 2385],
-    "all_tech_ids": [1391, 1401, 1291, "pez_tech_id"],
     "switch_contents": [
       {
         "unit_name": "Jian",
         "civ_match": {
-          "civ_names": ["Wu"]
+          "civ_names": [
+            "Wu"
+          ]
         },
-        "unit_ids": [1974, 1976],
+        "unit_ids": [
+          1974,
+          1976
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Flemish Militia",
         "civ_match": {
-          "civ_names": ["Burgundians"]
+          "civ_names": [
+            "Burgundians"
+          ]
         },
-        "unit_ids": [1699],
+        "unit_ids": [
+          1699
+        ],
         "tech_ids": []
       },
       {
         "unit_name": "Ibirapema",
         "civ_match": {
-          "civ_names": ["Tupi"]
+          "civ_names": [
+            "Tupi"
+          ]
         },
-        "unit_ids": [2582, 2584],
-        "tech_ids": [1391]
+        "unit_ids": [
+          2582,
+          2584
+        ],
+        "tech_ids": [
+          1391
+        ]
       },
       {
         "unit_name": "Temple Guard",
         "civ_match": {
-          "civ_names": ["Muisca"]
+          "civ_names": [
+            "Muisca"
+          ]
         },
-        "unit_ids": [2586, 2587],
-        "tech_ids": [1401]
+        "unit_ids": [
+          2586,
+          2587
+        ],
+        "tech_ids": [
+          1401
+        ]
       },
       {
         "unit_name": "Phalangite",
         "civ_match": {
-          "civ_names": ["Macedonians"]
+          "civ_names": [
+            "Macedonians"
+          ]
         },
-        "unit_ids": [2384, 2385],
-        "tech_ids": [1291, "pez_tech_id"]
+        "unit_ids": [
+          2384,
+          2385
+        ],
+        "tech_ids": [
+          1291,
+          "pez_tech_id"
+        ]
       }
     ]
   }

@@ -91,8 +91,12 @@ def _execute_unit_switch(effect, civ_name, civ_id, params):
         unit_button_id = category.get('unit_button_id')
         tech_button_id = category.get('tech_button_id')
 
-        all_uids = set(_resolve_ids(category.get('all_unit_ids', []), params))
-        all_tids = set(_resolve_ids(category.get('all_tech_ids', []), params))
+        all_uids = set()
+        all_tids = set()
+        for sc in category.get('switch_contents', []):
+            all_uids.update(_resolve_ids(sc.get('unit_ids', []), params))
+            all_tids.update(_resolve_ids(sc.get('tech_ids', []), params))
+
         enable_uids = set(_resolve_ids(target_sc.get('unit_ids', []), params))
         enable_tids = set(_resolve_ids(target_sc.get('tech_ids', []), params))
 

@@ -583,7 +583,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
             research_tech(effect, 992)
-            move_unit_button(effect, 1911, 31)
+            move_unit_button(effect, 1911, 22)
             append_tech(data, tech, effect)
             name = 'cheap Siege and Defensive techs'
             tech = get_new_tech(name)
@@ -706,6 +706,18 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 for j in target_units:
                     plus_unit_armor(effect, j, -1, 1, 3)
         case 'Mapuche':
+            name = 'enable Bolas Rider'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+            effect = get_new_effect(name)
+            enable_unit(effect, 2569)
+            append_tech(data, tech, effect)
+            name = 'Elite Bolas Rider'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+            effect = get_new_effect(name)
+            force_tech(effect, 1378)
+            append_tech(data, tech, effect)
             effect = effects[1383]
             b_wp_with_relic = False
             for command in effect.effect_commands:
@@ -786,21 +798,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(effects[effect_with_bl_id], tech_id)
 
         case 'Muisca':
-            name = 'enable Bolas Rider'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 2569)
-            move_unit_button(effect, 2569, 33)
-            move_unit_button(effect, 2571, 33)
-            append_tech(data, tech, effect)
-            name = 'Elite Bolas Rider'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 1378)
-            move_tech_button(effect, 1378, 34)
-            append_tech(data, tech, effect)
             name = 'enable Temple Guard'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
@@ -1320,7 +1317,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
             research_tech(effect, 1037)
-            move_unit_button(effect, 1952, 22)
             append_tech(data, tech, effect)
             name = 'enable Cao Cao'
             tech = get_new_tech(name)
