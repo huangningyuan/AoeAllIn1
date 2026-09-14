@@ -37,7 +37,7 @@ def adding_switch(data: DatFile):
         civ.units.append(split_line_unit)
 
     params = All_In_1_Params()
-    params.ut_in_castle_with_mutex_list = dict()
+    params.civ_index_to_additional_uts = dict()
     params.other_params = dict()
     tech = get_new_tech('All in 1 Switch')
     tech.civ = constants.LARGE_CIV_ID

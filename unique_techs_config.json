@@ -144,89 +144,103 @@
                     "source_id": 623,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Double Crossbow"
+                    "tech_name": "Double Crossbow",
+                    "additional_ut": 28
                 },
                 {
                     "source_id": 884,
                     "button": 0,
                     "in_castle": true,
                     "icon": "BLAST_FURNACE_ICON_ID",
-                    "tech_name": "Comitatenses"
+                    "tech_name": "Comitatenses",
+                    "additional_ut": 43
                 },
                 {
                     "source_id": 517,
                     "button": 0,
                     "in_castle": true,
                     "icon": "INFANTRY_ARMOR_ICON_ID",
-                    "tech_name": "Couriers"
+                    "tech_name": "Fabric Shields",
+                    "additional_ut": 21
                 },
                 {
                     "source_id": 833,
                     "button": 0,
                     "in_castle": true,
                     "icon": "BLAST_FURNACE_ICON_ID",
-                    "tech_name": "Paiks"
+                    "tech_name": "Paiks",
+                    "additional_ut": 41
                 },
                 {
                     "source_id": 574,
                     "button": 0,
                     "in_castle": true,
                     "icon": "INFANTRY_ARMOR_ICON_ID",
-                    "tech_name": "Royal Heirs"
+                    "tech_name": "Royal Heirs",
+                    "additional_ut": 25
                 },
                 {
                     "source_id": 579,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Maghrabi Camels"
+                    "tech_name": "Maghrebi Camels",
+                    "additional_ut": 27
                 },
                 {
                     "source_id": 784,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Wagenburg Tactics"
+                    "tech_name": "Wagenburg Tactics",
+                    "additional_ut": 39
                 },
                 {
                     "source_id": 1120,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Taxiarchs"
+                    "tech_name": "Taxiarchs",
+                    "additional_ut": 47
                 },
                 {
                     "source_id": 1070,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Coiled Serpent Array"
+                    "tech_name": "Coiled Serpent Array",
+                    "additional_ut": 49
                 },
                 {
                     "source_id": 1080,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Red Cliffs Tactics"
+                    "tech_name": "Red Cliffs Tactics",
+                    "additional_ut": 50
                 },
                 {
                     "source_id": 1287,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Sarissophoroi"
+                    "tech_name": "Sarissophoroi",
+                    "additional_ut": 54
                 },
                 {
                     "source_id": 1110,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Sparabaras"
+                    "tech_name": "Sparabaras",
+                    "additional_ut": 46
                 },
                 {
                     "source_id": 1298,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Bessian Metalworking"
+                    "tech_name": "Bessian Metalworking",
+                    "additional_ut": 55
                 },
                 {
                     "source_id": 1308,
                     "button": 0,
                     "in_castle": true,
-                    "tech_name": "Leaf-Headed Shafts"
+                    "tech_name": "Leaf-Headed Shafts",
+                    "additional_ut": 56
                 },
                 {
                     "source_id": 1380,
@@ -294,13 +308,11 @@
                     "source_id": 884,
                     "button": 6,
                     "icon": "BLAST_FURNACE_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Comitatenses"
                 },
                 {
                     "source_id": 1298,
                     "button": 6,
-                    "share_effect": true,
                     "tech_name": "Bessian Metalworking"
                 },
                 {
@@ -313,8 +325,7 @@
                     "source_id": 517,
                     "button": 34,
                     "icon": "INFANTRY_ARMOR_ICON_ID",
-                    "share_effect": true,
-                    "tech_name": "Couriers"
+                    "tech_name": "Fabric Shields"
                 },
                 {
                     "source_id": 1392,
@@ -336,7 +347,6 @@
                 {
                     "source_id": 1070,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Coiled Serpent Array"
                 },
                 {
@@ -347,7 +357,6 @@
                 {
                     "source_id": 1110,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Sparabaras"
                 },
                 {
@@ -375,7 +384,6 @@
                     "source_id": 784,
                     "button": 27,
                     "icon": "SQUIRES_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Wagenburg Tactics"
                 },
                 {
@@ -460,7 +468,6 @@
                     "source_id": 833,
                     "button": 9,
                     "icon": "BLAST_FURNACE_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Paiks"
                 },
                 {
@@ -490,14 +497,12 @@
                 {
                     "source_id": 579,
                     "button": 13,
-                    "share_effect": true,
-                    "tech_name": "Maghrabi Camels"
+                    "tech_name": "Maghrebi Camels"
                 },
                 {
                     "source_id": 574,
                     "button": 13,
                     "icon": "CAVALRY_ARMOR_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Royal Heirs"
                 },
                 {
@@ -514,13 +519,11 @@
                 {
                     "source_id": 884,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Comitatenses"
                 },
                 {
                     "source_id": 1298,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Bessian Metalworking"
                 },
                 {
@@ -531,7 +534,7 @@
                 {
                     "source_id": 1307,
                     "button": 28,
-                    "tech_name": "Vadhāvadha"
+                    "tech_name": "Vadh膩vadha"
                 }
             ]
         },
@@ -549,7 +552,6 @@
                     "source_id": 687,
                     "button": 13,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Silk Armor"
                 },
                 {
@@ -562,46 +564,39 @@
                     "source_id": 1062,
                     "button": 13,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Ming-Kuang Armor"
                 },
                 {
                     "source_id": 924,
                     "button": 13,
-                    "share_effect": true,
                     "tech_name": "Aznauri Cavalry"
                 },
                 {
                     "source_id": 833,
                     "button": 28,
                     "icon": "BRACER_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Paiks"
                 },
                 {
                     "source_id": 831,
                     "button": 28,
-                    "share_effect": true,
                     "tech_name": "Medical Corps"
                 },
                 {
                     "source_id": 836,
                     "button": 28,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Frontier Guards"
                 },
                 {
                     "source_id": 573,
                     "button": 14,
                     "icon": "BALLISTICS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Arquebus"
                 },
                 {
                     "source_id": 784,
                     "button": 14,
-                    "share_effect": true,
                     "tech_name": "Wagenburg Tactics"
                 },
                 {
@@ -642,13 +637,11 @@
                 {
                     "source_id": 1393,
                     "button": 11,
-                    "share_effect": true,
                     "tech_name": "Curare"
                 },
                 {
                     "source_id": 1365,
                     "button": 11,
-                    "share_effect": true,
                     "tech_name": "Herbalism"
                 },
                 {
@@ -660,7 +653,6 @@
                     "source_id": 689,
                     "button": 8,
                     "icon": "CONSCRIPTION_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Steppe Husbandry"
                 },
                 {
@@ -672,15 +664,13 @@
                 {
                     "source_id": 1392,
                     "button": 26,
-                    "share_effect": true,
                     "tech_name": "Caciques"
                 },
                 {
                     "source_id": 517,
                     "button": 26,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "share_effect": true,
-                    "tech_name": "Couriers"
+                    "tech_name": "Fabric Shields"
                 },
                 {
                     "source_id": 460,
@@ -704,19 +694,16 @@
                     "source_id": 692,
                     "button": 7,
                     "icon": "ARCHER_ARMOR_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Tower Shields"
                 },
                 {
                     "source_id": 1006,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Lamellar Armor"
                 },
                 {
                     "source_id": 1130,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Helot Levies"
                 },
                 {
@@ -737,26 +724,23 @@
                 {
                     "source_id": 1380,
                     "button": 34,
-                    "share_effect": true,
                     "tech_name": "Butalmapu"
                 }
             ]
         },
         {
             "header": "----Siege UTs----",
-            "building": "SIEGE_WORKSHOP_ID",
+            "building": "SIEGE_ID",
             "techs": [
                 {
                     "source_id": 833,
                     "button": 31,
                     "icon": "BLAST_FURNACE_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Paiks"
                 },
                 {
                     "source_id": 831,
                     "button": 31,
-                    "share_effect": true,
                     "tech_name": "Medical Corps"
                 },
                 {
@@ -789,13 +773,11 @@
                     "source_id": 573,
                     "button": 32,
                     "icon": "BALLISTICS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Arquebus"
                 },
                 {
                     "source_id": 784,
                     "button": 32,
-                    "share_effect": true,
                     "tech_name": "Wagenburg Tactics"
                 },
                 {
@@ -807,19 +789,16 @@
                 {
                     "source_id": 997,
                     "button": 27,
-                    "share_effect": true,
                     "tech_name": "Thunderclap Bombs"
                 },
                 {
                     "source_id": 454,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Counterweights"
                 },
                 {
                     "source_id": 623,
                     "button": 8,
-                    "share_effect": true,
                     "tech_name": "Double Crossbow"
                 },
                 {
@@ -836,7 +815,6 @@
                 {
                     "source_id": 1069,
                     "button": 28,
-                    "share_effect": true,
                     "tech_name": "Bolt Magazine"
                 },
                 {
@@ -848,7 +826,7 @@
         },
         {
             "header": "----University UTs----",
-            "building": "UNIVERSITY_ID",
+            "building": "UNIV_ID",
             "techs": [
                 {
                     "source_id": 455,
@@ -888,21 +866,18 @@
                 {
                     "source_id": 482,
                     "button": 3,
-                    "share_effect": true,
                     "tech_name": "Stronghold"
                 },
                 {
                     "source_id": 923,
                     "button": 4,
                     "icon": "ARROWSLITS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Svan Towers"
                 },
                 {
                     "source_id": 3,
                     "button": 6,
                     "icon": "ARROWSLITS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Yeomen"
                 },
                 {
@@ -913,7 +888,6 @@
                 {
                     "source_id": 1393,
                     "button": 8,
-                    "share_effect": true,
                     "tech_name": "Curare"
                 }
             ]
@@ -926,7 +900,6 @@
                     "source_id": 10,
                     "button": 1,
                     "icon": "SIEGE_ENGINEERS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Artillery"
                 },
                 {
@@ -937,14 +910,13 @@
                 {
                     "source_id": 462,
                     "button": 3,
-                    "share_effect": true,
                     "tech_name": "Great Wall"
                 }
             ]
         },
         {
             "header": "----TC UTs----",
-            "building": "TOWN_CENTER_ID",
+            "building": "TC_ID",
             "techs": [
                 {
                     "source_id": 691,
@@ -966,14 +938,13 @@
                 {
                     "source_id": 1130,
                     "button": 10,
-                    "share_effect": true,
                     "tech_name": "Helot Levies, Spartan Unique Tech"
                 }
             ]
         },
         {
             "header": "----Monastery UTs----",
-            "building": "MONASTERY_ID",
+            "building": "MONESTARY_ID",
             "techs": [
                 {
                     "source_id": 785,
@@ -1000,7 +971,6 @@
                 {
                     "source_id": 464,
                     "button": 31,
-                    "share_effect": true,
                     "tech_name": "Greek Fire"
                 },
                 {
@@ -1012,57 +982,48 @@
                     "source_id": 10,
                     "button": 14,
                     "icon": "SIEGE_ENGINEERS_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Artillery"
                 },
                 {
                     "source_id": 1069,
                     "button": 14,
-                    "share_effect": true,
                     "tech_name": "Bolt Magazine"
                 },
                 {
                     "source_id": 52,
                     "button": 14,
-                    "share_effect": true,
                     "tech_name": "Rocketry"
                 },
                 {
                     "source_id": 1081,
                     "button": 14,
-                    "share_effect": true,
                     "tech_name": "Sitting Tiger"
                 },
                 {
                     "source_id": 997,
                     "button": 14,
-                    "share_effect": true,
                     "tech_name": "Thunderclap Bombs"
                 },
                 {
                     "source_id": 883,
                     "button": 12,
                     "icon": "BRACER_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Ballistas"
                 },
                 {
                     "source_id": 49,
                     "button": 26,
                     "icon": "BRACER_ICON_ID",
-                    "share_effect": true,
                     "tech_name": "Bogsveigar"
                 },
                 {
                     "source_id": 445,
                     "button": 27,
-                    "share_effect": true,
                     "tech_name": "Shinkichon"
                 },
                 {
                     "source_id": 1080,
                     "button": 13,
-                    "share_effect": true,
                     "tech_name": "Red Cliffs Tactics"
                 }
             ]
@@ -1085,13 +1046,11 @@
                 {
                     "source_id": 1111,
                     "button": 7,
-                    "share_effect": true,
                     "tech_name": "Reed Arrows"
                 },
                 {
                     "source_id": 1132,
                     "button": 6,
-                    "share_effect": true,
                     "tech_name": "Xyphos"
                 },
                 {
@@ -1107,7 +1066,6 @@
                 {
                     "source_id": 1133,
                     "button": 11,
-                    "share_effect": true,
                     "tech_name": "Peloponnesian League"
                 }
             ]

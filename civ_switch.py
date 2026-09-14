@@ -204,7 +204,10 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         
 
     print(uu_id_list)
-    additional_ut_ids = dict()
+    additional_ut_ids: dict[int, list[int]] = {
+        civ_id: list(tech_ids)
+        for civ_id, tech_ids in params.civ_index_to_additional_uts.items()
+    }
     name = 'Force uu uts castle'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
@@ -213,22 +216,19 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     tech_id = 83
     force_tech(effect, tech_id)
     move_tech_button(effect, tech_id, -1)
-    additional_ut_ids[2] = tech_id
+    additional_ut_ids.setdefault(2, []).append(tech_id)
     # Athenians
-    tech_id = params.ut_in_castle_with_mutex_list['Taxiarchs']
-    force_tech(effect, tech_id)
-    move_tech_button(effect, tech_id, -1)
-    additional_ut_ids[47] = tech_id
+    for tid in params.civ_index_to_additional_uts.get(47, []):
+        force_tech(effect, tid)
+        move_tech_button(effect, tid, -1)
     # Shu
-    tech_id = params.ut_in_castle_with_mutex_list['Coiled Serpent Array']
-    force_tech(effect, tech_id)
-    move_tech_button(effect, tech_id, -1)
-    additional_ut_ids[49] = tech_id
+    for tid in params.civ_index_to_additional_uts.get(49, []):
+        force_tech(effect, tid)
+        move_tech_button(effect, tid, -1)
     # Wu
-    tech_id = params.ut_in_castle_with_mutex_list['Red Cliffs Tactics']
-    force_tech(effect, tech_id)
-    move_tech_button(effect, tech_id, -1)
-    additional_ut_ids[50] = tech_id
+    for tid in params.civ_index_to_additional_uts.get(50, []):
+        force_tech(effect, tid)
+        move_tech_button(effect, tid, -1)
     append_tech(data, tech, effect)
 
     name = 'Force uu uts imp'
@@ -239,7 +239,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     tech_id = 61
     force_tech(effect, tech_id)
     move_tech_button(effect, tech_id, -1)
-    additional_ut_ids[7] = tech_id
+    additional_ut_ids.setdefault(7, []).append(tech_id)
     append_tech(data, tech, effect)
 
     # Corvinian Army
@@ -254,7 +254,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 869, -1, 103, food + gold)
     set_unit_attribute(effect, 871, -1, 103, food + gold)
     cov_tech_id, effect_id = append_tech(data, tech, effect)
-    additional_ut_ids[22] = cov_tech_id
+    additional_ut_ids.setdefault(22, []).append(cov_tech_id)
     name = 'Corvinian Army Imp'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, cov_tech_id)
@@ -285,20 +285,6 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 869, -1, 103, food + gold)
     set_unit_attribute(effect, 871, -1, 103, food + gold)
     append_tech(data, tech, effect)
-
-    additional_ut_ids[28] = params.ut_in_castle_with_mutex_list['Double Crossbow']
-    additional_ut_ids[43] = params.ut_in_castle_with_mutex_list['Comitatenses']
-    additional_ut_ids[21] = params.ut_in_castle_with_mutex_list['Fabric Shields']
-    additional_ut_ids[41] = params.ut_in_castle_with_mutex_list['Paiks']
-    additional_ut_ids[25] = params.ut_in_castle_with_mutex_list['Royal Heirs']
-    additional_ut_ids[27] = params.ut_in_castle_with_mutex_list['Maghrebi Camels']
-    additional_ut_ids[39] = params.ut_in_castle_with_mutex_list['Wagenburg Tactics']
-    additional_ut_ids[46] = params.ut_in_castle_with_mutex_list['Sparabaras']
-    additional_ut_ids[49] = params.ut_in_castle_with_mutex_list['Coiled Serpent Array']
-    additional_ut_ids[50] = params.ut_in_castle_with_mutex_list['Red Cliffs Tactics']
-    additional_ut_ids[54] = params.ut_in_castle_with_mutex_list['Sarissophoroi']
-    additional_ut_ids[55] = params.ut_in_castle_with_mutex_list['Bessian Metalworking']
-    additional_ut_ids[56] = params.ut_in_castle_with_mutex_list['Leaf-Headed Shafts']
 
     # huskarl
     tech = techs[365]
@@ -331,14 +317,14 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 disable_unit(effect, civ_switch_unit_offset_id + j)
                 move_unit_button(effect, uu_id_list[j], 1)
                 move_tech_button(effect, uu_tech_id_list[j], 6, 0)
-                if j in additional_ut_ids.keys():
-                    move_tech_button(effect, additional_ut_ids[j], 6, 0)
+                for aid in additional_ut_ids.get(j, []):
+                    move_tech_button(effect, aid, 6, 0)
             else:
                 enable_unit(effect, civ_switch_unit_offset_id + j)
                 move_unit_button(effect, uu_id_list[j], -1)
                 move_tech_button(effect, uu_tech_id_list[j], -1, 0)
-                if j in additional_ut_ids.keys():
-                    move_tech_button(effect, additional_ut_ids[j], -1, 0)
+                for aid in additional_ut_ids.get(j, []):
+                    move_tech_button(effect, aid, -1, 0)
         _execute_unit_switch(effect, civ_name, civ_id, params)
         append_tech(data, tech, effect)
 

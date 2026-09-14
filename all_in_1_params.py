@@ -3,5 +3,5 @@ class All_In_1_Params():
     feudal_duplicate_tech_id: int
     castle_duplicate_tech_id: int
     imp_duplicate_tech_id: int
-    ut_in_castle_with_mutex_list: dict
+    civ_index_to_additional_uts: dict[int, list[int]]
     other_params: dict
