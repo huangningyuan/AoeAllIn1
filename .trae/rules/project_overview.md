@@ -17,7 +17,8 @@
 ### Python模块
 | 文件 | 职责 |
 |------|------|
-| `main.py` | **入口**。加载dat文件，调用adding_switch()和update_all_in_1() |
+| `main.py` | 调试入口（非主流程） |
+| `update_all_in_1.py` | **正式入口脚本**。加载原生dat→调用adding_switch()→依次执行civ_switch/unique_techs/ftt/civ_bonuses/mutex等模块→输出到mod目录 |
 | `add_switch.py` | **主流程**。adding_switch()函数是核心入口，调度各模块完成所有配置 |
 | `unit_switch.json` → `civ_switch.py` | 读取unit_switch.json，自动计算all_uids/all_tids并集，匹配文明后通过move_unit_button/move_tech_button调整按钮位置（-1=隐藏，正数=目标位置） |
 | `unique_techs_config.json` → `unique_techs_config_loader.py` | 解析config，将register_as映射到params.other_params供civ_switch使用；同时返回source_id→effect_id/tech_id的映射表 |
@@ -94,5 +95,5 @@
 
 ## 注意事项
 - 一个科技不能出现在同一建筑的多个button位置（同一文明同一位置不能有两个科技）
-- 修改后运行`python main.py`验证
+- 修改后运行`python update_all_in_1.py`验证
 - JSON配置文件改完后可通过`python -c "import json;json.load(open('xxx.json','r',encoding='utf-8'));print('OK')"`快速验证格式
