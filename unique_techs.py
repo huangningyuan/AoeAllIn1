@@ -58,6 +58,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     params.civ_index_to_additional_uts = result['civ_index_to_additional_uts']
 
     # ===== FORCE TECH SERIES (complete copy from original) =====
+    append_tech(data, get_new_tech('----Exceptions----'), get_new_effect('----Exceptions----'))
 
     # --- Vedic Teachings ---
     vedic_teaching_id = 1309
