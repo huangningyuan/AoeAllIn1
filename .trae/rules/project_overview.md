@@ -18,8 +18,8 @@
 | 文件 | 职责 |
 |------|------|
 | `main.py` | 调试入口（非主流程） |
-| `update_all_in_1.py` | **正式入口脚本**。加载原生dat→调用adding_switch()→依次执行civ_switch/unique_techs/ftt/civ_bonuses/mutex等模块→输出到mod目录 |
-| `add_switch.py` | **主流程**。adding_switch()函数是核心入口，调度各模块完成所有配置 |
+| `update_all_in_1.py` | **正式入口脚本**。加载原生dat→调用adding_switch()初始化→依次执行ftt/civ_bonuses/unique_techs/civ_switch→保存→mutex互斥处理→打包zip |
+| `add_switch.py` | **添加总开关**。adding_switch()函数负责预留tech/effect/unit空间、初始化All_In_1_Params，返回params供后续模块使用 |
 | `unit_switch.json` → `civ_switch.py` | 读取unit_switch.json，自动计算all_uids/all_tids并集，匹配文明后通过move_unit_button/move_tech_button调整按钮位置（-1=隐藏，正数=目标位置） |
 | `unique_techs_config.json` → `unique_techs_config_loader.py` | 解析config，将register_as映射到params.other_params供civ_switch使用；同时返回source_id→effect_id/tech_id的映射表 |
 | `ftt.py` | **FTT补丁**。通过move_tech_button调整原生单位/科技的默认按钮位置 |
