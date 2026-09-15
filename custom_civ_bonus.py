@@ -12,6 +12,7 @@ from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_unit
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import append_tech_effect, disable_tech, extend_effect, force_research_tech, disable_unit
+from utils import check_effect
 from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
@@ -218,7 +219,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             multiply_resource(effect, 502, (1 + 0.1 * 1.4) / 1.1)
             append_tech(data, tech, effect)
             # Athenians lumberjack
-            effect = effects[1119]
+            effect = check_effect(effects, 1119)
             for command in effect.effect_commands:
                 if command.type == 1 and command.a == 502 and command.b == 0:
                     command.b = 1
@@ -244,7 +245,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 434)
             append_tech(data, tech, effect)
         case 'Bengalis':
-            effect = effects[865]
+            effect = check_effect(effects, 865)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = []
             for unit in constants.elephant_units:
@@ -315,7 +316,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             enable_unit(effect, 1254)
             append_tech(data, tech, effect)
         case 'Burgundians':
-            effect = effects[794]
+            effect = check_effect(effects, 794)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in gunpowder_units:
                 if i in origin_units:
@@ -397,7 +398,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
         case 'Celts':
             # siege fire rate
-            effect = effects[385]
+            effect = check_effect(effects, 385)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in siege_units:
@@ -453,7 +454,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
         case 'Georgians':
             # Cavalry regeneration ext
             for i in (954, 961):
-                extend_effect(effects[i], [1263])
+                extend_effect(check_effect(effects, i), [1263])
         case 'Gurjaras':
             name = 'enable camel scout'
             tech = get_new_tech(name)
@@ -489,7 +490,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_unit_attribute(effect, 1734, -1, 2, 10)
             append_tech(data, tech, effect)
             # tb elephant ext
-            effect = effects[843]
+            effect = check_effect(effects, 843)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = []
             for unit in constants.elephant_units:
@@ -498,7 +499,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             extend_effect(effect, extend_units)
         case 'Hindustanis':
             # gunpowder +armor ext
-            effect = effects[576]
+            effect = check_effect(effects, 576)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = list()
             for i in gunpowder_units:
@@ -516,7 +517,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
         case 'Huns':
             techs[241].civ = -1
             techs[242].civ = -1
-            effect = effects[231]
+            effect = check_effect(effects, 231)
             disable_tech(effect, get_tech_id_by_name(data, 'Start w/ Horse'))
             name = 'disable house'
             tech = get_new_tech(name)
@@ -561,7 +562,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
         case 'Italians':
             # cheap gunpowder units ext
-            effect = effects[555]
+            effect = check_effect(effects, 555)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in gunpowder_units:
                 if i in original_units:
@@ -666,7 +667,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 move_tech_button(effect, i, -1)
             append_tech(data, tech, effect)
             # siege ext
-            effect = effects[1220]
+            effect = check_effect(effects, 1220)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
             for i in siege_units:
                 if units[i].class_ not in original_classes:
@@ -687,7 +688,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_tech_button(effect, constants.ELITE_PHALANGITE_TECH_ID, -1)
             append_tech(data, tech, effect)
             # Druzhina + Phalangite
-            effect = effects[569]
+            effect = check_effect(effects, 569)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in (2384, 2385):
                 if i not in original_units:
@@ -702,7 +703,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                         map(lambda x: x.unit_id, unit.creatable.train_locations)) and i not in origin_units:
                     target_units.append(i)
             for i in (618, 619, 620):
-                effect = effects[i]
+                effect = check_effect(effects, i)
                 for j in target_units:
                     plus_unit_armor(effect, j, -1, 1, 3)
         case 'Mapuche':
@@ -718,7 +719,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 1378)
             append_tech(data, tech, effect)
-            effect = effects[1383]
+            effect = check_effect(effects, 1383)
             b_wp_with_relic = False
             for command in effect.effect_commands:
                 if command.a == constants.WP_WITH_RELIC_ID:
@@ -768,6 +769,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id, BLOODLINE_ID)
             effect_with_bl_id = 286
+            check_effect(effects, effect_with_bl_id)
             tech.effect_id = effect_with_bl_id
             tech_with_bl_id = append_tech(data, tech)
             disable_tech(effects[effect_with_bl_id], tech_with_bl_id)
@@ -775,6 +777,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
             effect_id = 288
+            check_effect(effects, effect_id)
             tech.effect_id = effect_id
             tech_id = append_tech(data, tech)
             disable_tech(effects[effect_id], tech_id)
@@ -784,6 +787,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id, BLOODLINE_ID)
             effect_with_bl_id = 287
+            check_effect(effects, effect_with_bl_id)
             tech.effect_id = effect_with_bl_id
             tech_with_bl_id = append_tech(data, tech)
             disable_tech(effects[effect_with_bl_id], tech_with_bl_id)
@@ -791,6 +795,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
             effect_id = 387
+            check_effect(effects, effect_id)
             tech.effect_id = effect_id
             tech_id = append_tech(data, tech)
             disable_tech(effects[effect_id], tech_id)
@@ -819,8 +824,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, ELITE_TEMPLE_GUARD_TECH_ID)
             append_tech(data, tech, effect)
             # archer armor ext
+            _e = check_effect(effects, 1369)
             for i in (2301, 2302):
-                plus_unit_attribute(effects[1369], i, -1, 4, 1)
+                plus_unit_attribute(_e, i, -1, 4, 1)
         case 'Persians':
             name = 'Super Harbor'
             tech = get_new_tech(name)
@@ -846,8 +852,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 526)
             append_tech(data, tech, effect)
-            disable_tech(effects[253], 526)
-            disable_tech(effects[581], 265)
+            disable_tech(check_effect(effects, 253), 526)
+            disable_tech(check_effect(effects, 581), 265)
             name = 'enable Caravanserai'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
@@ -923,7 +929,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             enable_unit(effect, 1021)
             append_tech(data, tech, effect)
             # cheap conquisidator
-            effect = effects[33]
+            effect = check_effect(effects, 33)
             multiply_unit_cost(effect, -1, 23, 0.8)
         case 'Puru':
             name = 'Enable Sannahya'
@@ -942,8 +948,10 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_tech_button(effect, 1328, 28)
             append_tech(data, tech, effect)
             # Remove Puru Emplacement
-            effects[1266].effect_commands.pop(-1)
-            effects[1267].effect_commands.pop(-1)
+            _e = check_effect(effects, 1266)
+            _e.effect_commands.pop(-1)
+            _e = check_effect(effects, 1267)
+            _e.effect_commands.pop(-1)
             name = 'Puru Defensive Emplacement'
             tech = get_new_tech(name)
             set_require_techs(tech, 1323)
@@ -1031,12 +1039,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             original_units = set(map(lambda command: command.a, effects[1072].effect_commands))
             for i in (420, 691, 1795, 2140): # siege warships
                 if i not in original_units and units[i].class_ not in original_classes:
-                    multiply_unit_attribute(effects[1068], i, -1, 5, 1.1)
-                    multiply_unit_attribute(effects[1072], i, -1, 5, 1.15 / 1.1)
+                    multiply_unit_attribute(check_effect(effects, 1068), i, -1, 5, 1.1)
+                    multiply_unit_attribute(check_effect(effects, 1072), i, -1, 5, 1.1)
             for i in siege_units:
                 if i not in original_units and units[i].class_ not in original_classes:
-                    multiply_unit_attribute(effects[1068], i, -1, 5, 1.1)
-                    multiply_unit_attribute(effects[1072], i, -1, 5, 1.15 / 1.1)
+                    multiply_unit_attribute(check_effect(effects, 1068), i, -1, 5, 1.1)
+                    multiply_unit_attribute(check_effect(effects, 1072), i, -1, 5, 1.1)
             name = 'Enable Traction Trebuchets'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
@@ -1073,7 +1081,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
         case 'Slavs':
             # Siege Unit Cheaper ext
-            effect = effects[567]
+            effect = check_effect(effects, 567)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in siege_workshop_units:
@@ -1169,7 +1177,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
             techs[1179].civ = -1
             # elite Stratego ext
-            upgrade_unit(effects[1128], 2227, 2228)
+            upgrade_unit(check_effect(effects, 1128), 2227, 2228)
         case 'Tatars':
             name = 'reverse Tatars Sheep'
             tech = get_new_tech(name)
@@ -1240,11 +1248,11 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                                                                                          constants.STABLE_ID}) and i not in origin_units:
                     ext_units.append(i)
             for i in (333, 334):
-                effect = effects[i]
+                effect = check_effect(effects, i)
                 for j in ext_units:
                     plus_unit_armor(effect, j, -1, 1, 4)
             # tc +atk
-            effect = effects[335]
+            effect = check_effect(effects, 335)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in TC_IDS:
                 if i in origin_units:
@@ -1253,7 +1261,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 plus_unit_attribute(effect, i, -1, 107, 5)
         case 'Turks':
             # Gunpowder +20% HP ext
-            effect = effects[296]
+            effect = check_effect(effects, 296)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             for i in gunpowder_units:
                 if i in origin_units:
@@ -1293,7 +1301,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # reverse_tech_ids.append(tech_id)
         case 'Vietnamese':
             # Archers +20% HP ext
-            effect = effects[672]
+            effect = check_effect(effects, 672)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             for i, unit in enumerate(data.civs[0].units):
                 if i in origin_units:
@@ -1373,24 +1381,24 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = copy.deepcopy(techs[1056])
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, BLOODLINE_ID)
             tech.civ = -1
-            castle_hc_hp_bl_effect = effects[tech.effect_id]
+            castle_hc_hp_bl_effect = check_effect(effects, tech.effect_id)
             castle_hc_hp_bl_tech_id = append_tech(data, tech)
             tech = copy.deepcopy(techs[1057])
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, BLOODLINE_ID)
             tech.civ = -1
-            imp_hc_hp_bl_effect = effects[tech.effect_id]
+            imp_hc_hp_bl_effect = check_effect(effects, tech.effect_id)
             imp_hc_hp_bl_tech_id = append_tech(data, tech)
             tech = copy.deepcopy(techs[1058])
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             tech.civ = -1
-            castle_hc_hp_effect = effects[tech.effect_id]
+            castle_hc_hp_effect = check_effect(effects, tech.effect_id)
             castle_hc_hp_tech_id = append_tech(data, tech)
             disable_tech(castle_hc_hp_effect, castle_hc_hp_bl_tech_id)
             disable_tech(castle_hc_hp_bl_effect, castle_hc_hp_tech_id)
             tech = copy.deepcopy(techs[1059])
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             tech.civ = -1
-            imp_hc_hp_effect = effects[tech.effect_id]
+            imp_hc_hp_effect = check_effect(effects, tech.effect_id)
             imp_hc_hp_tech_id = append_tech(data, tech)
             disable_tech(imp_hc_hp_effect, imp_hc_hp_bl_tech_id)
             disable_tech(imp_hc_hp_bl_effect, imp_hc_hp_tech_id)
@@ -1411,7 +1419,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             reverse_tech_ids.append(tech_id)
             # regeneration of wp with relic
             for i in range(1085, 1087):
-                effect = effects[i]
+                effect = check_effect(effects, i)
                 b_wp_with_relic = False
                 for command in effect.effect_commands:
                     if command.a == constants.WP_WITH_RELIC_ID:

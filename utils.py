@@ -1,4 +1,5 @@
 import copy
+import json
 import os
 import zipfile
 from dataclasses import fields
@@ -288,6 +289,105 @@ def create_mod_zip(mod_path: str, zip_filename: str = 'allin1.zip') -> str:
             for file in files:
                 zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), mod_path))
     return ofilename
+
+
+def _effect_to_list(effect: Effect) -> list:
+    return [
+        {"type": c.type, "a": c.a, "b": c.b, "c": c.c, "d": c.d}
+        for c in effect.effect_commands
+    ]
+
+
+_BASELINE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "effect_baselines.json")
+
+
+def _load_baselines() -> dict:
+    if not os.path.exists(_BASELINE_PATH):
+        return {}
+    try:
+        with open(_BASELINE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {}
+
+
+def _save_baselines(data: dict) -> None:
+    with open(_BASELINE_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def _format_cmd(cmd: dict) -> str:
+    return f"type={cmd['type']} a={cmd['a']} b={cmd['b']} c={cmd['c']} d={cmd['d']}"
+
+
+def _diff_effects(old: list, new: list) -> list:
+    diffs = []
+    old_set = set()
+    for c in old:
+        old_set.add((c["type"], c["a"], c["b"], c["c"], c["d"]))
+    new_set = set()
+    for c in new:
+        new_set.add((c["type"], c["a"], c["b"], c["c"], c["d"]))
+
+    added = new_set - old_set
+    removed = old_set - new_set
+
+    if removed:
+        diffs.append(f"  --- Removed commands ({len(removed)}):")
+        for t, a, b, c, d in sorted(removed):
+            diffs.append(f"      - type={t} a={a} b={b} c={c} d={d}")
+    if added:
+        diffs.append(f"  +++ Added commands ({len(added)}):")
+        for t, a, b, c, d in sorted(added):
+            diffs.append(f"      + type={t} a={a} b={b} c={c} d={d}")
+
+    if not added and not removed:
+        max_len = max(len(old), len(new))
+        for i in range(max_len):
+            o = old[i] if i < len(old) else None
+            n = new[i] if i < len(new) else None
+            if o is None:
+                diffs.append(f"  [{i}] ADDED: {_format_cmd(n)}")
+            elif n is None:
+                diffs.append(f"  [{i}] REMOVED: {_format_cmd(o)}")
+            elif o != n:
+                diffs.append(f"  [{i}] CHANGED:")
+                diffs.append(f"    OLD: {_format_cmd(o)}")
+                diffs.append(f"    NEW: {_format_cmd(n)}")
+
+    return diffs
+
+
+_checked_ids: set = set()
+
+
+def check_effect(effects: list, effect_id: int) -> Effect:
+    effect = effects[effect_id]
+    if effect_id in _checked_ids:
+        return effect
+    _checked_ids.add(effect_id)
+
+    current = _effect_to_list(effect)
+    baselines = _load_baselines()
+    key = str(effect_id)
+    tag = f"[{effect.name}] " if effect.name else ""
+
+    if key not in baselines:
+        print(f"[EffectTracker] NEW {tag}effect_id={effect_id}: {len(current)} commands (baseline recorded)")
+    else:
+        baseline = baselines[key]
+        if baseline != current:
+            diffs = _diff_effects(baseline, current)
+            print(f"[EffectTracker] CHANGE DETECTED {tag}effect_id={effect_id}:")
+            for line in diffs:
+                print(line)
+            print(f"  (old: {len(baseline)} cmds, new: {len(current)} cmds)")
+        else:
+            print(f"[EffectTracker] OK {tag}effect_id={effect_id}: {len(current)} commands")
+
+    baselines[key] = current
+    _save_baselines(baselines)
+    return effect
 
 
 if __name__ == '__main__':

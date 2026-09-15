@@ -15,6 +15,7 @@ from utils import append_tech, extend_effect
 from utils import force_tech
 from utils import get_new_effect, set_require_techs
 from utils import get_new_tech
+from utils import check_effect
 from utils import set_resource, set_unit_attribute, plus_unit_attack, multiply_resource, \
     plus_unit_attribute, multiply_unit_attribute, plus_unit_armor, set_tech_cost, upgrade_unit
 
@@ -71,7 +72,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, vedic_teaching_id, 7)
     append_tech(data, tech, effect)
 
-    effect = effects[vedic_effect_id]
+    effect = check_effect(effects, vedic_effect_id)
     multiply_resource(effect, 502, 1.02)
     multiply_resource(effect, 267, 1.02)
     multiply_resource(effect, 241, 1.02)
@@ -343,13 +344,10 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
                         gold = cost.amount / 2
                 set_tech_cost(effect, i, 3, 0)
                 set_tech_cost(effect, i, 0, food + gold)
-    for civ in data.civs:
-        civ.units[775].creatable.resource_costs = (
-            ResourceCost(3, 100, 1), ResourceCost(0, 0, 1), ResourceCost(4, 1, 1))
     set_unit_attribute(effect, 125, -1, 105, 0)
     set_unit_attribute(effect, 125, -1, 103, 80)
     set_unit_attribute(effect, 775, -1, 105, 0)
-    set_unit_attribute(effect, 775, -1, 103, 80)
+    set_unit_attribute(effect, 775, -1, 103, 110)
     cost = units[1811].creatable.resource_costs
     food = cost[0].amount * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
     gold = cost[1].amount * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
@@ -362,28 +360,28 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # --- Stronghold source_id=482 ---
     sh_effect_id = sid2effect[482]
-    effect = effects[sh_effect_id]
+    effect = check_effect(effects, sh_effect_id)
     multiply_unit_attribute(effect, 2418, -1, 10, 0.75)
     plus_unit_attribute(effect, 82, -1, 63, -32)
     plus_unit_attribute(effect, 2418, -1, 63, -32)
 
     # --- Citadels source_id=7 ---
     cit_effect_id = sid2effect[7]
-    effect = effects[cit_effect_id]
+    effect = check_effect(effects, cit_effect_id)
     plus_unit_attack(effect, 2418, -1, 4, 3)
     plus_unit_attack(effect, 2418, -1, 3, 1)
     plus_unit_attack(effect, 2418, -1, 3, 17)
 
     # --- Svan Towers source_id=923 ---
     st_effect_id = sid2effect[923]
-    effect = effects[st_effect_id]
+    effect = check_effect(effects, st_effect_id)
     plus_unit_attack(effect, 1830, -1, 2, 3)
     for i in (2275, 2276, 2277):
         plus_unit_attack(effect, i, -1, 2, 3)
 
     # --- Curare source_id=1393 ---
     cur_effect_id = sid2effect[1393]
-    effect = effects[cur_effect_id]
+    effect = check_effect(effects, cur_effect_id)
     citadel_projectile_id = 1830
     set_unit_attribute(effect, citadel_projectile_id, -1, 145, 2610)
     set_unit_attribute(effect, citadel_projectile_id, -1, 146, 2)
@@ -391,7 +389,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # --- Paiks source_id=833 ---
     paiks_effect_id = sid2effect[833]
-    effect = effects[paiks_effect_id]
+    effect = check_effect(effects, paiks_effect_id)
     original_units = set(map(lambda command: command.a, effect.effect_commands))
     extend_units = []
     for unit in elephant_units:
@@ -401,7 +399,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # --- Maghrebi Camels source_id=579 ---
     ma_ca_effect_id = sid2effect[579]
-    effect = effects[ma_ca_effect_id]
+    effect = check_effect(effects, ma_ca_effect_id)
     original_units = set(map(lambda command: command.a, effect.effect_commands))
     camels = []
     for i, unit in enumerate(units):
