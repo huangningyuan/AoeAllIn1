@@ -141,6 +141,13 @@
                     "tech_name": "Atheism"
                 },
                 {
+                    "source_id": 61,
+                    "button": 0,
+                    "in_castle": true,
+                    "tech_name": "Logistica",
+                    "additional_ut": 7
+                },
+                {
                     "source_id": 623,
                     "button": 0,
                     "in_castle": true,

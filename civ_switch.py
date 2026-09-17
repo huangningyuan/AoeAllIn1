@@ -212,40 +212,6 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         civ_id: list(tech_ids)
         for civ_id, tech_ids in params.civ_index_to_additional_uts.items()
     }
-    name = 'Force uu uts castle'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-    effect = get_new_effect(name)
-    # franks
-    tech_id = 83
-    force_tech(effect, tech_id)
-    move_tech_button(effect, tech_id, -1)
-    additional_ut_ids.setdefault(2, []).append(tech_id)
-    # Athenians
-    for tid in params.civ_index_to_additional_uts.get(47, []):
-        force_tech(effect, tid)
-        move_tech_button(effect, tid, -1)
-    # Shu
-    for tid in params.civ_index_to_additional_uts.get(49, []):
-        force_tech(effect, tid)
-        move_tech_button(effect, tid, -1)
-    # Wu
-    for tid in params.civ_index_to_additional_uts.get(50, []):
-        force_tech(effect, tid)
-        move_tech_button(effect, tid, -1)
-    append_tech(data, tech, effect)
-
-    name = 'Force uu uts imp'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-    effect = get_new_effect(name)
-    # byz
-    tech_id = 61
-    force_tech(effect, tech_id)
-    move_tech_button(effect, tech_id, -1)
-    additional_ut_ids.setdefault(7, []).append(tech_id)
-    append_tech(data, tech, effect)
-
     # Corvinian Army
     name = 'Corvinian Army'
     tech = get_ut(data, params, 514, True)
