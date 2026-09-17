@@ -123,6 +123,14 @@ def append_tech(data: DatFile, tech: Tech, effect: Effect = None):
     else:
         return append_tech_effect(data, tech, effect)
 
+
+def bind_effect(data: DatFile, tech: Tech, effect: Effect):
+    effect_id = len(data.effects)
+    tech.effect_id = effect_id
+    data.effects.append(effect)
+    return effect_id
+
+
 def append_unit(data: DatFile, unit: Unit):
     unit_id = len(data.civs[0].units)
     for civ in data.civs:

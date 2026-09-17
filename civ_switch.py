@@ -212,49 +212,6 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         civ_id: list(tech_ids)
         for civ_id, tech_ids in params.civ_index_to_additional_uts.items()
     }
-    # Corvinian Army
-    name = 'Corvinian Army'
-    tech = get_ut(data, params, 514, True)
-    tech.research_locations[0].button_id = 0
-    effect = get_new_effect(name)
-    food = 35 * 0.8
-    gold = 45 * 0.8
-    set_unit_attribute(effect, 869, -1, 105, 0)
-    set_unit_attribute(effect, 871, -1, 105, 0)
-    set_unit_attribute(effect, 869, -1, 103, food + gold)
-    set_unit_attribute(effect, 871, -1, 103, food + gold)
-    cov_tech_id, effect_id = append_tech(data, tech, effect)
-    additional_ut_ids.setdefault(22, []).append(cov_tech_id)
-    name = 'Corvinian Army Imp'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, cov_tech_id)
-    effect = get_new_effect(name)
-    food = 35 * 0.75
-    set_unit_attribute(effect, 869, -1, 105, 0)
-    set_unit_attribute(effect, 871, -1, 105, 0)
-    set_unit_attribute(effect, 869, -1, 103, food + gold)
-    set_unit_attribute(effect, 871, -1, 103, food + gold)
-    append_tech(data, tech, effect)
-    name = 'Corvinian Army + Kshatriyas'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, get_tech_id_by_name(data, 'Kshatriyas Castle Militia'), cov_tech_id)
-    effect = get_new_effect(name)
-    food = 35 * 0.75 * 0.8
-    set_unit_attribute(effect, 869, -1, 105, 0)
-    set_unit_attribute(effect, 871, -1, 105, 0)
-    set_unit_attribute(effect, 869, -1, 103, food + gold)
-    set_unit_attribute(effect, 871, -1, 103, food + gold)
-    append_tech(data, tech, effect)
-    name = 'Corvinian Army + Kshatriyas Imp'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, get_tech_id_by_name(data, 'Kshatriyas Imp Militia'), cov_tech_id)
-    effect = get_new_effect(name)
-    food = 35 * 0.75 * 0.75
-    set_unit_attribute(effect, 869, -1, 105, 0)
-    set_unit_attribute(effect, 871, -1, 105, 0)
-    set_unit_attribute(effect, 869, -1, 103, food + gold)
-    set_unit_attribute(effect, 871, -1, 103, food + gold)
-    append_tech(data, tech, effect)
 
     # huskarl
     tech = techs[365]

@@ -11,7 +11,7 @@ from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_uni
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from unique_techs_config_loader import apply_mutex_groups
-from utils import append_tech, extend_effect
+from utils import append_tech, bind_effect, extend_effect
 from utils import force_tech
 from utils import get_new_effect, set_require_techs
 from utils import get_new_tech
@@ -57,6 +57,51 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     sid2all = result['source_id_to_all_tech_ids']
     sid2effect = result['source_id_to_effect_id']
     params.civ_index_to_additional_uts = result['civ_index_to_additional_uts']
+
+    # --- Corvinian Army ---
+    cov_tech_id = sid2all[514][0]
+    cov_tech = techs[cov_tech_id]
+    cov_effect = get_new_effect('Corvinian Army')
+    food = 35 * 0.8
+    gold = 45 * 0.8
+    set_unit_attribute(cov_effect, 869, -1, 105, 0)
+    set_unit_attribute(cov_effect, 871, -1, 105, 0)
+    set_unit_attribute(cov_effect, 869, -1, 103, food + gold)
+    set_unit_attribute(cov_effect, 871, -1, 103, food + gold)
+    bind_effect(data, cov_tech, cov_effect)
+
+    name = 'Corvinian Army Imp'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, cov_tech_id)
+    effect = get_new_effect(name)
+    food = 35 * 0.75
+    set_unit_attribute(effect, 869, -1, 105, 0)
+    set_unit_attribute(effect, 871, -1, 105, 0)
+    set_unit_attribute(effect, 869, -1, 103, food + gold)
+    set_unit_attribute(effect, 871, -1, 103, food + gold)
+    append_tech(data, tech, effect)
+
+    name = 'Corvinian Army + Kshatriyas'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, sid2all.get(835, [835])[0], cov_tech_id)
+    effect = get_new_effect(name)
+    food = 35 * 0.75 * 0.8
+    set_unit_attribute(effect, 869, -1, 105, 0)
+    set_unit_attribute(effect, 871, -1, 105, 0)
+    set_unit_attribute(effect, 869, -1, 103, food + gold)
+    set_unit_attribute(effect, 871, -1, 103, food + gold)
+    append_tech(data, tech, effect)
+
+    name = 'Corvinian Army + Kshatriyas Imp'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, sid2all.get(835, [835])[0], cov_tech_id)
+    effect = get_new_effect(name)
+    food = 35 * 0.75 * 0.75
+    set_unit_attribute(effect, 869, -1, 105, 0)
+    set_unit_attribute(effect, 871, -1, 105, 0)
+    set_unit_attribute(effect, 869, -1, 103, food + gold)
+    set_unit_attribute(effect, 871, -1, 103, food + gold)
+    append_tech(data, tech, effect)
 
     # ===== FORCE TECH SERIES (complete copy from original) =====
     append_tech(data, get_new_tech('----Exceptions----'), get_new_effect('----Exceptions----'))
@@ -194,8 +239,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect.effect_commands = list(filter(lambda command: command.type != 1, effects[562].effect_commands))
     multiply_resource(effect, 213, 1.1)
     multiply_resource(effect, 241, 1.1)
-    techs[grand_trunk_road_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[grand_trunk_road_id], effect)
 
     # --- Paper Money source_id=629 ---
     paper_money_tech_id = sid2first[629]
@@ -203,8 +247,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     paper_money_factor = 1.5 * 1.15 * (1 + (0.2 * 1.4)) * (1 + (0.2 * 1.4)) * (1 + (0.1 * 1.4)) * 1.05
     effect = get_new_effect(name)
     set_resource(effect, 266, paper_money_factor)
-    techs[paper_money_tech_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[paper_money_tech_id], effect)
 
     # --- Burgundian Vineyards source_id=754 ---
     bv_tech_id = sid2first[754]
@@ -212,8 +255,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     bv_factor = 2 * 1.15 * 1.05
     set_resource(effect, 236, bv_factor)
-    techs[bv_tech_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[bv_tech_id], effect)
 
     # --- Forced Levy source_id=625 ---
     forced_levy_id = sid2first[625]
@@ -225,8 +267,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     for id in constants.MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
         set_unit_attribute(effect, id, -1, 105, 0)
-    techs[forced_levy_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[forced_levy_id], effect)
 
     # --- Eisphora source_id=1122 ---
     eis_tech_id = sid2first[1122]
@@ -242,9 +283,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     for i in (hoplite_id, e_hoplite_id):
         set_unit_attribute(effect, i, -1, 103, new_food + new_gold * 0.33)
         set_unit_attribute(effect, i, -1, 105, new_gold * 0.67)
-    eis_effect_id = len(effects)
-    techs[eis_tech_id].effect_id = eis_effect_id
-    effects.append(effect)
+    bind_effect(data, techs[eis_tech_id], effect)
 
     # --- Kamandaran source_id=488 ---
     kam_id = sid2first[488]
@@ -266,8 +305,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 4, -1, 105, 0)
     set_unit_attribute(effect, 24, -1, 105, 0)
     set_unit_attribute(effect, 492, -1, 105, 0)
-    techs[kam_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[kam_id], effect)
 
     # --- Detinets source_id=455 ---
     det_id = sid2first[455]
@@ -290,8 +328,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     stone = 650 * 0.85 * 0.85
     set_unit_attribute(effect, 82, -1, 104, stone * 0.4)
     set_unit_attribute(effect, 82, -1, 106, stone * 0.6)
-    techs[det_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[det_id], effect)
 
     unit = units[constants.DONJON_ID]
     costs = unit.creatable.resource_costs
@@ -310,8 +347,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
         plus_unit_attribute(effect, i, -1, 1, 3)
         plus_unit_attribute(effect, i, -1, 12, 3)
         plus_unit_attribute(effect, i, -1, 23, 3)
-    techs[hf_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[hf_id], effect)
 
     # --- Tigui source_id=576 ---
     tig_id = sid2first[576]
@@ -320,8 +356,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     for i in constants.TC_IDS:
         plus_unit_attribute(effect, i, -1, 102, 8)
         plus_unit_attribute(effect, i, -1, 107, 8)
-    techs[tig_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[tig_id], effect)
 
     # --- Hussite Reforms source_id=785 ---
     hr_id = sid2first[785]
@@ -353,8 +388,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     gold = cost[1].amount * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
     set_unit_attribute(effect, 1811, -1, 105, 0)
     set_unit_attribute(effect, 1811, -1, 103, food + gold)
-    techs[hr_id].effect_id = len(effects)
-    effects.append(effect)
+    bind_effect(data, techs[hr_id], effect)
 
     # ===== C CLASS: effect modification =====
 

@@ -148,6 +148,13 @@
                     "additional_ut": 7
                 },
                 {
+                    "source_id": 514,
+                    "button": 0,
+                    "in_castle": true,
+                    "tech_name": "Corvinian Army",
+                    "additional_ut": 22
+                },
+                {
                     "source_id": 623,
                     "button": 0,
                     "in_castle": true,
