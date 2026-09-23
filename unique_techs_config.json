@@ -413,6 +413,12 @@
                     "tech_name": "Shield Wall"
                 },
                 {
+                    "source_id": 61,
+                    "button": 14,
+                    "tech_name": "Logistica",
+                    "icon": "BLAST_FURNACE_ICON_ID"
+                },
+                {
                     "source_id": 1474,
                     "button": 14,
                     "tech_name": "Gothikon"
