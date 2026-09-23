@@ -7,7 +7,7 @@ import constants
 from all_in_1_params import All_In_1_Params
 from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, \
     elephant_units, \
-    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, TECH_NUM
+    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, SAXON_DISCOUNT, TECH_NUM
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from unique_techs_config_loader import apply_mutex_groups
@@ -226,6 +226,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect.effect_commands = list(filter(lambda command: command.type != 1, effects[562].effect_commands))
     multiply_resource(effect, 213, 1.1)
     multiply_resource(effect, 241, 1.1)
+    multiply_resource(effect, 297, 1.1)
+    multiply_resource(effect, 298, 1.1)
     bind_effect(data, techs[grand_trunk_road_id], effect)
 
     # --- Paper Money source_id=629 ---
@@ -248,8 +250,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     forced_levy_id = sid2first[625]
     name = 'Forced Levy'
     effect = get_new_effect(name)
-    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
-    gold = 20 * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
+    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    gold = 20 * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
     food += gold
     for id in constants.MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
@@ -276,8 +278,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     kam_id = sid2first[488]
     name = 'Kamandaran'
     effect = get_new_effect(name)
-    wood = 25 * MAYAN_AGE3_DISCOUNT * KOREANS_SOLDIER_DISCOUNT
-    gold = 45 * MAYAN_AGE3_DISCOUNT * PORTGUESE_DISCOUNT
+    wood = 25 * MAYAN_AGE3_DISCOUNT * KOREANS_SOLDIER_DISCOUNT * SAXON_DISCOUNT
+    gold = 45 * MAYAN_AGE3_DISCOUNT * PORTGUESE_DISCOUNT * SAXON_DISCOUNT
     kama_effect = effects[sid2effect[488]]
     for command in kama_effect.effect_commands:
         if command.c == 105:
@@ -502,7 +504,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Forced Levy + Kshatriyas'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, forced_levy_id, ksha_id)
-    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * constants.KSHATRIYAS_DISCOUNT + gold
+    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * constants.KSHATRIYAS_DISCOUNT * SAXON_DISCOUNT + gold
     effect = get_new_effect(name)
     for id in constants.MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
@@ -524,8 +526,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, kam_id)
     effect = get_new_effect(name)
-    wood = 25 * MAYAN_AGE4_DISCOUNT * KOREANS_SOLDIER_DISCOUNT
-    gold = 45 * MAYAN_AGE4_DISCOUNT * PORTGUESE_DISCOUNT
+    wood = 25 * MAYAN_AGE4_DISCOUNT * KOREANS_SOLDIER_DISCOUNT * SAXON_DISCOUNT
+    gold = 45 * MAYAN_AGE4_DISCOUNT * PORTGUESE_DISCOUNT * SAXON_DISCOUNT
     wood += gold * wood_cost / gold_cost
     set_unit_attribute(effect, 4, -1, 104, wood)
     set_unit_attribute(effect, 24, -1, 104, wood)

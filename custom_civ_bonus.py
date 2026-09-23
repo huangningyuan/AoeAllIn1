@@ -1205,6 +1205,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             sheep_annex1.copy_id = sheep_annex1_id
             sheep_annex1.base_id = sheep_annex1_id
             sheep_annex1.id = sheep_annex1_id
+            sheep_annex1.building.tech_id = 1498
             sheep_annex2.copy_id = sheep_annex2_id
             sheep_annex2.base_id = sheep_annex2_id
             sheep_annex2.id = sheep_annex2_id
@@ -1224,6 +1225,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             upgrade_unit(effect, 890, sheep_annex1_id)
             upgrade_unit(effect, 1694, sheep_annex1_id)
+            upgrade_unit(effect, 2717, sheep_annex1_id)
             set_unit_attribute(effect, sheep_annex1_id, -1, 0, -1)
             append_tech(data, tech, effect)
             name = 'Flaming Camel'
@@ -1233,6 +1235,20 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             research_tech(effect, 703)
             move_unit_button(effect, 1263, 13)
             append_tech(data, tech, effect)
+        case 'Saxons':
+            effect = check_effect(effects, 1469)
+            origin_units = set(map(lambda command: command.a, effect.effect_commands))
+            for tc_id in TC_IDS:
+                if tc_id in origin_units:
+                    continue
+                set_unit_attribute(effect, tc_id, -1, 66, 2716)
+            name = 'discount for initial tc'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 1498)
+            tech_id, effect_id = append_tech(data, tech, effect)
+            reverse_tech_ids.append(tech_id)
         case 'Teutons':
             # tc +atk
             effect = check_effect(effects, 335)

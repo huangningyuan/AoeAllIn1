@@ -815,7 +815,7 @@
                 },
                 {
                     "source_id": 1496,
-                    "button": -1,
+                    "button": 0,
                     "tech_name": "Ordonnance Companies",
                     "register_as": "ordonnance_companies_id"
                 }

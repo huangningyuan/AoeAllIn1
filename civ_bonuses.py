@@ -373,7 +373,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_tech_cost(effect, 103, 2, 800 * BYZANTINES_AGE_DISCOUNT * ITALIANS_AGE_DISCOUNT * MUISCA_AGE_DISCOUNT)
     append_tech(data, tech, effect)
 
-    JURCHENS_TECH_DISCOUNT = 0.25
+    JURCHENS_WOOD_DISCOUNT = 0.25
     name = 'Italians + Jurchens Univ'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
@@ -381,10 +381,11 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     for i in (377, 50, 51, 54, 608):
         for cost in techs[i].resource_costs:
             if cost.type == 1:
-                set_tech_cost(effect, i, 1, cost.amount * JURCHENS_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
+                set_tech_cost(effect, i, 1, cost.amount * JURCHENS_WOOD_DISCOUNT * ITALIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
     TURKS_TECH_DISCOUNT = 0.5
+    DANES_GOLD_DISCOUNT = 0.66
     name = 'Italians + Turks elite cannon galleon'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
@@ -406,7 +407,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
 
     BULGARIANS_TECH_DISCOUNT = 0.5
-    name = 'Bulgarians + Turks houfnice'
+    name = 'Bulgarians + Turks + Danes houfnice'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
@@ -414,9 +415,11 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         for cost in techs[i].resource_costs:
             if cost.type == 0:
                 set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * BULGARIANS_TECH_DISCOUNT)
+            if cost.type == 2:
+                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
     append_tech(data, tech, effect)
 
-    name = 'Turks + Jurchens heavy rocket cart'
+    name = 'Turks + Jurchens + Danes heavy rocket cart'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
@@ -425,9 +428,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             if cost.type == -1:
                 continue
             if cost.type == 1:
-                set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_TECH_DISCOUNT * TURKS_TECH_DISCOUNT)
+                set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_WOOD_DISCOUNT * TURKS_TECH_DISCOUNT)
                 continue
-            set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT)
+            if cost.type == 2:
+                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
+            else:
+                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
     TUPI_TECH_DISCOUNT = 0.5
@@ -489,7 +495,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_resource(effect, 502, (athenians_lumberjack_food + shu_lumberjack_food) * 1.15 * 1.05 * (1 + 0.2 * 1.4) / 1.2)
     append_tech(data, tech, effect)
 
-    name = 'Cheap Barrack Techs (Tupi + Dravidians)'
+    TUPI_FOOD_DISCOUNT = 0.5
+    DRAVIDIANS_TECH_DISCOUNT = 0.5
+    name = 'Cheap Barrack Techs (Tupi + Dravidians + Danes)'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
@@ -506,9 +514,11 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 if j.type == -1:
                     continue
                 if j.type == 0:
-                    set_tech_cost(effect, i, j.type, j.amount * 0.5 * 0.5)
+                    set_tech_cost(effect, i, j.type, j.amount * TUPI_FOOD_DISCOUNT * DRAVIDIANS_TECH_DISCOUNT)
+                elif j.type == 2:
+                    set_tech_cost(effect, i, j.type, j.amount * DRAVIDIANS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
                 else:
-                    set_tech_cost(effect, i, j.type, j.amount * 0.5)
+                    set_tech_cost(effect, i, j.type, j.amount * DRAVIDIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
     name = 'Italians + Burgundians Dock Tech'
