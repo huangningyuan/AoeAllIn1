@@ -568,16 +568,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i in original_units:
                     continue
                 multiply_unit_cost(effect, i, -1, 0.8)
-        case 'Japanese':
-            name = 'Cheap Gather Building ext'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            multiply_unit_cost(effect, 1808, -1, 0.5)
-            multiply_unit_cost(effect, 1711, -1, 0.5)
-            multiply_unit_cost(effect, 1720, -1, 0.5)
-            multiply_unit_cost(effect, 1734, -1, 0.5)
-            append_tech(data, tech, effect)
         case 'Jurchens':
             name = 'enable Grenadier'
             tech = get_new_tech(name)
