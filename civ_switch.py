@@ -168,6 +168,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     uu_tech_id_list: dict[int, int] = dict()
     uu_id_list: dict[int, int] = dict()
     elite_uu_id_list: dict[int, int] = dict()
+    uu_unit_ids_by_civ: dict[int, set[int]] = dict()
     for tech_id, tech in enumerate(techs):
         civ_id = tech.civ
         if len(tech.research_locations) == 0:
@@ -187,9 +188,13 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
                 train_location = unit.creatable.train_locations[0]
                 if train_location.unit_id == constants.CASTLE_ID and train_location.button_id == 1:
                     uu_id_list[civ_id] = command.a
-        if tech.name.startswith('Elite') and civ_id in uu_id_list:            
-            for command in effect.effect_commands:
-                if command.type == 3 and command.a == uu_id_list[civ_id]:
+                    uu_unit_ids_by_civ.setdefault(civ_id, set()).add(command.a)
+    for effect in effects:
+        for command in effect.effect_commands:
+            if command.type != 3:
+                continue
+            for civ_id, known_uu_ids in uu_unit_ids_by_civ.items():
+                if command.a in known_uu_ids:
                     elite_uu_id_list[civ_id] = command.b
 
     but_id = 1380
@@ -204,7 +209,8 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             exit(1)
         if uu_id_list[civ_id] not in but_uu_id_list:
             effect.effect_commands.append(EffectCommand(15, uu_id_list[civ_id], -1, 100, 0.85))
-            effect.effect_commands.append(EffectCommand(15, elite_uu_id_list[civ_id], -1, 100, 0.85))
+            if civ_id in elite_uu_id_list and elite_uu_id_list[civ_id] not in but_uu_id_list:
+                effect.effect_commands.append(EffectCommand(15, elite_uu_id_list[civ_id], -1, 100, 0.85))
         
 
     print(uu_id_list)
@@ -285,7 +291,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         pos = (constants.MULE_CART_ID, 1)
         for civ_id in range(1, current_civ_num):
             unit = get_dead_unit(units, )
-            unit.icon_id = units[uu_id_list[civ_id]].icon_id
+            unit.icon_id = units[elite_uu_id_list[civ_id]].icon_id
             unit.creatable.train_locations.append(TrainLocation(0, pos[0], pos[1], -1))
             unit.building.tech_id = civ_switch_tech_offset_id + civ_id
             unit.name = 'switch to ' + get_civ_name(data.civs, civ_id)

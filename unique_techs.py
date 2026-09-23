@@ -177,12 +177,11 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     move_tech_button(effect, 365, 29, 1)
     append_tech(data, tech, effect)
-    name = 'Anarchy + Malians + Teutons'
+    name = 'Anarchy + Malians'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, anarchy_tech_id)
     effect = get_new_effect(name)
     for i in huskarl_ids:
-        plus_unit_armor(effect, i, -1, 1, 4)
         plus_unit_armor(effect, i, -1, 2, 3)
     append_tech(data, tech, effect)
     name = 'Anarchy + Malians + Teutons Imp'
@@ -190,7 +189,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, anarchy_tech_id, params.imp_duplicate_tech_id)
     effect = get_new_effect(name)
     for i in huskarl_ids:
-        plus_unit_armor(effect, i, -1, 1, 4)
         plus_unit_armor(effect, i, -1, 1, 3)
     append_tech(data, tech, effect)
 
@@ -206,17 +204,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, marauder_id, 26)
     for i in tarkan_ids:
         move_unit_button(effect, i, 21, 1)
-    append_tech(data, tech, effect)
-    name = 'Marauders + Teutons'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, marauder_id)
-    effect = get_new_effect(name)
-    for i in tarkan_ids:
-        plus_unit_armor(effect, i, -1, 1, 4)
-    append_tech(data, tech, effect)
-    name = 'Marauders + Teutons Imp'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, marauder_id, params.imp_duplicate_tech_id)
     append_tech(data, tech, effect)
 
     # --- Thalassocracy ---

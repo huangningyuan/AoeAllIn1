@@ -162,7 +162,8 @@
           "hauberk_id",
           "szlachta_privileges_id",
           "comitatenses_id",
-          "bessian_metalworking_id"
+          "bessian_metalworking_id",
+          "vendel_legacy_id"
         ]
       },
       {
@@ -205,7 +206,8 @@
           "hauberk_id",
           "szlachta_privileges_id",
           "comitatenses_id",
-          "bessian_metalworking_id"
+          "bessian_metalworking_id",
+          "vendel_legacy_id"
         ]
       }
     ]
@@ -260,6 +262,37 @@
         ],
         "tech_ids": [
           1378
+        ]
+      },
+      {
+        "unit_name": "Mounted Crossbowman",
+        "civ_match": {
+          "civ_names": [
+            "Britons",
+            "Franks",
+            "Teutons",
+            "Vikings",
+            "Celts",
+            "Spanish",
+            "Italians",
+            "Portuguese",
+            "Burgundians",
+            "Sicilians",
+            "Poles",
+            "Bohemians",
+            "Saxons",
+            "Varangians",
+            "Danes"
+          ]
+        },
+        "unit_ids": [
+          2700,
+          2701
+        ],
+        "tech_ids": [
+          1451,
+          1452,
+          "ordonnance_companies_id"
         ]
       },
       {

@@ -557,6 +557,24 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, elite_champi_warrior_tech_id, 34)
     append_tech(data, tech, effect)
 
+    name = 'Early Varangian Guard'
+    varangian_tech_id = 1453
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, varangian_tech_id)
+    move_unit_button(effect, 2703, 13)
+    move_unit_button(effect, 2704, 13)
+    append_tech(data, tech, effect)
+    name = 'Elite Varangian Guard'
+    varangian_elite_tech_id = 1454
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, varangian_elite_tech_id)
+    move_tech_button(effect, varangian_elite_tech_id, 14)
+    append_tech(data, tech, effect)
+
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 

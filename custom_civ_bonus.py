@@ -1234,23 +1234,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 1263, 13)
             append_tech(data, tech, effect)
         case 'Teutons':
-            # Inf Cav +1 armor ext
-            origin_units = set(map(lambda command: command.a, effects[333].effect_commands))
-            ext_units = list()
-            for i, unit in enumerate(data.civs[1].units):
-                if i in origin_units:
-                    continue
-                if unit is None or unit.creatable is None or len(unit.creatable.train_locations) == 0:
-                    continue
-                if unit.creatable.hero_mode == 1:
-                    continue
-                if bool(set(map(lambda x: x.unit_id, unit.creatable.train_locations)) & {constants.BARRACK_ID,
-                                                                                         constants.STABLE_ID}) and i not in origin_units:
-                    ext_units.append(i)
-            for i in (333, 334):
-                effect = check_effect(effects, i)
-                for j in ext_units:
-                    plus_unit_armor(effect, j, -1, 1, 4)
             # tc +atk
             effect = check_effect(effects, 335)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -1289,28 +1272,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1391)
             move_tech_button(effect, 1391, -1)
             append_tech(data, tech, effect)
-            # name = '+25 res'
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id)
-            # effect = get_new_effect(name)
-            # plus_resource(effect, 0, 25)
-            # plus_resource(effect, 1, 25)
-            # plus_resource(effect, 2, 25)
-            # plus_resource(effect, 3, 25)
-            # tech_id, effect_id = append_tech(data, tech, effect)
-            # reverse_tech_ids.append(tech_id)
         case 'Vietnamese':
-            # Archers +20% HP ext
-            effect = check_effect(effects, 672)
-            origin_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i, unit in enumerate(data.civs[0].units):
-                if i in origin_units:
-                    continue
-                if unit is None or unit.creatable is None or len(unit.creatable.train_locations) == 0:
-                    continue
-                if constants.ARCHERY_RANGE_ID in list(map(lambda x: x.unit_id,
-                                                           unit.creatable.train_locations)) and i not in origin_units:
-                    multiply_unit_hp(effect, i, -1, 1.2)
             name = 'Eco Techs no wood, 1/2 time'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)

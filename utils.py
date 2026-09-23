@@ -390,8 +390,6 @@ def check_effect(effects: list, effect_id: int) -> Effect:
             for line in diffs:
                 print(line)
             print(f"  (old: {len(baseline)} cmds, new: {len(current)} cmds)")
-        else:
-            print(f"[EffectTracker] OK {tag}effect_id={effect_id}: {len(current)} commands")
 
     baselines[key] = current
     _save_baselines(baselines)

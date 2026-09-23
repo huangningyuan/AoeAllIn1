@@ -405,6 +405,22 @@
                     "button": 32,
                     "tech_name": "Pezhetairoi",
                     "register_as": "pez_tech_id"
+                },
+                {
+                    "source_id": 1464,
+                    "button": 11,
+                    "icon": "INFANTRY_ARMOR_ICON_ID",
+                    "tech_name": "Shield Wall"
+                },
+                {
+                    "source_id": 1474,
+                    "button": 14,
+                    "tech_name": "Gothikon"
+                },
+                {
+                    "source_id": 1484,
+                    "button": 11,
+                    "tech_name": "Hamask"
                 }
             ]
         },
@@ -595,6 +611,13 @@
                     "source_id": 1307,
                     "button": 28,
                     "tech_name": "Vadh膩vadha"
+                },
+                {
+                    "source_id": 1473,
+                    "button": 7,
+                    "icon": "BLAST_FURNACE_ICON_ID",
+                    "tech_name": "Vendel Legacy",
+                    "register_as": "vendel_legacy_id"
                 }
             ]
         },
@@ -789,6 +812,12 @@
                     "source_id": 1380,
                     "button": 34,
                     "tech_name": "Butalmapu"
+                },
+                {
+                    "source_id": 1496,
+                    "button": -1,
+                    "tech_name": "Ordonnance Companies",
+                    "register_as": "ordonnance_companies_id"
                 }
             ]
         },
@@ -885,6 +914,12 @@
                     "source_id": 1081,
                     "button": 29,
                     "tech_name": "Sitting Tiger"
+                },
+                {
+                    "source_id": 1483,
+                    "button": 11,
+                    "icon": "SIEGE_ENGINEERS_ICON_ID",
+                    "tech_name": "Northmen's Fury"
                 }
             ]
         },
@@ -1025,6 +1060,12 @@
                     "source_id": 28,
                     "button": 23,
                     "tech_name": "Bimaristan"
+                },
+                {
+                    "source_id": 1491,
+                    "button": 26,
+                    "icon": "BLOCK_PRINTING_ICON_ID",
+                    "tech_name": "Clerical Recruitment"
                 }
             ]
         },
@@ -1091,6 +1132,12 @@
                     "source_id": 1080,
                     "button": 13,
                     "tech_name": "Red Cliffs Tactics"
+                },
+                {
+                    "source_id": 1483,
+                    "button": 14,
+                    "icon": "SIEGE_ENGINEERS_ICON_ID",
+                    "tech_name": "Northmen's Fury"
                 }
             ]
         },
