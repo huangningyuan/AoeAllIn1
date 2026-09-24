@@ -1227,18 +1227,30 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
         case 'Saxons':
             effect = check_effect(effects, 1469)
+            castle_building = copy.deepcopy(units[2717])
+            castle_building_id = len(units)
+            castle_building.copy_id = castle_building_id
+            castle_building.base_id = castle_building_id
+            castle_building.id = castle_building_id
+            for civ in data.civs:
+                civ.units.append(castle_building)
+            for command in effect.effect_commands:
+                if command.type == 3 and command.a == 2718 and command.b == 2717:
+                    command.b = castle_building_id
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             for tc_id in TC_IDS:
                 if tc_id in origin_units:
                     continue
                 set_unit_attribute(effect, tc_id, -1, 66, 2716)
-            for civ in data.civs:
-                new_castle = civ.units[2418]
-                new_castle.building.annexes = (BuildingAnnex(2718, 2, 2), BuildingAnnex(-1, 0, 0), BuildingAnnex(-1, 0, 0), BuildingAnnex(-1, 0, 0))
             for castle_id in (2418,):
                 if castle_id in origin_units:
                     continue
                 set_unit_attribute(effect, castle_id, -1, 66, 2716)
+            for civ in data.civs:
+                new_castle = civ.units[2418]
+                new_castle.building.annexes = (BuildingAnnex(2718, 2, 2), BuildingAnnex(-1, 0, 0),
+                                               BuildingAnnex(-1, 0, 0), BuildingAnnex(-1, 0, 0))
+
             name = 'discount for initial tc'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
