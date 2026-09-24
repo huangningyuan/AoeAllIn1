@@ -481,15 +481,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
         tech.effect_id = effect_id
         append_tech(data, tech)
 
-    # --- Grand Trunk Road + Chieftains ---
-    chief_id = sid2first[463]
-    name = 'Grand Trunk Road + Chieftains'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, grand_trunk_road_id, chief_id)
-    effect = get_new_effect(name)
-    multiply_resource(effect, 274, 1.1)
-    append_tech(data, tech, effect)
-
     # --- Chronic civs Elite Kipchak ---
     cm_tech_id = sid2first[690]
     name = 'Chronical civs Elite Kipchak'
