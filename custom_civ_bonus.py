@@ -526,6 +526,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_unit(effect, HOUSE_ID)
             append_tech(data, tech, effect)
         case 'Incas':
+            name = 'Incas Team Tech Tree'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            tech.effect_id = 678
+            tech_id = append_tech(data, tech)
+            reverse_tech_ids.append(tech_id)
             name = 'enable slinger'
             tech = get_new_tech(name)
             set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
