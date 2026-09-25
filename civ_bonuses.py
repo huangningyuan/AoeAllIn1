@@ -338,6 +338,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, 448, 27)
     force_tech(effect, 597)
     move_tech_button(effect, 597, 28)
+    move_tech_button(effect, 22, 11)
     append_tech(data, tech, effect)
 
     # Catapult Galleon requirements

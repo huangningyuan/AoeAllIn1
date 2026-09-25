@@ -40,7 +40,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 2150, 31)
             move_unit_button(effect, 2151, 31)
             move_tech_button(effect, e_war_chariot_tech_id, 32)
-            # disable_tech(effect, e_war_chariot_tech_id)
+            disable_tech(effect, e_war_chariot_tech_id)
             append_tech(data, tech, effect)
             append_tech_tech_id = 1138
             achaemenids_tech_id = 1103

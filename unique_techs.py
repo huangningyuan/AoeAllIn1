@@ -158,6 +158,15 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, 1324, 34)
     append_tech(data, tech, effect)
 
+    # --- Helot Levies TC button Imperial adjustment ---
+    helot_levies_tc_id = sid2all[1130][-1]
+    name = 'Helot Levies Imp Button'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+    effect = get_new_effect(name)
+    move_tech_button(effect, helot_levies_tc_id, 11)
+    append_tech(data, tech, effect)
+
     # --- Anarchy + variants ---
     name = 'enable Anarchy'
     tech = get_new_tech(name)
