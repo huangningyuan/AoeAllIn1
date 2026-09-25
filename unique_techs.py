@@ -504,6 +504,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Forced Levy + Kshatriyas'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, forced_levy_id, ksha_id)
+    gold = constants.MILLITIA_LINE_GOLD * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
     food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * constants.KSHATRIYAS_DISCOUNT * SAXON_DISCOUNT + gold
     effect = get_new_effect(name)
     for id in constants.MILLITIA_LINE_IDS:
@@ -574,6 +575,22 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech.required_tech_count = 2
     effect = get_new_effect(name)
     multiply_resource(effect, 521, 1.1)
+    append_tech(data, tech, effect)
+
+    # --- Coiled Serpent Array + Shield Wall ---
+    csa_ids = sid2all[1070]
+    sw_ids = sid2all[1464]
+    spearman_units = [93, 1786, 358, 1787, 359, 1788, 1959, 1961]
+
+    name = 'Coiled Serpent Array + Shield Wall'
+    tech = get_new_tech(name)
+    all_preqs = csa_ids + sw_ids
+    set_require_techs(tech, *all_preqs)
+    tech.required_tech_count = 2
+    effect = get_new_effect(name)
+    for uid in spearman_units:
+        plus_unit_attribute(effect, uid, -1, 63, -96)
+    append_tech(data, tech, effect)
 
     # ===== APPLY MUTEX (delayed, after all effect modifications) =====
     apply_mutex_groups(data, result, extra_groups=[[482, 1286]])
