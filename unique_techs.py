@@ -592,7 +592,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
         plus_unit_attribute(effect, uid, -1, 63, -96)
     append_tech(data, tech, effect)
 
-    aura_infantry_units = [2162, 2164, 2165, 2166, 2167, 2270, 2271, 2272, 2104, 2105]
+    aura_infantry_units = [2162, 2164, 2165, 2166, 2167, 2270, 2271, 2272, 2104, 2105, 1966, 2066]
     for uid in aura_infantry_units:
         plus_unit_attribute(effects[1464], uid, -1, 63, -32)
 

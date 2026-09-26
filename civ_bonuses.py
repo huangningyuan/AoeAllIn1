@@ -10,8 +10,7 @@ from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
-    set_unit_attribute, set_resource, append_tech, force_research_tech, set_tech_time, set_tech_discount, \
-    append_tech_effect
+    set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
@@ -636,6 +635,13 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
     techs[constants.ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
+
+    name = 'enable fire lancer'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    research_tech(effect, 981)
+    append_tech(data, tech, effect)
 
 
     for i in range(5):

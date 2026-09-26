@@ -215,11 +215,17 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     extend_units.append(unit)
             extend_effect(effect, extend_units)
         case 'Berbers':
-            name = 'ftt elite genitour'
+            name = 'genitour'
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
             effect = get_new_effect(name)
-            move_tech_button(effect, 599, 29)
+            force_research_tech(effect, 601)
+            append_tech(data, tech, effect)
+            name = 'Elite Genitour'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+            effect = get_new_effect(name)
+            force_tech(effect, 599)
             append_tech(data, tech, effect)
         case 'Bohemians':
             name = 'enable houfnice'
@@ -390,21 +396,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, 246)
             tech.effect_id = 1010
             append_tech(data, tech)
-            name = 'enable fire lancer'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 981)
-            move_unit_button(effect, 1901, 22)
-            move_unit_button(effect, 1903, 22)
-            move_tech_button(effect, 982, 27)
-            append_tech(data, tech, effect)
-            name = 'Elite Fire Lancer'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 982)
-            append_tech(data, tech, effect)
 
         case 'Cumans':
             name = 'Feudal Siege'
@@ -536,6 +527,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i in original_units:
                     continue
                 multiply_unit_cost(effect, i, -1, 0.8)
+            name = 'Condottiero'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            enable_tech(effect, 522)
+            append_tech(data, tech, effect)
         case 'Jurchens':
             name = 'enable Grenadier'
             tech = get_new_tech(name)
