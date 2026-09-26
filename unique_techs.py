@@ -580,7 +580,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # --- Coiled Serpent Array + Shield Wall ---
     csa_ids = sid2all[1070]
     sw_ids = sid2all[1464]
-    aura_infantry_units = [93, 1786, 358, 1787, 359, 1788, 1959, 1961]
+    csa_aura_infantry_units = [93, 1786, 358, 1787, 359, 1788, 1959, 1961]
 
     name = 'Coiled Serpent Array + Shield Wall'
     tech = get_new_tech(name)
@@ -588,13 +588,18 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, *all_preqs)
     tech.required_tech_count = 2
     effect = get_new_effect(name)
-    for uid in aura_infantry_units:
+    for uid in csa_aura_infantry_units:
         plus_unit_attribute(effect, uid, -1, 63, -96)
     append_tech(data, tech, effect)
 
-    aura_infantry_units = [2162, 2164, 2165, 2166, 2167, 2270, 2271, 2272, 2104, 2105, 1966, 2066]
-    for uid in aura_infantry_units:
-        plus_unit_attribute(effects[1464], uid, -1, 63, -32)
+    # Infantry Aura
+    for unit in units:
+        if unit and unit.class_ == 6 and unit.creatable and unit.type_50 and unit.type_50.break_off_combat >= 32:
+            boc = unit.type_50.break_off_combat
+            if boc & 32:
+                plus_unit_attribute(effects[1464], unit.id, -1, 63, -32)
+            if boc & 64:
+                plus_unit_attribute(effects[1464], unit.id, -1, 63, -64)
 
     # ===== APPLY MUTEX (delayed, after all effect modifications) =====
     apply_mutex_groups(data, result, extra_groups=[[482, 1286]])
