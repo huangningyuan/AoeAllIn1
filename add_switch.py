@@ -44,13 +44,28 @@ def adding_switch(data: DatFile):
     switch_tech_id = append_tech(data, tech)
     params.switch_tech_id = switch_tech_id
 
+    tech = get_new_tech('Early Feudal')
+    set_require_techs(tech, switch_tech_id, 101)
+    tech.required_tech_count = 1
+    params.early_feudal_tech_id = append_tech(data, tech)
+
     tech = get_new_tech('feudal switch')
     set_require_techs(tech, switch_tech_id, 101)
     params.feudal_duplicate_tech_id = append_tech(data, tech)
 
+    tech = get_new_tech('Early Castle')
+    set_require_techs(tech, params.feudal_duplicate_tech_id, 102)
+    tech.required_tech_count = 1
+    params.early_castle_tech_id = append_tech(data, tech)
+
     tech = get_new_tech('castle switch')
     set_require_techs(tech, switch_tech_id, 102)
     params.castle_duplicate_tech_id = append_tech(data, tech)
+
+    tech = get_new_tech('Early Imp')
+    set_require_techs(tech, params.castle_duplicate_tech_id, 103, 115)
+    tech.required_tech_count = 1
+    params.early_imp_duplicate_tech_id = append_tech(data, tech)
 
     tech = get_new_tech('imp switch')
     set_require_techs(tech, switch_tech_id, 103)

@@ -5,9 +5,11 @@ from utils import get_new_tech
 from utils import replace_tuple
 from utils import set_require_techs
 
-FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 433, 659, 660, 661, 666, 667, 668, 755, 906]
-CASTLE_AGE_REQUIRE_TECH_LIST = [13, 48, 162, 182, 197, 203, 207, 249, 279, 384, 1137]
-IMPERIAL_AGE_REQUIRE_TECH_LIST = [12, 47, 96, 209, 217, 221, 264, 429, 436, 85, 377, 218]
+FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 659, 660, 661, 666, 667, 668, 755,
+                            906, 1402]
+CASTLE_AGE_REQUIRE_TECH_LIST = [13, 48, 162, 182, 197, 203, 207, 249, 279, 384, 1137, 1351, 1267]
+IMPERIAL_AGE_REQUIRE_TECH_LIST = [12, 47, 96, 209, 217, 221, 264, 429, 436, 85, 377, 218, 1454,
+                                  1352, 1291, 434, 1391, 1401]
 EAGLE_WARRIOR_TECH_ID = 384
 ELITE_EAGLE_TECH_ID = 434
 FLEMISH_REVOLUTION_TECH_ID = 755
@@ -17,11 +19,12 @@ def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):
     print('Dealing Required tech...')
     for i, tech in enumerate(data.techs):
         if i in FEUDAL_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, -1, params.switch_tech_id)
+            tech.required_techs = replace_tuple(tech.required_techs, 101, params.early_feudal_tech_id)
         elif i in CASTLE_AGE_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, -1, params.feudal_duplicate_tech_id)
+            tech.required_techs = replace_tuple(tech.required_techs, 102, params.early_castle_tech_id)
         elif i in IMPERIAL_AGE_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, -1, params.castle_duplicate_tech_id)
+            tech.required_techs = replace_tuple(tech.required_techs, 103, params.early_imp_duplicate_tech_id)
+            tech.required_techs = replace_tuple(tech.required_techs, 115, params.early_imp_duplicate_tech_id)
 
     flemish_revolution_tech = data.techs[FLEMISH_REVOLUTION_TECH_ID]
     flemish_revolution_tech.required_techs = (115, params.switch_tech_id, 758, -1, -1, -1)

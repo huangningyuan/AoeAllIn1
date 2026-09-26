@@ -10,7 +10,8 @@ from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
-    set_unit_attribute, set_resource, append_tech, force_research_tech, set_tech_time, set_tech_discount
+    set_unit_attribute, set_resource, append_tech, force_research_tech, set_tech_time, set_tech_discount, \
+    append_tech_effect
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
@@ -534,40 +535,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             0].amount * constants.BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
-    name = 'enable Champi'
+    name = 'Early Champi'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
-    enable_unit(effect, 2550)
     enable_unit(effect, 74)
-    move_unit_button(effect, 2550, 33)
-    move_unit_button(effect, 2588, 33)
-    move_unit_button(effect, 2552, 33)
-    move_unit_button(effect, 2554, 33)
-    append_tech(data, tech, effect)
-    name = 'Champi Runner'
-    champi_runner_tech_id = 1402
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    force_tech(effect, champi_runner_tech_id)
-    move_tech_button(effect, champi_runner_tech_id, 34)
-    append_tech(data, tech, effect)
-    name = 'Champi Warrior'
-    champi_warrior_tech_id = 1351
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, champi_runner_tech_id, params.feudal_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_tech(effect, champi_warrior_tech_id)
-    move_tech_button(effect, champi_warrior_tech_id, 34)
-    append_tech(data, tech, effect)
-    name = 'Elite Champi Warrior'
-    elite_champi_warrior_tech_id = 1352
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, champi_warrior_tech_id, params.castle_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_tech(effect, elite_champi_warrior_tech_id)
-    move_tech_button(effect, elite_champi_warrior_tech_id, 34)
+    force_research_tech(effect, 1350)
     append_tech(data, tech, effect)
 
     name = 'Early Varangian Guard'
@@ -576,17 +549,94 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
     force_research_tech(effect, varangian_tech_id)
-    move_unit_button(effect, 2703, 13)
-    move_unit_button(effect, 2704, 13)
     append_tech(data, tech, effect)
-    name = 'Elite Varangian Guard'
-    varangian_elite_tech_id = 1454
+
+    name = 'enable Hoplite'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, 1136)
+    e_hoplite_tech_id = 1137
+    move_tech_button(effect, e_hoplite_tech_id, 8)
+    disable_tech(effect, e_hoplite_tech_id)
+    append_tech(data, tech, effect)
+    name = 'Elite Hoplite'
+    tech = copy.deepcopy(techs[e_hoplite_tech_id])
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    tech.civ = -1
+    tech.research_locations[0].button_id = 8
+    tech.resource_costs[0].amount = 150
+    tech.resource_costs[1].amount = 275
+    effect = get_new_effect(name)
+    force_research_tech(effect, e_hoplite_tech_id)
+    append_tech(data, tech, effect)
+
+    name = 'enable Phalangite'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, 1290)
+    move_unit_button(effect, 2384, 31)
+    move_tech_button(effect, constants.ELITE_PHALANGITE_TECH_ID, 32)
+    append_tech(data, tech, effect)
+    techs[constants.ELITE_PHALANGITE_TECH_ID].civ = -1
+
+    name = 'enable War Chariot'
+    e_war_chariot_tech_id = 1171
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
     effect = get_new_effect(name)
-    force_tech(effect, varangian_elite_tech_id)
-    move_tech_button(effect, varangian_elite_tech_id, 14)
+    force_research_tech(effect, 1169)
+    move_unit_button(effect, 2150, 31)
+    move_unit_button(effect, 2151, 31)
+    move_tech_button(effect, e_war_chariot_tech_id, 32)
+    disable_tech(effect, e_war_chariot_tech_id)
     append_tech(data, tech, effect)
+
+    tech = copy.deepcopy(techs[e_war_chariot_tech_id])
+    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+    tech.research_locations[0].button_id = 32
+    tech.resource_costs[0].amount = 300
+    tech.resource_costs[1].amount = 250
+    effect = get_new_effect(name)
+    force_research_tech(effect, e_war_chariot_tech_id)
+    append_tech_effect(data, tech, effect)
+
+    # Eagle Warrior
+    name = 'Enable Eagle Warrior'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, 433)
+    append_tech(data, tech, effect)
+
+    name = 'enable Ibirapema'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, 1390)
+    move_unit_button(effect, 2582, 31)
+    move_unit_button(effect, 2584, 31)
+    move_tech_button(effect, constants.ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
+    append_tech(data, tech, effect)
+    techs[constants.ELITE_IBIRAPEMA_TEMP_TECH_ID].civ = -1
+
+    name = 'enable Temple Guard'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_research_tech(effect, 1400)
+    move_tech_button(effect, constants.ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
+    elite_temple_guard_tech = techs[constants.ELITE_TEMPLE_GUARD_TECH_ID]
+    elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
+    elite_temple_guard_tech.research_locations[1].location_id = constants.MONESTARY_ID
+    elite_temple_guard_tech.research_locations[1].button_id = 32
+    for i in constants.TEMPLE_GUARD_IDS:
+        move_unit_button(effect, i, 31, 0)
+        move_unit_button(effect, i, 24, 1)
+    append_tech(data, tech, effect)
+    techs[constants.ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
+
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())

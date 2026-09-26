@@ -97,6 +97,18 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 1966, 26)
     move_unit_button(effect, 1954, 28)
     move_unit_button(effect, 1978, 27)
+    # varangian guard
+    move_unit_button(effect, 2703, 13)
+    move_unit_button(effect, 2704, 13)
+    move_tech_button(effect, 1454, 14)
+    # Champi
+    move_unit_button(effect, 2550, 33)
+    move_unit_button(effect, 2588, 33)
+    move_unit_button(effect, 2552, 33)
+    move_unit_button(effect, 2554, 33)
+    move_tech_button(effect, 1402, 34)
+    move_tech_button(effect, 1351, 34)
+    move_tech_button(effect, 1352, 34)
 
     append_tech(data, tech, effect)
     for i in range(5):

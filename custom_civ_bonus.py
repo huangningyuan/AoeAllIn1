@@ -7,12 +7,11 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 import constants
 from all_in_1_params import All_In_1_Params
 from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
-    ELITE_TEMPLE_GUARD_TECH_ID, ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, MONESTARY_ID, \
-    HOUSE_ID
+    ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, HOUSE_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
-from utils import append_tech_effect, disable_tech, extend_effect, force_research_tech, disable_unit
 from utils import check_effect
+from utils import disable_tech, extend_effect, force_research_tech, disable_unit
 from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
@@ -31,17 +30,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
     units = data.civs[0].units
     match civ_name:
         case 'Achaemenids':
-            name = 'enable War Chariot'
-            e_war_chariot_tech_id = 1171
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1169)
-            move_unit_button(effect, 2150, 31)
-            move_unit_button(effect, 2151, 31)
-            move_tech_button(effect, e_war_chariot_tech_id, 32)
-            disable_tech(effect, e_war_chariot_tech_id)
-            append_tech(data, tech, effect)
             append_tech_tech_id = 1138
             achaemenids_tech_id = 1103
             name = 'Achaemenids or All in 1'
@@ -55,20 +43,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
             name = 'Elite War Chariot'
-            # bug upgrade
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            # effect = get_new_effect(name)
-            # force_tech(effect, e_war_chariot_tech_id)
-            # append_tech_effect(data, tech, effect)
-            tech = copy.deepcopy(techs[e_war_chariot_tech_id])
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            tech.research_locations[0].button_id = 32
-            tech.resource_costs[0].amount = 300
-            tech.resource_costs[1].amount = 250
-            effect = get_new_effect(name)
-            force_research_tech(effect, e_war_chariot_tech_id)
-            append_tech_effect(data, tech, effect)
             name = 'enable dock, port'
             append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
             tech = get_new_tech(name)
@@ -231,18 +205,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             for i in (23, 44, 47):
                 multiply_unit_attribute(effect, -1, i, 101, 1 / 1.15)
-            append_tech(data, tech, effect)
-            name = 'enable Eagle Warrior'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 433)
-            append_tech(data, tech, effect)
-            name = 'append_tech elite eagle warrior'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
-            effect = get_new_effect(name)
-            force_tech(effect, 434)
             append_tech(data, tech, effect)
         case 'Bengalis':
             effect = check_effect(effects, 865)
@@ -633,6 +595,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, transhumance_tech_id)
             append_tech(data, tech, effect)
+        case 'Khmer':
+            name = 'Khmer Requirements'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 638)
+            append_tech(data, tech, effect)
         case 'Lithuanians':
             name = '+100f'
             tech = get_new_tech(name)
@@ -669,20 +638,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if units[i].class_ not in original_classes:
                     plus_unit_armor(effect, i, -1, 1, 3)
                     multiply_unit_attack(effect, i, -1, 130, 11)
-            name = 'enable Phalangite'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1290)
-            move_unit_button(effect, 2384, 31)
-            append_tech(data, tech, effect)
-            name = 'enable Elite Phalangite'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, constants.ELITE_PHALANGITE_TECH_ID)
-            move_tech_button(effect, constants.ELITE_PHALANGITE_TECH_ID, -1)
-            append_tech(data, tech, effect)
             # Druzhina + Phalangite
             effect = check_effect(effects, 569)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -799,26 +754,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(effects[effect_with_bl_id], tech_id)
 
         case 'Muisca':
-            name = 'enable Temple Guard'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1400)
-            move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
-            elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
-            elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
-            elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_ID
-            elite_temple_guard_tech.research_locations[1].button_id = 29
-            for i in constants.TEMPLE_GUARD_IDS:
-                move_unit_button(effect, i, 31, 0)
-                move_unit_button(effect, i, 24, 1)
-            append_tech(data, tech, effect)
-            name = 'Elite Temple Guard'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, ELITE_TEMPLE_GUARD_TECH_ID)
-            append_tech(data, tech, effect)
             # archer armor ext
             _e = check_effect(effects, 1369)
             for i in (2301, 2302):
@@ -1132,31 +1067,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 multiply_unit_attribute(effect, i, -1, 10, 0.85)
             append_tech(data, tech, effect)
         case 'Spartans':
-            name = 'enable Hoplite'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1136)
-            e_hoplite_tech_id = 1137
-            move_tech_button(effect, e_hoplite_tech_id, 8)
-            disable_tech(effect, e_hoplite_tech_id)
-            append_tech(data, tech, effect)
-            name = 'Elite Hoplite'
-            tech = copy.deepcopy(techs[e_hoplite_tech_id])
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            tech.civ = -1
-            tech.research_locations[0].button_id = 8
-            tech.resource_costs[0].amount = 150
-            tech.resource_costs[1].amount = 275
-            effect = get_new_effect(name)
-            force_research_tech(effect, e_hoplite_tech_id)
-            # bug upgrade
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            # effect = get_new_effect(name)
-            # force_tech(effect, e_hoplite_tech_id)
-            append_tech(data, tech, effect)
-
             name = 'enable Spartans TC Techs'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
@@ -1287,21 +1197,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             set_tech_cost(effect, 786, -1, 0)
             set_tech_time(effect, 786, 0)
-            append_tech(data, tech, effect)
-        case 'Tupi':
-            name = 'enable Ibirapema'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1390)
-            move_unit_button(effect, 1699, 31)
-            append_tech(data, tech, effect)
-            name = 'Elite Ibirapema'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 1391)
-            move_tech_button(effect, 1391, -1)
             append_tech(data, tech, effect)
         case 'Vietnamese':
             name = 'Eco Techs no wood, 1/2 time'
