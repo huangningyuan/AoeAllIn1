@@ -129,21 +129,48 @@ def apply_mutex_groups(data: DatFile, result: dict, extra_groups: list[list[int]
     if extra_groups:
         all_groups_sids.extend(extra_groups)
 
+    parent: dict[int, int] = {}
+
+    def find(x: int) -> int:
+        while parent.get(x, x) != x:
+            parent[x] = parent.get(parent[x], parent[x])
+            x = parent[x]
+        return x
+
+    def union(a: int, b: int):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    for group_sids in all_groups_sids:
+        roots = set()
+        for sid in group_sids:
+            if sid in all_tech_ids_map:
+                roots.add(find(sid))
+        roots = list(roots)
+        for i in range(1, len(roots)):
+            union(roots[0], roots[i])
+
+    merged: dict[int, list[int]] = {}
+    for group_sids in all_groups_sids:
+        for sid in group_sids:
+            if sid in all_tech_ids_map:
+                root = find(sid)
+                merged.setdefault(root, [])
+                if sid not in merged[root]:
+                    merged[root].append(sid)
+
     effect_disable_set: dict[int, set[int]] = {}
     linked_entries: list[list[int]] = []
 
-    for group_sids in all_groups_sids:
-        config_sids = [sid for sid in group_sids if sid in all_tech_ids_map]
-        if len(config_sids) < 2:
-            if len(config_sids) == 1:
-                if len(all_tech_ids_map[config_sids[0]]) <= 1:
-                    continue
-            else:
-                continue
-
+    for root, sids in merged.items():
         group_techs: list[int] = []
-        for sid in config_sids:
+        for sid in sids:
             group_techs.extend(all_tech_ids_map[sid])
+
+        if len(group_techs) < 2:
+            continue
+
         linked_entries.append(group_techs)
 
         group_effects = {data.techs[tid].effect_id for tid in group_techs}

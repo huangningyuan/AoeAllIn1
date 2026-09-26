@@ -602,7 +602,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
                 plus_unit_attribute(effects[1464], unit.id, -1, 63, -64)
 
     # ===== APPLY MUTEX (delayed, after all effect modifications) =====
-    apply_mutex_groups(data, result, extra_groups=[[482, 1286]])
+    apply_mutex_groups(data, result)
 
     # ===== FOOTER: spacer techs =====
     for i in range(5):
