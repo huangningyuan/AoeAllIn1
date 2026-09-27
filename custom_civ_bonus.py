@@ -1204,6 +1204,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 set_tech_cost(effect, i, 1, 0)
                 set_tech_time_discount(effect, i, 0.5)
             append_tech(data, tech, effect)
+            # Archers + 20%HP ext
+            effect = check_effect(effects, 672)
+            extend_effect(effect, [2101, 2102])
         case 'Wei':
             name = 'enable Xianbei Raider'
             tech = get_new_tech(name)
