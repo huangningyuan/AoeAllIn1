@@ -45,13 +45,17 @@
         "unit_name": "Catapult Galleon",
         "civ_match": {
           "civ_names": [
-            "Cumans",
-            "Mayans",
             "Aztecs",
+            "Cumans",
+            "Danes",
             "Incas",
-            "Muisca",
             "Mapuche",
-            "Tupi"
+            "Mayans",
+            "Muisca",
+            "Saxons",
+            "Tupi",
+            "Varangians",
+            "Vikings"
           ]
         },
         "unit_ids": [

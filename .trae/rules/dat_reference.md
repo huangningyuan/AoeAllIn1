@@ -50,11 +50,11 @@ bind_effect(data, tech, effect)
 | `effect_commands` | List[EffectCommand] | 效果指令列表 |
 
 ### EffectCommand(type, a, b, c, d) 参数含义
-type = 第一个参数 = 功能类型。其他参数名用 utils 函数签名里的顺序（a, b, c, d 或在某些工具函数里叫 c, a, b, d, e），**以下按 EffectCommand(type, p1, p2, p3, p4) 的顺序描述**：
+所有 EffectCommand 的构造签名都是 `EffectCommand(type, a, b, c, d)`，不同 type 下 a/b/c/d 的含义不同。
 
-| type | 功能 | p1 (type之后第一参) | p2 | p3 | p4 | utils 函数 |
+| type | 功能 | a | b | c | d | utils 函数 |
 |------|------|------|------|------|------|------------|
-| **0** | set_unit_attribute | unit_id (或 -1 if p2=-1 by class) | class_id (-1=by unit_id) | attribute | value | `set_unit_attribute` |
+| **0** | set_unit_attribute | unit_id (或 -1 if b=-1 by class) | class_id (-1=by unit_id) | attribute | value | `set_unit_attribute` |
 | **1** | 资源操作 | resource_id | 0=set, 1=plus | — | value | `set_resource`, `plus_resource` |
 | **2** | enable/disable unit | unit_id | 1=enable, 0=disable | — | — | `enable_unit`, `disable_unit` |
 | **3** | upgrade unit | from_unit_id | to_unit_id | mode(-1=所有同类) | — | `upgrade_unit` |
@@ -146,10 +146,10 @@ type = 第一个参数 = 功能类型。其他参数名用 utils 函数签名里
 ### 单位/文明开关
 | 函数 | 说明 |
 |------|------|
-| `enable_unit(effect, unit_id)` | type 2 p2=1 |
-| `disable_unit(effect, unit_id)` | type 2 p2=0 |
-| `force_tech(effect, tech_id)` | type 8 p4=2（冗余：get_ut 已设 tech.civ=-1） |
-| `research_tech(effect, tech_id)` | type 8 p4=3 |
+| `enable_unit(effect, unit_id)` | type 2, b=1 |
+| `disable_unit(effect, unit_id)` | type 2, b=0 |
+| `force_tech(effect, tech_id)` | type 8, d=2（冗余：get_ut 已设 tech.civ=-1） |
+| `research_tech(effect, tech_id)` | type 8, d=3 |
 | `force_research_tech(effect, tech_id)` | force + research |
 
 ### 属性修改
@@ -166,16 +166,16 @@ type = 第一个参数 = 功能类型。其他参数名用 utils 函数签名里
 ### 科技修改
 | 函数 | 说明 |
 |------|------|
-| `set_tech_cost(effect, tech_id, res_id, val)` | type 101 p3=0 |
-| `set_tech_discount(effect, tech_id, res_id, val)` | type 101 p3=2 |
-| `set_tech_time(effect, tech_id, val)` | type 103 p3=0 |
-| `set_tech_time_discount(effect, tech_id, val)` | type 103 p3=2 |
+| `set_tech_cost(effect, tech_id, res_id, val)` | type 101, c=0 |
+| `set_tech_discount(effect, tech_id, res_id, val)` | type 101, c=2 |
+| `set_tech_time(effect, tech_id, val)` | type 103, c=0 |
+| `set_tech_time_discount(effect, tech_id, val)` | type 103, c=2 |
 
 ### 资源
 | 函数 | 说明 |
 |------|------|
-| `plus_resource(effect, res_id, val)` | type 1 p2=1 |
-| `set_resource(effect, res_id, val)` | type 1 p2=0 |
+| `plus_resource(effect, res_id, val)` | type 1, b=1 |
+| `set_resource(effect, res_id, val)` | type 1, b=0 |
 | `multiply_resource(effect, res_id, mul)` | type 6 |
 
 ### 按钮操作
