@@ -101,6 +101,40 @@ bind_effect(data, tech, effect)
 | 11 | Military Building |
 | 12 | Horse and Camel |
 
+### Attack Type / Armor Type 常用值 (utils 中 type=参数，即 `value + 256 * type` 里的 type)
+来源：`AGE3NamesV0007.ini [AoE2DEArmorNames]`。攻击和护甲共用同一个 ID 体系。
+
+| 值 | 含义 | 说明 |
+|----|------|------|
+| 0 | Unused | |
+| 1 | Infantry | 步兵 |
+| 2 | Turtle Ships | 龟船专属 |
+| 3 | Base Pierce | 远程（最常用！） |
+| 4 | Base Melee | 近战（最常用！） |
+| 5 | War Elephants | 战象 |
+| 8 | Cavalry | 骑兵 |
+| 11 | All Buildings (except Port) | 所有建筑（除港口） |
+| 13 | Stone Walls & Gates & Towers | 石墙/城门/塔楼 |
+| 14 | Predator Animals | 掠食动物 |
+| 15 | Archers | 弓箭手 |
+| 16 | Ships & Saboteur | 战舰/爆破者 |
+| 17 | Rams & Trebuchet & Siege Towers | 攻城器（最常用！） |
+| 19 | Unique Units (except Turtle Ship) | 独特单位 |
+| 20 | Siege Weapons | 攻城武器 |
+| 21 | Standard Buildings | 标准建筑 |
+| 23 | Gunpowder Units | 火药单位 |
+| 25 | Monks | 僧侣 |
+| 26 | Castle | 城堡 |
+| 27 | Spearmen | 矛兵 |
+| 28 | Cavalry Archers | 骑射手 |
+| 29 | Shock Infantry | 冲击步兵（旧称 Eagle Warriors） |
+| 30 | Camels | 骆驼 |
+| 31 | Leitis Attack | 旧立陶宛 Leitis（已弃用），现仅阿契美尼德 Sagaris 使用 |
+| 32 | Condottiero | 意大利佣兵 |
+| 34 | Fishing Ship | 渔船 |
+| 35 | Mamelukes | 马穆鲁克 |
+| 36 | Heroes | 英雄 |
+
 ---
 
 ## 常量速查 (`constants.py`)
