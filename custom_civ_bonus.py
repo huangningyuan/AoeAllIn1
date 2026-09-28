@@ -179,7 +179,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1204)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-
             name = 'Athenians + Armenians Age2'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
@@ -756,24 +755,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (2301, 2302):
                 plus_unit_attribute(_e, i, -1, 4, 1)
         case 'Persians':
-            name = 'Super Harbor'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            multiply_unit_hp(effect, 1189, -1, 2)
-            append_tech(data, tech, effect)
-            name = 'Castle Harbor +15%'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            multiply_unit_attribute(effect, 1189, -1, 13, 1.15)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            name = 'Imp Harbor +20%'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.imp_duplicate_tech_id, tech_id)
-            effect = get_new_effect(name)
-            multiply_unit_attribute(effect, 1189, -1, 13, 1.2 / 1.15)
-            append_tech(data, tech, effect)
             name = 'enable Savar'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, 209)
