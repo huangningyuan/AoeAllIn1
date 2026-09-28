@@ -19,7 +19,7 @@ data.civs[civ_id]   # 指定文明的单位覆盖（通常不直接用）
 | `name` | str | SID（原生 tech）或显示名（我们创建的副本）。effect.name 是效果显示名 |
 | `required_techs` | Tuple[int, 6] | 前置科技索引列表，**-1 = 空槽** |
 | `required_tech_count` | int | 最少需要多少个前置非-1 |
-| `research_locations` | List[ResearchLocation] | 研发地点列表（原生 tech 通常只有一个，get_ut 创建的副本可能有多个——每个建筑 section 对应一个） |
+| `research_locations` | List[ResearchLocation] | 研发地点列表。**原生 tech 通常只有一个**；`get_ut` 创建的副本也只有一个（同一科技在不同建筑中通过创建多个 tech 实例来保证按钮顺序）。**多个 location 的典型案例**是全文明开关科技（同按钮在多个建筑均可研发） |
 
 ### ResearchLocation (研发地点 / 按钮)
 | 属性 | 类型 | 说明 |
@@ -61,7 +61,7 @@ bind_effect(data, tech, effect)
 | **4** | plus_unit_attribute | unit_id | class_id (-1=by unit) | attribute | value | `plus_unit_attribute`, `plus_unit_attack`, `plus_unit_armor` |
 | **5** | multiply_unit_attribute | unit_id | class_id (-1=by unit) | attribute | multiplier | `multiply_unit_attribute`, `multiply_unit_cost`, `multiply_unit_attack` |
 | **6** | multiply_resource | resource_id | — | — | multiplier | `multiply_resource` |
-| **8** | tech 开关 | tech_id | 12(固定) | — | 1=researchable, 2=force, 3=research | `force_tech`, `research_tech`, `force_research_tech` |
+| **8** | tech 开关 | tech_id | 12(固定) | **-1**=所有建筑生效，**≥0**=建筑下标（配合 research_locations 内各条目） | 1=enable, 2=force, 3=research。**注意**：enable(d=1) 仅对 `civ=-1` 的通用科技有效，文明专属科技只能用 force(d=2)；少数原生科技 enable 莫名无效，也需 force | `force_tech`, `research_tech`, `force_research_tech` |
 | **101** | tech 成本 | tech_id | resource_id | 0=cost, 2=discount | value | `set_tech_cost`, `set_tech_discount` |
 | **102** | disable_tech | — | — | — | tech_id | `disable_tech` |
 | **103** | tech 研发时间 | tech_id | — | 0=time, 2=discount | value | `set_tech_time`, `set_tech_time_discount` |
