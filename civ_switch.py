@@ -1,42 +1,25 @@
-import copy
 import json
 import os
-from tkinter.filedialog import SaveAs
 
 from genieutils.datfile import DatFile
-from genieutils.effect import EffectCommand
 from genieutils.tech import ResearchLocation
 from genieutils.unit import TrainLocation
 
-from all_in_1_params import All_In_1_Params
 import constants
-from constants import (
-    CHRONICLE_CIV_IDS,
-    ELITE_IBIRAPEMA_TEMP_TECH_ID,
-    ELITE_TEMPLE_GUARD_TECH_ID,
-    FLEMISH_MILITIA_ID,
-    PASTURE_ID,
-    PHALANGITE_IDS,
-    SETTLEMENT_ID,
-    SOUTH_MESO_CIV_IDS,
-    TEMPLE_GUARD_IDS,
-    ELITE_PHALANGITE_TECH_ID,
-)
+import utils
+from all_in_1_params import All_In_1_Params
 from ftt import move_tech_button
 from ftt import move_unit_button
-from unique_techs import get_ut
-import utils
-from utils import append_tech, set_unit_attribute
-from utils import enable_unit
-from utils import force_tech
-from utils import get_dead_unit
+from utils import append_tech
 from utils import (
     disable_unit,
     get_civ_name,
     get_new_effect,
-    get_tech_id_by_name,
     set_require_techs,
 )
+from utils import enable_unit
+from utils import force_tech
+from utils import get_dead_unit
 from utils import get_new_tech
 from utils import research_tech
 
@@ -196,22 +179,6 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             for civ_id, known_uu_ids in uu_unit_ids_by_civ.items():
                 if command.a in known_uu_ids:
                     elite_uu_id_list[civ_id] = command.b
-
-    but_id = 1380
-    effect = effects[but_id]
-    but_uu_id_list = list[int]()
-    for command in effect.effect_commands:
-        if command.type == 15:
-            but_uu_id_list.append(command.a)
-    for civ_id in range(1, current_civ_num):
-        if civ_id not in uu_id_list:
-            print(f'Failed to find uu for civ {civ_id}')
-            exit(1)
-        if uu_id_list[civ_id] not in but_uu_id_list:
-            effect.effect_commands.append(EffectCommand(15, uu_id_list[civ_id], -1, 100, 0.85))
-            if civ_id in elite_uu_id_list and elite_uu_id_list[civ_id] not in but_uu_id_list:
-                effect.effect_commands.append(EffectCommand(15, elite_uu_id_list[civ_id], -1, 100, 0.85))
-        
 
     print(uu_id_list)
     additional_ut_ids: dict[int, list[int]] = {
