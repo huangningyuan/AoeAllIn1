@@ -745,7 +745,8 @@
                     "source_id": 689,
                     "button": 8,
                     "icon": "CONSCRIPTION_ICON_ID",
-                    "tech_name": "Steppe Husbandry"
+                    "tech_name": "Steppe Husbandry",
+                    "register_as": "steppe_husbandry_id"
                 },
                 {
                     "source_id": 1366,

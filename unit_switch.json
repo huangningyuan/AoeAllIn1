@@ -309,7 +309,8 @@
           474
         ],
         "tech_ids": [
-          218
+          218,
+          "steppe_husbandry_id"
         ]
       }
     ]
