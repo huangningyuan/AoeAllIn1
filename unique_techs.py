@@ -7,7 +7,8 @@ import constants
 from all_in_1_params import All_In_1_Params
 from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, \
     elephant_units, \
-    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, SAXON_DISCOUNT, TECH_NUM
+    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, SAXON_DISCOUNT, TECH_NUM, \
+    TC_IDS, CASTLE_IDS
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from unique_techs_config_loader import apply_mutex_groups
@@ -57,6 +58,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     sid2all = result['source_id_to_all_tech_ids']
     sid2effect = result['source_id_to_effect_id']
     params.civ_index_to_additional_uts = result['civ_index_to_additional_uts']
+
+    # --- Fortified Bastions: add extended TC IDs ---
+    fb_effect = effects[sid2effect[996]]
+    existing_a = {ec.a for ec in fb_effect.effect_commands if ec.type == 4}
+    for uid in TC_IDS + CASTLE_IDS:
+        if uid not in existing_a:
+            plus_unit_attribute(fb_effect, uid, -1, 109, 500)
 
     # --- Corvinian Army ---
     cov_tech_id = sid2all[514][0]
