@@ -84,6 +84,28 @@ bind_effect(data, tech, effect)
 | 103 | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值 |
 | 105 | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
 
+#### 建筑附属存储量 (Storage Amount)
+编年史（Wu/Shui 等）和 DLC 建筑有附属存储槽，用于建造奖励资源。每个建筑原生定义了多个 storage slot，每个 slot 固定一种资源类型（食物/石头等）。通过 type 0/4/5 修改存储量数值：
+
+| 值 | Constants.xs | 含义 | 典型案例 |
+|----|-------------|------|----------|
+| 21 | `cAmountFirstStorage` | 第 1 个附属存储量 | |
+| 26 | `cAmountSecondStorage` | 第 2 个附属存储量 | Dropsite +10 石头 |
+| 27 | `cAmountThirdStorage` | 第 3 个附属存储量 | Wu Dock +65 食物, Dropsite +35 食物 |
+
+**注意**：这个属性依赖建筑原生定义好的 slot 资源类型，不是随便指定资源。例如 Effect #1084 (`C-Bonus, Military Buildings +65f`) 对 Dock 设 `type=4, a=DOCK_ID, c=27, d=55`，就是给 Dock 第三个 slot（食物）+55。但 Harbour（1189）原生 slot[2] 是 `type=-1`（无效），不是食物。
+
+**船坞/巨港差异与修复（Thalassocracy 触发后）**：
+
+| 项目 | Dock (45/51/47/133) | Harbor (1189) 原生 | Harbor 修复后 |
+|------|---------------------|-------------------|--------------|
+| slot[2] type | 0 (Food) | -1 (无效) | 0 (Food) ✅ 已修复 |
+| slot[2] flag | 8 | 0 | 8 ✅ 已修复 |
+| Wu Effect #1084 c=27 | 4 条 Dock 指令 | 无 Harbor 指令 | 追加 Harbor ✅ 已修复 |
+| 核心科技 attack 指令 | 原生含 Harbor | — | 原生已覆盖，无需修复 |
+
+**修复代码位置**：`unique_techs.py` Thalassocracy 段之后（双修复：unit storage + effect 指令追加）
+
 ### class_id 常用值 (type 0/4/5 的第 3 参数，用 -1 表示 by unit_id)
 | 值 | 含义 |
 |----|------|

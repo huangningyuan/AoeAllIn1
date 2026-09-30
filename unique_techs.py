@@ -7,8 +7,7 @@ import constants
 from all_in_1_params import All_In_1_Params
 from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, SQUIRES_ICON_ID, siege_units, siege_workshop_units, \
     elephant_units, \
-    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, SAXON_DISCOUNT, TECH_NUM, \
-    TC_IDS, CASTLE_IDS
+    KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, SAXON_DISCOUNT, TECH_NUM
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from unique_techs_config_loader import apply_mutex_groups
@@ -58,13 +57,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     sid2all = result['source_id_to_all_tech_ids']
     sid2effect = result['source_id_to_effect_id']
     params.civ_index_to_additional_uts = result['civ_index_to_additional_uts']
-
-    # --- Fortified Bastions: add extended TC IDs ---
-    fb_effect = effects[sid2effect[996]]
-    existing_a = {ec.a for ec in fb_effect.effect_commands if ec.type == 4}
-    for uid in TC_IDS + CASTLE_IDS:
-        if uid not in existing_a:
-            plus_unit_attribute(fb_effect, uid, -1, 109, 500)
 
     # --- Corvinian Army ---
     cov_tech_id = sid2all[514][0]
@@ -234,6 +226,27 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     move_tech_building(effect, tha_tech_id, constants.DOCK_ID)
     append_tech(data, tech, effect)
 
+    # --- Thalassocracy: Harbor storage + Wu civ-bonus fix ---
+    # Harbor (1189) slot[2] is type=-1 (invalid) vs Dock's type=0 (Food), flag=8
+    # Fix on every civ layer so storage-based effects (cAmountThirdStorage=27) work on Harbor
+    for civ in data.civs:
+        for u in civ.units:
+            if u and u.id == constants.HARBOR_ID:
+                u.resource_storages[2].type = 0
+                u.resource_storages[2].flag = 8
+                break
+    # Wu Effect #1084 (C-Bonus, Military Buildings +65f) has Dock instructions only,
+    # add Harbor instruction to grant food on Harbor construction
+    wu_civ_bonus_effect_id = 1084
+    wu_eff = data.effects[wu_civ_bonus_effect_id]
+    dock_cmd = next((c for c in wu_eff.effect_commands
+                     if c.type == 4 and c.a in constants.DOCK_IDS and c.c == 27), None)
+    if dock_cmd:
+        from genieutils.effect import EffectCommand
+        wu_eff.effect_commands.append(EffectCommand(
+            type=dock_cmd.type, a=constants.HARBOR_ID,
+            b=dock_cmd.b, c=dock_cmd.c, d=dock_cmd.d))
+
     # ===== B CLASS: custom effect replacement =====
 
     # --- Grand Trunk Road source_id=506 ---
@@ -345,25 +358,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, DONJON_ID, -1, 104, new_wood)
     set_unit_attribute(effect, DONJON_ID, -1, 106, new_stone)
 
-    # --- Hill Forts source_id=691 ---
-    hf_id = sid2first[691]
-    name = 'Hill Forts'
-    effect = get_new_effect(name)
-    for i in constants.TC_IDS:
-        plus_unit_attribute(effect, i, -1, 1, 3)
-        plus_unit_attribute(effect, i, -1, 12, 3)
-        plus_unit_attribute(effect, i, -1, 23, 3)
-    bind_effect(data, techs[hf_id], effect)
-
-    # --- Tigui source_id=576 ---
-    tig_id = sid2first[576]
-    name = 'Tigui'
-    effect = get_new_effect(name)
-    for i in constants.TC_IDS:
-        plus_unit_attribute(effect, i, -1, 102, 8)
-        plus_unit_attribute(effect, i, -1, 107, 8)
-    bind_effect(data, techs[tig_id], effect)
-
     # --- Hussite Reforms source_id=785 ---
     hr_id = sid2first[785]
     name = 'Hussite Reforms'
@@ -398,26 +392,10 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # ===== C CLASS: effect modification =====
 
-    # --- Stronghold source_id=482 ---
-    sh_effect_id = sid2effect[482]
-    effect = check_effect(effects, sh_effect_id)
-    multiply_unit_attribute(effect, 2418, -1, 10, 0.75)
-    plus_unit_attribute(effect, 82, -1, 63, -32)
-    plus_unit_attribute(effect, 2418, -1, 63, -32)
-
-    # --- Citadels source_id=7 ---
-    cit_effect_id = sid2effect[7]
-    effect = check_effect(effects, cit_effect_id)
-    plus_unit_attack(effect, 2418, -1, 4, 3)
-    plus_unit_attack(effect, 2418, -1, 3, 1)
-    plus_unit_attack(effect, 2418, -1, 3, 17)
-
     # --- Svan Towers source_id=923 ---
     st_effect_id = sid2effect[923]
     effect = check_effect(effects, st_effect_id)
     plus_unit_attack(effect, 1830, -1, 2, 3)
-    for i in (2275, 2276, 2277):
-        plus_unit_attack(effect, i, -1, 2, 3)
 
     # --- Curare source_id=1393 ---
     cur_effect_id = sid2effect[1393]

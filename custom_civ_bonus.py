@@ -1131,15 +1131,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for command in effect.effect_commands:
                 if command.type == 3 and command.a == 2718 and command.b == 2717:
                     command.b = castle_building_id
-            origin_units = set(map(lambda command: command.a, effect.effect_commands))
-            for tc_id in TC_IDS:
-                if tc_id in origin_units:
-                    continue
-                set_unit_attribute(effect, tc_id, -1, 66, 2716)
-            for castle_id in (2418,):
-                if castle_id in origin_units:
-                    continue
-                set_unit_attribute(effect, castle_id, -1, 66, 2716)
             for civ in data.civs:
                 new_castle = civ.units[2418]
                 new_castle.building.annexes = (BuildingAnnex(2718, 2, 2), BuildingAnnex(-1, 0, 0),
@@ -1152,15 +1143,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_research_tech(effect, 1498)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-        case 'Teutons':
-            # tc +atk
-            effect = check_effect(effects, 335)
-            origin_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in TC_IDS:
-                if i in origin_units:
-                    continue
-                plus_unit_attribute(effect, i, -1, 2, 10)
-                plus_unit_attribute(effect, i, -1, 107, 5)
         case 'Turks':
             # Gunpowder +20% HP ext
             effect = check_effect(effects, 296)

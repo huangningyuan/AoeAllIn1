@@ -299,6 +299,57 @@ def create_mod_zip(mod_path: str, zip_filename: str = 'allin1.zip') -> str:
     return ofilename
 
 
+def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> int:
+    """
+    自动补全所有 effect 中针对建筑变体的缺失 attribute commands。
+
+    遍历所有 effect，对每个 type in {0,4,5,203,204,205} 且 b=-1 的 command，
+    如果其 a (unit_id) 属于某一建筑组 (TC组/Castle组/...)，则将该 (type,c,d)
+    模式补全到该组中所有缺失的 building ID。
+
+    原理：原生 dat 中同一类建筑的不同变体（如 TC 109/71/141/...，Castle 82/2418）
+    应该共享相同的属性修改，但原生可能只覆盖了基础变体。
+    本函数按 (type, c, d) 分组后，对每组算出已覆盖的建筑 ID，将相同命令补到缺失 ID。
+
+    Args:
+        data: DatFile
+        building_ids_by_group: {group_name: [building_id, ...]}
+            例如 {"tc": [109, 71, 141, ...], "castle": [82, 2418]}
+
+    Returns:
+        补全新增的 command 总数
+    """
+    from collections import defaultdict
+
+    all_effects = data.effects
+    target_types = {0, 4, 5, 203, 204, 205}
+    extended_total = 0
+
+    for group_name, all_ids in building_ids_by_group.items():
+        group_set = set(all_ids)
+        for eff in all_effects:
+            pattern_map = defaultdict(list)
+            for ec in eff.effect_commands:
+                if ec.b != -1:
+                    continue
+                if ec.type not in target_types:
+                    continue
+                if ec.a in group_set:
+                    pattern_map[(ec.type, ec.c, ec.d)].append(ec.a)
+
+            for (etype, ec_attr, ec_val), existing_a in pattern_map.items():
+                missing = group_set - set(existing_a)
+                for mid in missing:
+                    eff.effect_commands.append(
+                        EffectCommand(etype, mid, -1, ec_attr, ec_val)
+                    )
+                    extended_total += 1
+
+    if extended_total > 0:
+        print(f"[AutoExtend] Extended {extended_total} building-variant effect commands")
+    return extended_total
+
+
 def _effect_to_list(effect: Effect) -> list:
     return [
         {"type": c.type, "a": c.a, "b": c.b, "c": c.c, "d": c.d}
