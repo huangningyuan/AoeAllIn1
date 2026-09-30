@@ -304,8 +304,7 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
     自动补全所有 effect 中针对建筑变体的缺失 attribute commands。
 
     遍历所有 effect，对每个 type in {0,4,5,203,204,205} 且 b=-1 的 command，
-    如果其 a (unit_id) 属于某一建筑组 (TC组/Castle组/...)，则将该 (type,c,d)
-    模式补全到该组中所有缺失的 building ID。
+    如果其 a (unit_id) 属于某一建筑组，则将该 (type,c,d) 模式补全到该组中所有缺失的 building ID。
 
     原理：原生 dat 中同一类建筑的不同变体（如 TC 109/71/141/...，Castle 82/2418）
     应该共享相同的属性修改，但原生可能只覆盖了基础变体。
@@ -313,8 +312,11 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
 
     Args:
         data: DatFile
-        building_ids_by_group: {group_name: [building_id, ...]}
-            例如 {"tc": [109, 71, 141, ...], "castle": [82, 2418]}
+        building_ids_by_group: {group_name: value}
+            value 可以是：
+              - [building_id, ...]                        双向补全：组内任意 ID 有的模式都补到全组
+              - ([source_ids], [target_ids])              单向补全：只从 source_ids 收集模式，补到 target_ids 缺失处
+            例如 {"tc": ([109, 71, 141, 142], [109, 71, 141, 142, 2275, 2276, 2277])}
 
     Returns:
         补全新增的 command 总数
@@ -325,8 +327,14 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
     target_types = {0, 4, 5, 203, 204, 205}
     extended_total = 0
 
-    for group_name, all_ids in building_ids_by_group.items():
-        group_set = set(all_ids)
+    for group_name, group_def in building_ids_by_group.items():
+        if isinstance(group_def, tuple):
+            source_ids, target_ids = group_def
+        else:
+            source_ids, target_ids = group_def, group_def
+        source_set = set(source_ids)
+        target_set = set(target_ids)
+
         for eff in all_effects:
             pattern_map = defaultdict(list)
             for ec in eff.effect_commands:
@@ -334,11 +342,11 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
                     continue
                 if ec.type not in target_types:
                     continue
-                if ec.a in group_set:
+                if ec.a in source_set:
                     pattern_map[(ec.type, ec.c, ec.d)].append(ec.a)
 
             for (etype, ec_attr, ec_val), existing_a in pattern_map.items():
-                missing = group_set - set(existing_a)
+                missing = target_set - set(existing_a)
                 for mid in missing:
                     eff.effect_commands.append(
                         EffectCommand(etype, mid, -1, ec_attr, ec_val)

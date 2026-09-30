@@ -8,7 +8,7 @@ from add_switch import adding_switch
 from civ_bonuses import add_civ_bonuses
 from civ_switch import add_civ_switch
 from constants import gunpowder_units, siege_units, siege_workshop_units, elephant_units
-from constants import TC_IDS, CASTLE_IDS
+from constants import TC_IDS, TC_IDS_ORIGINAL, CASTLE_IDS, CASTLE_IDS_ORIGINAL
 from deal_xs import deal_xs
 from ftt import deal_ftt
 from genieutils.datfile import DatFile
@@ -54,7 +54,10 @@ def update_all_in_1(debug = True):
     add_unique_techs(data, params)
     add_civ_switch(data, params)
     print('Auto-extending building variant effects...')
-    auto_extend_building_effects(data, {"tc": TC_IDS, "castle": CASTLE_IDS})
+    auto_extend_building_effects(data, {
+        "tc": (TC_IDS_ORIGINAL, TC_IDS),
+        "castle": (CASTLE_IDS_ORIGINAL, CASTLE_IDS),
+    })
     print('Saving Data...')
     data.save(target_file_name)
     print('Data saved.')
