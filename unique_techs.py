@@ -362,7 +362,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     hr_id = sid2first[785]
     name = 'Hussite Reforms'
     effect = get_new_effect(name)
-    for i, tech1 in enumerate(techs):
+    for i in range(TECH_NUM):
+        tech1 = techs[i]
         if len(tech1.research_locations) == 0:
             continue
         research_location_id = tech1.research_locations[0].location_id
