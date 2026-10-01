@@ -892,6 +892,12 @@
                     "tech_name": "Thunderclap Bombs"
                 },
                 {
+                    "source_id": 1483,
+                    "button": 7,
+                    "icon": "SIEGE_ENGINEERS_ICON_ID",
+                    "tech_name": "Northmen's Fury"
+                },
+                {
                     "source_id": 454,
                     "button": 7,
                     "tech_name": "Counterweights"
@@ -921,12 +927,6 @@
                     "source_id": 1081,
                     "button": 29,
                     "tech_name": "Sitting Tiger"
-                },
-                {
-                    "source_id": 1483,
-                    "button": 11,
-                    "icon": "SIEGE_ENGINEERS_ICON_ID",
-                    "tech_name": "Northmen's Fury"
                 }
             ]
         },
