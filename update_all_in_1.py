@@ -33,7 +33,7 @@ def update_all_in_1(debug = True):
         if len(t.research_locations) > 0
         and t.research_locations[0].location_id == MONESTARY_ID
         and t.research_locations[0].button_id > 0
-        and t.name != 'Herbal Medicine'
+        and i != 441
     ]
     params = adding_switch(data)
     constants.TECH_NUM = len(data.techs)
