@@ -122,16 +122,16 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     multiply_resource(effect, 512, 1.02)
 
     current_vedic_univ_techs = list()
-    for i in range(constants.R.TECH_NUM):
+    for i in range(constants.TECH_NUM):
         required_techs = techs[i].required_techs
         if vedic_teaching_id in required_techs:
             current_vedic_univ_techs.append(required_techs[0])
     print('Current Vedic Univ Techs:', current_vedic_univ_techs)
-    for i in constants.R.university_techs:
-        if constants.R.university_techs[i] not in current_vedic_univ_techs:
+    for i in constants.university_techs:
+        if constants.university_techs[i] not in current_vedic_univ_techs:
             name = f'{i} Researched for Vedic Teachings'
             tech = get_new_tech(name)
-            set_require_techs(tech, constants.R.university_techs[i], vedic_teaching_id)
+            set_require_techs(tech, constants.university_techs[i], vedic_teaching_id)
             tech.effect_id = vedic_effect_id
             append_tech(data, tech)
 
@@ -360,7 +360,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     hr_id = sid2first[785]
     name = 'Hussite Reforms'
     effect = get_new_effect(name)
-    for i in constants.R.ORIGINAL_MONESTARY_TECH_IDS:
+    for i in constants.ORIGINAL_MONESTARY_TECH_IDS:
         tech1 = techs[i]
         food = 0
         gold = 0
@@ -402,7 +402,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect = check_effect(effects, paiks_effect_id)
     original_units = set(map(lambda command: command.a, effect.effect_commands))
     extend_units = []
-    for unit in constants.R.elephant_units:
+    for unit in constants.elephant_units:
         if unit not in original_units:
             extend_units.append(unit)
     extend_effect(effect, extend_units)
@@ -443,7 +443,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     multiply_resource(effect, 266, 1.2)
     effect_id = len(effects)
     effects.append(effect)
-    for tech_name, tech_id in constants.R.university_techs.items():
+    for tech_name, tech_id in constants.university_techs.items():
         tech = get_new_tech(name + " + " + tech_name)
         set_require_techs(tech, params.switch_tech_id, tech_id, vedic_teaching_id, paper_money_tech_id)
         tech.effect_id = effect_id
@@ -464,7 +464,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     multiply_resource(effect, 236, 1.02)
     effect_id = len(effects)
     effects.append(effect)
-    for tech_name, tech_id in constants.R.university_techs.items():
+    for tech_name, tech_id in constants.university_techs.items():
         tech = get_new_tech(name + " + " + tech_name)
         set_require_techs(tech, params.switch_tech_id, tech_id, vedic_teaching_id, bv_tech_id)
         tech.effect_id = effect_id

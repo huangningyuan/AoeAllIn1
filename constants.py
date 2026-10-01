@@ -57,22 +57,16 @@ HUTS_IDS = [1082, 1083, 1084, 1085, 1086, 1087, 1088, 1196, 1197, 1198, 1199, 12
 WP_WITH_RELIC_ID = 1831
 
 
-# ===== 运行时状态（加载 dat 后填充）=====
-# 所有运行时可变变量统一放在 R 上，避免 from import 按值绑定导致标量失效
-# 使用方式：constants.R.TECH_NUM = N  /  constants.R.TECH_NUM
-from types import SimpleNamespace
-
-R = SimpleNamespace(
-    TECH_NUM=0,
-    ORIGINAL_TECH_NUM=0,
-    ORIGINAL_MONESTARY_TECH_IDS=[],
-    MOD_PATH='',
-    gunpowder_units=[],
-    siege_units=[],
-    siege_workshop_units=[],
-    elephant_units=[],
-    university_techs={},
-)
+# ===== 运行时状态（加载 dat 后填充，禁止 from import，统一用 constants.X 访问）=====
+TECH_NUM = 0
+ORIGINAL_TECH_NUM = 0
+ORIGINAL_MONESTARY_TECH_IDS = []
+MOD_PATH = ''
+gunpowder_units = []
+siege_units = []
+siege_workshop_units = []
+elephant_units = []
+university_techs = dict()
 
 # tech id
 ELITE_TEMPLE_GUARD_TECH_ID = 1401

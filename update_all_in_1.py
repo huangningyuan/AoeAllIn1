@@ -18,44 +18,44 @@ import mutex
 
 def update_all_in_1(debug = True):
     origin_file_name = os.path.join(constants.GAME_DATA_PATH, 'empires2_x2_p1.dat')
-    constants.R.MOD_PATH = utils.get_mod_path()
-    mod_path = constants.R.MOD_PATH
+    constants.MOD_PATH = utils.get_mod_path()
+    mod_path = constants.MOD_PATH
     print(mod_path)
     target_file_name = os.path.join(mod_path, 'resources', '_common', 'dat', 'empires2_x2_p1.dat')
     print('Loading data...')
     data = DatFile.parse(origin_file_name)
     print('Data loaded.')
-    constants.R.ORIGINAL_TECH_NUM = len(data.techs)
-    constants.R.ORIGINAL_MONESTARY_TECH_IDS = [
-        i for i, t in enumerate(data.techs[:constants.R.ORIGINAL_TECH_NUM])
+    constants.ORIGINAL_TECH_NUM = len(data.techs)
+    constants.ORIGINAL_MONESTARY_TECH_IDS = [
+        i for i, t in enumerate(data.techs[:constants.ORIGINAL_TECH_NUM])
         if len(t.research_locations) > 0
         and t.research_locations[0].location_id == constants.MONESTARY_ID
         and t.research_locations[0].button_id > 0
         and t.name != 'Herbal Medicine'
     ]
     params = adding_switch(data)
-    constants.R.TECH_NUM = len(data.techs)
+    constants.TECH_NUM = len(data.techs)
     effects = data.effects
     for command in effects[410].effect_commands:
-        constants.R.gunpowder_units.append(command.a)
+        constants.gunpowder_units.append(command.a)
     units = data.civs[0].units
     for i, unit in enumerate(units):
         if unit and unit.creatable and len(unit.creatable.train_locations) > 0:
             if constants.SIEGE_ID in list(map(lambda x: x.unit_id ,unit.creatable.train_locations)):
-                constants.R.siege_workshop_units.append(i)
+                constants.siege_workshop_units.append(i)
             if 20 in list(map(lambda armor: armor.class_, unit.type_50.armours)):
-                constants.R.siege_units.append(i)
+                constants.siege_units.append(i)
             if 5 in list(map(lambda armor: armor.class_, unit.type_50.armours)):
-                constants.R.elephant_units.append(i)
+                constants.elephant_units.append(i)
     for i, tech in enumerate(data.techs):
         if len(tech.research_locations) > 0:
             if tech.research_locations[0].location_id == 209:
-                constants.R.university_techs[tech.name] = i
-    print(f'Gunpowder units: {constants.R.gunpowder_units}')
-    print(f'Siege units: {constants.R.siege_units}')
-    print(f'Siege workshop units: {constants.R.siege_workshop_units}')
-    print(f'Elephant units: {constants.R.elephant_units}')
-    print(f'University techs: {constants.R.university_techs}')
+                constants.university_techs[tech.name] = i
+    print(f'Gunpowder units: {constants.gunpowder_units}')
+    print(f'Siege units: {constants.siege_units}')
+    print(f'Siege workshop units: {constants.siege_workshop_units}')
+    print(f'Elephant units: {constants.elephant_units}')
+    print(f'University techs: {constants.university_techs}')
     deal_ftt(data, params)
     add_civ_bonuses(data, params)
     add_unique_techs(data, params)
