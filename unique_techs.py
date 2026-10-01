@@ -362,24 +362,17 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     hr_id = sid2first[785]
     name = 'Hussite Reforms'
     effect = get_new_effect(name)
-    for i in range(TECH_NUM):
+    for i in constants.ORIGINAL_MONESTARY_TECH_IDS:
         tech1 = techs[i]
-        if len(tech1.research_locations) == 0:
-            continue
-        research_location_id = tech1.research_locations[0].location_id
-        research_button_id = tech1.research_locations[0].button_id
-        if research_location_id == constants.MONESTARY_ID and research_button_id > 0:
-            if tech1.name in ('Herbal Medicine'):
-                continue
-            else:
-                food = 0
-                for cost in tech1.resource_costs:
-                    if cost.type == 0:
-                        food = cost.amount / 2
-                    elif cost.type == 3:
-                        gold = cost.amount / 2
-                set_tech_cost(effect, i, 3, 0)
-                set_tech_cost(effect, i, 0, food + gold)
+        food = 0
+        gold = 0
+        for cost in tech1.resource_costs:
+            if cost.type == 0:
+                food = cost.amount / 2
+            elif cost.type == 3:
+                gold = cost.amount / 2
+        set_tech_cost(effect, i, 3, 0)
+        set_tech_cost(effect, i, 0, food + gold)
     set_unit_attribute(effect, 125, -1, 105, 0)
     set_unit_attribute(effect, 125, -1, 103, 80)
     set_unit_attribute(effect, 775, -1, 105, 0)

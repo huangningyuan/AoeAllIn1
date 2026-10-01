@@ -26,6 +26,14 @@ def update_all_in_1(debug = True):
     print('Loading data...')
     data = DatFile.parse(origin_file_name)
     print('Data loaded.')
+    constants.ORIGINAL_TECH_NUM = len(data.techs)
+    constants.ORIGINAL_MONESTARY_TECH_IDS = [
+        i for i, t in enumerate(data.techs[:constants.ORIGINAL_TECH_NUM])
+        if len(t.research_locations) > 0
+        and t.research_locations[0].location_id == constants.MONESTARY_ID
+        and t.research_locations[0].button_id > 0
+        and t.name != 'Herbal Medicine'
+    ]
     params = adding_switch(data)
     constants.TECH_NUM = len(data.techs)
     effects = data.effects
