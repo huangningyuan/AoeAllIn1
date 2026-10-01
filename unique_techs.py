@@ -575,13 +575,14 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
 
     # Infantry Aura
+    effect = check_effect(effects, 1464)
     for unit in units:
         if unit and unit.class_ == 6 and unit.creatable and unit.type_50 and unit.type_50.break_off_combat >= 32:
             boc = unit.type_50.break_off_combat
             if boc & 32:
-                plus_unit_attribute(effects[1464], unit.id, -1, 63, -32)
+                plus_unit_attribute(effect, unit.id, -1, 63, -32)
             if boc & 64:
-                plus_unit_attribute(effects[1464], unit.id, -1, 63, -64)
+                plus_unit_attribute(effect, unit.id, -1, 63, -64)
 
     # ===== APPLY MUTEX (delayed, after all effect modifications) =====
     apply_mutex_groups(data, result)

@@ -53,11 +53,6 @@ def update_all_in_1(debug = True):
         if len(tech.research_locations) > 0:
             if tech.research_locations[0].location_id == 209:
                 constants.university_techs[tech.name] = i
-    print(f'Gunpowder units: {constants.gunpowder_units}')
-    print(f'Siege units: {constants.siege_units}')
-    print(f'Siege workshop units: {constants.siege_workshop_units}')
-    print(f'Elephant units: {constants.elephant_units}')
-    print(f'University techs: {constants.university_techs}')
     deal_ftt(data, params)
     add_civ_bonuses(data, params)
     add_unique_techs(data, params)
