@@ -6,7 +6,7 @@ from genieutils.unit import BuildingAnnex, AttackOrArmor
 
 import constants
 from all_in_1_params import All_In_1_Params
-from constants import BLOODLINE_ID, TC_IDS, gunpowder_units, siege_workshop_units, siege_units, \
+from constants import BLOODLINE_ID, TC_IDS, \
     ROMAN_CIV_WORK_RATE, FRANKS_FORAGER_WORK_RATE, MAPUCHE_FORAGER_WORK_RATE, HOUSE_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
@@ -209,7 +209,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = check_effect(effects, 865)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = []
-            for unit in constants.elephant_units:
+            for unit in constants.R.elephant_units:
                 if unit not in original_units:
                     extend_units.append(unit)
             extend_effect(effect, extend_units)
@@ -250,7 +250,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             for i, tech1 in enumerate(techs):
-                if i > constants.TECH_NUM:
+                if i > constants.R.TECH_NUM:
                     break
                 if len(tech1.research_locations) == 0:
                     continue
@@ -285,7 +285,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
         case 'Burgundians':
             effect = check_effect(effects, 794)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in gunpowder_units:
+            for i in constants.R.gunpowder_units:
                 if i in origin_units:
                     continue
                 for attack in data.civs[0].units[i].type_50.attacks:
@@ -295,7 +295,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             for i, tech1 in enumerate(techs):
-                if i > constants.TECH_NUM:
+                if i > constants.R.TECH_NUM:
                     break
                 if len(tech1.research_locations) == 0:
                     continue
@@ -368,7 +368,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = check_effect(effects, 385)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
             original_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in siege_units:
+            for i in constants.R.siege_units:
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_attribute(effect, i, -1, 10, 0.8)
         case 'Chinese':
@@ -445,7 +445,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = check_effect(effects, 843)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = []
-            for unit in constants.elephant_units:
+            for unit in constants.R.elephant_units:
                 if unit not in original_units:
                     extend_units.append(unit)
             extend_effect(effect, extend_units)
@@ -454,7 +454,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = check_effect(effects, 576)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
             extend_units = list()
-            for i in gunpowder_units:
+            for i in constants.R.gunpowder_units:
                 if i not in origin_units:
                     extend_units.append(i)
                     # plus_unit_armor(effect, i, -1, 1, 3)
@@ -522,7 +522,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # cheap gunpowder units ext
             effect = check_effect(effects, 555)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in gunpowder_units:
+            for i in constants.R.gunpowder_units:
                 if i in original_units:
                     continue
                 multiply_unit_cost(effect, i, -1, 0.8)
@@ -630,7 +630,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # siege ext
             effect = check_effect(effects, 1220)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
-            for i in siege_units:
+            for i in constants.R.siege_units:
                 if units[i].class_ not in original_classes:
                     plus_unit_armor(effect, i, -1, 1, 3)
                     multiply_unit_attack(effect, i, -1, 130, 11)
@@ -950,7 +950,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_attribute(check_effect(effects, 1068), i, -1, 5, 1.1)
                     multiply_unit_attribute(check_effect(effects, 1072), i, -1, 5, 1.1)
-            for i in siege_units:
+            for i in constants.R.siege_units:
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_attribute(check_effect(effects, 1068), i, -1, 5, 1.1)
                     multiply_unit_attribute(check_effect(effects, 1072), i, -1, 5, 1.1)
@@ -993,7 +993,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = check_effect(effects, 567)
             original_classes = set(map(lambda command: command.b, effect.effect_commands))
             original_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in siege_workshop_units:
+            for i in constants.R.siege_workshop_units:
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_cost(effect, i, -1, 0.85)
 
@@ -1039,7 +1039,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 map(lambda command: command.a,
                     filter(lambda command: command.type == 5 and command.c == 10, effects[446].effect_commands)))
             effect = get_new_effect(name)
-            for i in gunpowder_units:
+            for i in constants.R.gunpowder_units:
                 if i in origin_units or data.civs[0].units[i].class_ == 44:
                     continue
                 multiply_unit_attribute(effect, i, -1, 10, 0.85)
@@ -1147,7 +1147,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # Gunpowder +20% HP ext
             effect = check_effect(effects, 296)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in gunpowder_units:
+            for i in constants.R.gunpowder_units:
                 if i in origin_units:
                     continue
                 multiply_unit_hp(effect, i, -1, 1.25)

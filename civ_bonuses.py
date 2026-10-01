@@ -450,7 +450,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     free_archery_techs = (98, 436, 437)
     shu_cheap_range_techs = (100, 237, 437, 199, 200, 201, 211, 212, 219, 436, 218)
     for i, tech1 in enumerate(techs):
-        if i > constants.TECH_NUM:
+        if i > constants.R.TECH_NUM:
             break
         if len(tech1.research_locations) == 0:
             continue
@@ -505,7 +505,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
     for i, tech1 in enumerate(techs):
-        if i > constants.TECH_NUM:
+        if i > constants.R.TECH_NUM:
             break
         if len(tech1.research_locations) == 0:
             continue

@@ -57,18 +57,28 @@ HUTS_IDS = [1082, 1083, 1084, 1085, 1086, 1087, 1088, 1196, 1197, 1198, 1199, 12
 WP_WITH_RELIC_ID = 1831
 
 
-gunpowder_units = []
-siege_units = []
-siege_workshop_units = []
-elephant_units = []
-university_techs = dict()
+# ===== 运行时状态（加载 dat 后填充）=====
+# 所有运行时可变变量统一放在 R 上，避免 from import 按值绑定导致标量失效
+# 使用方式：constants.R.TECH_NUM = N  /  constants.R.TECH_NUM
+from types import SimpleNamespace
+
+R = SimpleNamespace(
+    TECH_NUM=0,
+    ORIGINAL_TECH_NUM=0,
+    ORIGINAL_MONESTARY_TECH_IDS=[],
+    MOD_PATH='',
+    gunpowder_units=[],
+    siege_units=[],
+    siege_workshop_units=[],
+    elephant_units=[],
+    university_techs={},
+)
 
 # tech id
 ELITE_TEMPLE_GUARD_TECH_ID = 1401
 ELITE_IBIRAPEMA_TEMP_TECH_ID = 1391
 ELITE_PHALANGITE_TECH_ID = 1291
 
-TECH_NUM = 0
 LARGE_CIV_ID = 100
 CHRONICLE_CIV_IDS = [46, 47, 48, 54, 55, 56]
 SOUTH_MESO_CIV_IDS = [21, 57, 58, 59]
@@ -155,4 +165,3 @@ MAPUCHE_FORAGER_WORK_RATE = 1.25
 # paths
 GAME_DATA_PATH = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat'
 GAME_XS_PATH = r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\xs'
-MOD_PATH = r'C:\Users\huang\Games\Age of Empires 2 DE\76561198141916001\mods\local\All Civ Bonus Test\resources\_common\dat'

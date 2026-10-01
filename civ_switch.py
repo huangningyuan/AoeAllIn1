@@ -319,7 +319,7 @@ if __name__ == '__main__':
         'Spartans': '斯巴达', 'Wei': '魏', 'Shu': '蜀', 'Wu': '吴', 'Jurchens': '女真',
         'Khitans': '契丹', 'Puru': '普鲁', 'Thracians': '色雷斯', 'Macedonians': '马其顿',
         'Muisca': '穆伊斯卡', 'Mapuche': '马普切', 'Tupi': '图皮',
-        'Saxons': '撒克逊', 'Danes': '丹麦', 'Varangians': '瓦良吉',
+        'Saxons': '撒克逊', 'Danes': '丹麦', 'Varangians': '瓦兰吉',
     }
     en = open(en_file_name, 'w')
     zh = open(zh_file_name, 'w', encoding='utf-8')
