@@ -1,12 +1,12 @@
 from genieutils import unit
+from constants import GAME_XS_PATH
 
-import constants
 import utils
 import os
 
 
 def deal_xs(units: list[unit.Unit]):
-    xs_path = constants.GAME_XS_PATH
+    xs_path = GAME_XS_PATH
     mod_xs_path = os.path.join(utils.get_mod_path(), 'resources', '_common', 'xs')
     if not os.path.exists(mod_xs_path):
         os.makedirs(mod_xs_path, exist_ok=True)

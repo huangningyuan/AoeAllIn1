@@ -4,6 +4,7 @@ import os
 from genieutils.datfile import DatFile
 
 import constants
+from constants import GAME_DATA_PATH
 from utils import append_tech, get_new_tech, get_new_effect
 
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'unique_techs_config.json')
@@ -29,7 +30,7 @@ def load_config(path: str = CONFIG_FILE):
 
 
 def _load_native_mutex_groups() -> list[list[int]]:
-    linked_path = os.path.join(constants.GAME_DATA_PATH, 'linkedTechs.json')
+    linked_path = os.path.join(GAME_DATA_PATH, 'linkedTechs.json')
     if not os.path.exists(linked_path):
         return []
     with open(linked_path, 'r', encoding='utf-8') as f:

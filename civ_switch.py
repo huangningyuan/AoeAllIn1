@@ -1,11 +1,12 @@
 import json
 import os
+import constants
+from constants import BARRACK_ID, BLACKSMITH_ID, CASTLE_ID, MILL_ID, MULE_CART_ID, STABLE_ID
 
 from genieutils.datfile import DatFile
 from genieutils.tech import ResearchLocation
 from genieutils.unit import TrainLocation
 
-import constants
 import utils
 from all_in_1_params import All_In_1_Params
 from ftt import move_tech_button
@@ -108,7 +109,7 @@ def get_next_position(pos: tuple):
                 case 14:
                     return (pos[0], 21)
                 case 34:
-                    return (constants.MILL_ID, 2)
+                    return (MILL_ID, 2)
                 case _:
                     return (pos[0], pos[1] + 1)
         case constants.MILL_ID:
@@ -124,7 +125,7 @@ def get_next_position(pos: tuple):
                 case 14:
                     return (pos[0], 21)
                 case 34:
-                    return (constants.BLACKSMITH_ID, 1)
+                    return (BLACKSMITH_ID, 1)
                 case _:
                     return (pos[0], pos[1] + 1)
         case constants.BLACKSMITH_ID:
@@ -158,7 +159,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             continue
         research_location_id = tech.research_locations[0].location_id
         research_button_id = tech.research_locations[0].button_id
-        if (research_location_id == constants.CASTLE_ID and research_button_id == 6
+        if (research_location_id == CASTLE_ID and research_button_id == 6
                 and civ_id in range(1, current_civ_num)):
             uu_tech_id_list[civ_id] = tech_id
         if tech.effect_id == -1 or tech.civ == -1:
@@ -169,7 +170,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
             if command.type == 2:
                 unit = units[command.a]
                 train_location = unit.creatable.train_locations[0]
-                if train_location.unit_id == constants.CASTLE_ID and train_location.button_id == 1:
+                if train_location.unit_id == CASTLE_ID and train_location.button_id == 1:
                     uu_id_list[civ_id] = command.a
                     uu_unit_ids_by_civ.setdefault(civ_id, set()).add(command.a)
     for effect in effects:
@@ -188,12 +189,12 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
 
     # huskarl
     tech = techs[365]
-    new_location = ResearchLocation(constants.BARRACK_ID, tech.research_locations[0].research_time, 29, -1)
+    new_location = ResearchLocation(BARRACK_ID, tech.research_locations[0].research_time, 29, -1)
     tech.research_locations.append(new_location)
 
     # tarkan
     tech = techs[2]
-    new_location = ResearchLocation(constants.STABLE_ID, tech.research_locations[0].research_time, 26, -1)
+    new_location = ResearchLocation(STABLE_ID, tech.research_locations[0].research_time, 26, -1)
     tech.research_locations.append(new_location)
 
     name = 'enable all uus'
@@ -255,7 +256,7 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
     lfc_offset = 6800
     lfh_offset = 105800
     for civ in data.civs:
-        pos = (constants.MULE_CART_ID, 1)
+        pos = (MULE_CART_ID, 1)
         for civ_id in range(1, current_civ_num):
             unit = get_dead_unit(units, )
             unit.icon_id = units[elite_uu_id_list[civ_id]].icon_id

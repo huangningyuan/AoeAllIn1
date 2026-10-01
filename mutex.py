@@ -3,10 +3,10 @@ import json
 from genieutils.datfile import DatFile
 from genieutils.tech import ResearchResourceCost
 from utils import disable_tech, set_resource
-import constants
+from constants import GAME_DATA_PATH
 
 # Load linkedTechs.json at module level
-linked_techs_path = os.path.join(constants.GAME_DATA_PATH, 'linkedTechs.json')
+linked_techs_path = os.path.join(GAME_DATA_PATH, 'linkedTechs.json')
 with open(linked_techs_path, 'r', encoding='utf-8') as f:
     LINKED_TECHS = json.load(f)
 

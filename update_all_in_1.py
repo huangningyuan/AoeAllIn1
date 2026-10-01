@@ -1,13 +1,15 @@
 import os
 import zipfile
 import json
-
 import constants
+from constants import \
+    CASTLE_IDS, CASTLE_IDS_ORIGINAL, GAME_DATA_PATH, MONESTARY_ID, SIEGE_ID, TC_IDS, \
+    TC_IDS_ORIGINAL
+
 import utils
 from add_switch import adding_switch
 from civ_bonuses import add_civ_bonuses
 from civ_switch import add_civ_switch
-from constants import TC_IDS, TC_IDS_ORIGINAL, CASTLE_IDS, CASTLE_IDS_ORIGINAL
 from deal_xs import deal_xs
 from ftt import deal_ftt
 from genieutils.datfile import DatFile
@@ -17,7 +19,7 @@ import mutex
 
 
 def update_all_in_1(debug = True):
-    origin_file_name = os.path.join(constants.GAME_DATA_PATH, 'empires2_x2_p1.dat')
+    origin_file_name = os.path.join(GAME_DATA_PATH, 'empires2_x2_p1.dat')
     constants.MOD_PATH = utils.get_mod_path()
     mod_path = constants.MOD_PATH
     print(mod_path)
@@ -29,7 +31,7 @@ def update_all_in_1(debug = True):
     constants.ORIGINAL_MONESTARY_TECH_IDS = [
         i for i, t in enumerate(data.techs[:constants.ORIGINAL_TECH_NUM])
         if len(t.research_locations) > 0
-        and t.research_locations[0].location_id == constants.MONESTARY_ID
+        and t.research_locations[0].location_id == MONESTARY_ID
         and t.research_locations[0].button_id > 0
         and t.name != 'Herbal Medicine'
     ]
@@ -41,7 +43,7 @@ def update_all_in_1(debug = True):
     units = data.civs[0].units
     for i, unit in enumerate(units):
         if unit and unit.creatable and len(unit.creatable.train_locations) > 0:
-            if constants.SIEGE_ID in list(map(lambda x: x.unit_id ,unit.creatable.train_locations)):
+            if SIEGE_ID in list(map(lambda x: x.unit_id ,unit.creatable.train_locations)):
                 constants.siege_workshop_units.append(i)
             if 20 in list(map(lambda armor: armor.class_, unit.type_50.armours)):
                 constants.siege_units.append(i)

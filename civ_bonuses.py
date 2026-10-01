@@ -1,11 +1,13 @@
 import copy
+import constants
+from constants import \
+    ARCHERY_RANGE_ID, BARRACK_ID, BURGUNDIAN_ECO_TECH_DISCOUNT, CASTLE_ID, CHRONICLE_CIV_IDS, DRAVIDIANS_TECH_DISCOUNT, \
+    ELITE_IBIRAPEMA_TEMP_TECH_ID, ELITE_PHALANGITE_TECH_ID, ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, MONESTARY_ID, TEMPLE_GUARD_IDS
 
 from genieutils.datfile import DatFile
 from genieutils.effect import EffectCommand
 
-import constants
 from all_in_1_params import All_In_1_Params
-from constants import ITALIANS_TECH_DISCOUNT, CHRONICLE_CIV_IDS
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
@@ -86,9 +88,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if tech.effect_id == -1:
             continue
         research_location = tech.research_locations[0]
-        if research_location.location_id == constants.CASTLE_ID and (
+        if research_location.location_id == CASTLE_ID and (
                 research_location.button_id in (7, 8) or (
-                research_location.button_id in (12, 13) and tech.civ in constants.CHRONICLE_CIV_IDS)):
+                research_location.button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
         if research_location.location_id >= 0:
@@ -455,7 +457,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if len(tech1.research_locations) == 0:
             continue
         research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == constants.ARCHERY_RANGE_ID:
+        if research_location_id == ARCHERY_RANGE_ID:
             if i == hca_tech_id:
                 for cost in tech1.resource_costs:
                     if cost.type == -1:
@@ -510,7 +512,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if len(tech1.research_locations) == 0:
             continue
         research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == constants.BARRACK_ID:
+        if research_location_id == BARRACK_ID:
             if i in (197, 207, 217, 222, 264, 716, 875, 885, 602, 1173, 1174):
                 continue
             for j in tech1.resource_costs:
@@ -531,7 +533,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     for i in (65, 906):
         set_tech_cost(effect, i, 0, techs[i].resource_costs[
-            0].amount * constants.BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
+            0].amount * BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
     append_tech(data, tech, effect)
 
     name = 'Early Champi'
@@ -576,9 +578,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     force_research_tech(effect, 1290)
     move_unit_button(effect, 2384, 31)
-    move_tech_button(effect, constants.ELITE_PHALANGITE_TECH_ID, 32)
+    move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, 32)
     append_tech(data, tech, effect)
-    techs[constants.ELITE_PHALANGITE_TECH_ID].civ = -1
+    techs[ELITE_PHALANGITE_TECH_ID].civ = -1
 
     name = 'enable War Chariot'
     e_war_chariot_tech_id = 1171
@@ -616,25 +618,25 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     force_research_tech(effect, 1390)
     move_unit_button(effect, 2582, 31)
     move_unit_button(effect, 2584, 31)
-    move_tech_button(effect, constants.ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
+    move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
     append_tech(data, tech, effect)
-    techs[constants.ELITE_IBIRAPEMA_TEMP_TECH_ID].civ = -1
+    techs[ELITE_IBIRAPEMA_TEMP_TECH_ID].civ = -1
 
     name = 'enable Temple Guard'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
     force_research_tech(effect, 1400)
-    move_tech_button(effect, constants.ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
-    elite_temple_guard_tech = techs[constants.ELITE_TEMPLE_GUARD_TECH_ID]
+    move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
+    elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
     elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
-    elite_temple_guard_tech.research_locations[1].location_id = constants.MONESTARY_ID
+    elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_ID
     elite_temple_guard_tech.research_locations[1].button_id = 32
-    for i in constants.TEMPLE_GUARD_IDS:
+    for i in TEMPLE_GUARD_IDS:
         move_unit_button(effect, i, 31, 0)
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
-    techs[constants.ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
+    techs[ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
 
     name = 'enable fire lancer'
     tech = get_new_tech(name)

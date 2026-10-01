@@ -1,11 +1,13 @@
 import copy
+import constants
+from constants import \
+    BARRACK_ID, CHRONICLE_CIV_IDS, DOCK_ID, DOCK_IDS, DONJON_ID, GOTH_AGE4_DISCOUNT, \
+    HARBOR_ID, INCA_AGE4_DISCOUNT, KOREANS_SOLDIER_DISCOUNT, KSHATRIYAS_DISCOUNT, MAYAN_AGE3_DISCOUNT, MAYAN_AGE4_DISCOUNT, \
+    MILLITIA_LINE_FOOD, MILLITIA_LINE_GOLD, MILLITIA_LINE_IDS, PORTGUESE_DISCOUNT, SAXON_DISCOUNT, STABLE_ID
 
 from genieutils.datfile import DatFile
 
-import constants
 from all_in_1_params import All_In_1_Params
-from constants import DONJON_ID, MAYAN_AGE3_DISCOUNT, KOREANS_SOLDIER_DISCOUNT, PORTGUESE_DISCOUNT, MAYAN_AGE4_DISCOUNT, \
-    SAXON_DISCOUNT
 from ftt import move_tech_building, move_unit_button
 from ftt import move_tech_button
 from unique_techs_config_loader import apply_mutex_groups
@@ -22,12 +24,12 @@ CASTLE_BUILT_TECH_ID = 266
 def get_ut(data: DatFile, params: All_In_1_Params, tech_id: int, in_castle=False):
     tech = copy.deepcopy(data.techs[tech_id])
     research_button_id = tech.research_locations[0].button_id
-    if research_button_id == 7 or (research_button_id == 8 and tech.civ in constants.CHRONICLE_CIV_IDS):
+    if research_button_id == 7 or (research_button_id == 8 and tech.civ in CHRONICLE_CIV_IDS):
         if in_castle:
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
         else:
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 266)
-    elif research_button_id == 8 or (research_button_id in (12, 13) and tech.civ in constants.CHRONICLE_CIV_IDS):
+    elif research_button_id == 8 or (research_button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS):
         if in_castle:
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
         else:
@@ -173,7 +175,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     anarchy_tech_id = 16
     huskarl_ids = [41, 555]
     force_tech(effect, anarchy_tech_id)
-    move_tech_building(effect, anarchy_tech_id, constants.BARRACK_ID)
+    move_tech_building(effect, anarchy_tech_id, BARRACK_ID)
     move_tech_button(effect, anarchy_tech_id, 29)
     for i in huskarl_ids:
         move_unit_button(effect, i, 24, 1)
@@ -207,7 +209,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     marauder_id = 483
     tarkan_ids = [755, 757]
     force_tech(effect, marauder_id)
-    move_tech_building(effect, marauder_id, constants.STABLE_ID)
+    move_tech_building(effect, marauder_id, STABLE_ID)
     move_tech_button(effect, marauder_id, 26)
     for i in tarkan_ids:
         move_unit_button(effect, i, 21, 1)
@@ -221,7 +223,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tha_tech_id = 624
     force_tech(effect, tha_tech_id)
     move_tech_button(effect, tha_tech_id, 10)
-    move_tech_building(effect, tha_tech_id, constants.DOCK_ID)
+    move_tech_building(effect, tha_tech_id, DOCK_ID)
     append_tech(data, tech, effect)
 
     # --- Thalassocracy: Harbor storage + Wu civ-bonus fix ---
@@ -229,7 +231,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # Fix on every civ layer so storage-based effects (cAmountThirdStorage=27) work on Harbor
     for civ in data.civs:
         for u in civ.units:
-            if u and u.id == constants.HARBOR_ID:
+            if u and u.id == HARBOR_ID:
                 u.resource_storages[2].type = 0
                 u.resource_storages[2].flag = 8
                 break
@@ -238,11 +240,11 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     wu_civ_bonus_effect_id = 1084
     wu_eff = data.effects[wu_civ_bonus_effect_id]
     dock_cmd = next((c for c in wu_eff.effect_commands
-                     if c.type == 4 and c.a in constants.DOCK_IDS and c.c == 27), None)
+                     if c.type == 4 and c.a in DOCK_IDS and c.c == 27), None)
     if dock_cmd:
         from genieutils.effect import EffectCommand
         wu_eff.effect_commands.append(EffectCommand(
-            type=dock_cmd.type, a=constants.HARBOR_ID,
+            type=dock_cmd.type, a=HARBOR_ID,
             b=dock_cmd.b, c=dock_cmd.c, d=dock_cmd.d))
 
     # ===== B CLASS: custom effect replacement =====
@@ -278,10 +280,10 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     forced_levy_id = sid2first[625]
     name = 'Forced Levy'
     effect = get_new_effect(name)
-    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
-    gold = 20 * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    food = MILLITIA_LINE_FOOD * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    gold = 20 * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
     food += gold
-    for id in constants.MILLITIA_LINE_IDS:
+    for id in MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
         set_unit_attribute(effect, id, -1, 105, 0)
     bind_effect(data, techs[forced_levy_id], effect)
@@ -295,8 +297,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     hoplite = data.civs[0].units[hoplite_id]
     food = hoplite.creatable.resource_costs[0].amount
     gold = hoplite.creatable.resource_costs[1].amount
-    new_food = food * constants.GOTH_AGE4_DISCOUNT * constants.INCA_AGE4_DISCOUNT
-    new_gold = gold * constants.GOTH_AGE4_DISCOUNT * constants.PORTGUESE_DISCOUNT
+    new_food = food * GOTH_AGE4_DISCOUNT * INCA_AGE4_DISCOUNT
+    new_gold = gold * GOTH_AGE4_DISCOUNT * PORTGUESE_DISCOUNT
     for i in (hoplite_id, e_hoplite_id):
         set_unit_attribute(effect, i, -1, 103, new_food + new_gold * 0.33)
         set_unit_attribute(effect, i, -1, 105, new_gold * 0.67)
@@ -347,7 +349,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 82, -1, 106, stone * 0.6)
     bind_effect(data, techs[det_id], effect)
 
-    unit = units[constants.DONJON_ID]
+    unit = units[DONJON_ID]
     costs = unit.creatable.resource_costs
     stone = costs[0].amount * inca_discount
     wood = costs[1].amount * malian_discount
@@ -376,8 +378,8 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 775, -1, 105, 0)
     set_unit_attribute(effect, 775, -1, 103, 110)
     cost = units[1811].creatable.resource_costs
-    food = cost[0].amount * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
-    gold = cost[1].amount * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
+    food = cost[0].amount * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT
+    gold = cost[1].amount * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT
     set_unit_attribute(effect, 1811, -1, 105, 0)
     set_unit_attribute(effect, 1811, -1, 103, food + gold)
     bind_effect(data, techs[hr_id], effect)
@@ -484,10 +486,10 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Forced Levy + Kshatriyas'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, forced_levy_id, ksha_id)
-    gold = constants.MILLITIA_LINE_GOLD * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
-    food = constants.MILLITIA_LINE_FOOD * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT * constants.KSHATRIYAS_DISCOUNT * SAXON_DISCOUNT + gold
+    gold = MILLITIA_LINE_GOLD * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    food = MILLITIA_LINE_FOOD * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT * KSHATRIYAS_DISCOUNT * SAXON_DISCOUNT + gold
     effect = get_new_effect(name)
-    for id in constants.MILLITIA_LINE_IDS:
+    for id in MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
     append_tech(data, tech, effect)
 
@@ -496,7 +498,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, eis_tech_id, ksha_id)
     effect = get_new_effect(name)
-    new_food_k = new_food * constants.KSHATRIYAS_DISCOUNT
+    new_food_k = new_food * KSHATRIYAS_DISCOUNT
     for i in (hoplite_id, e_hoplite_id):
         set_unit_attribute(effect, i, -1, 103, new_food_k + new_gold * 0.33)
         set_unit_attribute(effect, i, -1, 105, new_gold * 0.67)
@@ -529,13 +531,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
 
     # --- Kshatriyas + Hussite Reforms ---
     cost = units[1811].creatable.resource_costs
-    food = cost[0].amount * constants.INCA_AGE4_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
-    gold = cost[1].amount * constants.PORTGUESE_DISCOUNT * constants.GOTH_AGE4_DISCOUNT
+    food = cost[0].amount * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT
+    gold = cost[1].amount * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT
     name = 'Kshatriyas + Hussite Reforms'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, hr_id, ksha_id)
     effect = get_new_effect(name)
-    food = food * constants.KSHATRIYAS_DISCOUNT
+    food = food * KSHATRIYAS_DISCOUNT
     set_unit_attribute(effect, 1811, -1, 103, food + gold)
     append_tech(data, tech, effect)
 
