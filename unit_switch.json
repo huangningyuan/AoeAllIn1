@@ -61,7 +61,9 @@
         "unit_ids": [
           2633
         ],
-        "tech_ids": []
+        "tech_ids": [
+          "nf_dock_id"
+        ]
       },
       {
         "unit_name": "Cannon Galleon",
