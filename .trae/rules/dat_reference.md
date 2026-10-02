@@ -172,17 +172,20 @@ bind_effect(data, tech, effect)
 
 | class_id | strings SID | strings 中文 | 含义 | 代码验证 |
 |----------|------------|-------------|------|---------|
-| 0 | 13300 | 步弓手 | Archery / 远程单位 | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
-| 3 | 13303 | 建筑 | Building | |
+| 0 | 13300 | 步弓手 | Archery / 远程单位（包括弓箭手、弩手、投矛手等） | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
 | 4 | 13304 | 平民 | Villager | |
-| 6 | 13306 | 步兵 | Infantry | unique_techs.py:580 `class_==6` Huskarl |
-| 12 | 13312 | 骑兵 | Cavalry / 马单位 | custom_civ_bonus.py:352 `class_==12` 覆盖含城堡骑兵 UU |
+| 6 | 13306 | 步兵 | Infantry（包括剑士、长枪兵、帕拉丁等） | unique_techs.py:580 `class_==6` Huskarl |
+| 12 | 13312 | 骑兵 | Cavalry / 马单位（骑在马上的单位，不限生产建筑） | custom_civ_bonus.py:352 `class_==12` 覆盖马厩产(Knight/Mameluke)和城堡产(Samurai/Scorpion) |
 | 13 | 13313 | 攻城武器 | Siege | |
 | 18 | 13318 | 僧侣 | Monk | |
 | 19 | 13319 | 贸易车 | Trade Cart | |
 | 22 | 13322 | 战船 | Ship | |
+| 36 | 13336 | 骑射手 | Cavalry Archers（骑射类，不等同骑兵类） | Mangudai(突骑) class_=36，不是 12 |
 | 44 | 13344 | 火枪手 | Gunpowder | custom_civ_bonus.py:1045 `class_==44` gunpowder |
 | 51 | 13351 | 组装的单位 | Assembled Unit | 抛石机/投石车等 |
+
+> ⚠️ **骑兵类 ≠ 马厩单位**：class 12 是"骑在马上的单位"，不限生产建筑。Knight（马厩）、Mameluke（马厩）、Samurai（城堡）、Scorpion（城堡）都是 class 12。反过来马厩还产 Camel Rider（class 不是 12）。
+> ⚠️ **骑兵类 ≠ 骑射类**：class 12 是骑兵（近战或投掷），class 36 是骑射手（如 Mangudai 蒙古突骑）。两者共享战马但 class 不同，判断时别搞混。
 
 **完整 Class List（strings 13300-13366）：**
 
