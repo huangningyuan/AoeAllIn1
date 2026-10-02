@@ -68,9 +68,9 @@ C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\{zh|en}\strings\k
 | 编码类型 | strings 段名 | SID 范围 | 与 dat 编码关系 | 公式 |
 |---------|-------------|---------|----------------|------|
 | **Attack/Armor Type** | Attack and Armor classes | 12400-12599 | `command.d` 里的 type | **SID = type + 12400** ✅ 严格线性 |
+| **Class** | Class List | 13300-13366 | `unit.class_`、type 0/4/5 的 `b`（class_id） | **SID = class_id + 13300** ✅ 严格线性 |
 | **Resource** | Resource List | 15000-15049 | type 1/6/101 的 `a`（resource_id） | **SID = res_id + 15000** ✅ 严格线性 |
-| **Attribute** | Attribute List | 12200-12621+ | type 0/4/5 的 `c`（attribute） | **非线性** ❌ 中间有跳跃（attr 7 在 strings 里无条目），需按中文查 |
-| **Class** | Class List | 13300-13359 | type 0/4/5 的 `b`（class_id） | **非线性** ❌ 需按中文查 |
+| **Attribute** | Attribute List | 12200-12609 | type 0/4/5 的 `c`（attribute） | **SID = attr + 12200**（有少量跳跃缺口，如 attr 7/31/35-39 无 strings 条目） |
 | 单位显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
 | 科技显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
 
@@ -126,20 +126,20 @@ bind_effect(data, tech, effect)
 
 ### unit attribute 常用值 (type 0/4/5 的第 4 参数 = attribute)
 
-strings SID 见 Attribute List（SID 12200-12621+），**非线性**，需按中文查。下表已标注常用值对应 SID：
+**基本线性：SID = attr + 12200**（中间有少量跳跃缺口，如 attr 7/31/35-39 无 strings 条目）。完整列表见 strings Attribute List（SID 12200-12609）。
 
 | attr | strings SID | strings 中文 | 含义 | 备注 |
 |------|------------|-------------|------|------|
 | 0 | 12200 | 生命值 | HP | |
+| 1 | 12201 | 视野 | Line of Sight | |
 | 5 | 12205 | 移动速度 | Speed | |
 | 8 | 12208 | 护甲 | Armor | 用 utils 时自动编码 type（`value + 256 * armor_type`） |
 | 9 | 12209 | 攻击力 | Attack | 用 utils 时自动编码 type（`value + 256 * attack_type`） |
-| 12 | 12212 | 最大射程 | Range | strings 叫"最大射程" |
-| 14 | 12214? | — | — | ⚠️ 待验证（strings 12214 = "运载量"） |
+| 11 | 12211 | 准确度百分比 | Accuracy | |
+| 12 | 12212 | 最大射程 | Max Range | |
 | 36 | 12301 | 训练时间 | Train time | strings 叫"训练时间" |
-| 40 | — | — | Accuracy | |
-| 100 | — | — | Cost 乘子 | multiply_unit_cost 用这个 |
-| 103 | — | — | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值 |
+| 100 | — | — | Cost 乘子 | multiply_unit_cost 用这个（无 strings 条目） |
+| 103 | — | — | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值（无 strings 条目） |
 | 105 | — | — | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
 
 #### 建筑附属存储量 (Storage Amount)
@@ -166,23 +166,49 @@ strings SID 见 Attribute List（SID 12200-12621+），**非线性**，需按中
 
 ### class_id 常用值 (type 0/4/5 的第 3 参数，用 -1 表示 by unit_id)
 
-strings SID 见 Class List（SID 13300-13359），**非线性**，需按中文查。下表已标注常用值对应 SID：
+**严格线性：SID = class_id + 13300** ✅。dat `unit.class_` 直接等于 strings Class List 的 index。
 
-| class | strings SID | strings 中文 | 含义 |
-|-------|------------|-------------|------|
-| 0 | 13300 | 步弓手 | Archery (远程单位) |
-| 1 | 13306 | 步兵 | Infantry |
-| 2 | 13312 | 骑兵 | Cavalry |
-| 3 | 13322 | 战船 | Ship |
-| 4 | 13319 | 贸易车 | Trade Cart |
-| 5 | 13303 | 建筑 | Building |
-| 6 | — | — | Mountain Monk (骆驼骑兵) |
-| 7 | 13313 | 攻城武器 | Siege |
-| 8 | 13304 | 平民 | Villager |
-| 9 | 13318 | 僧侣 | Monk |
-| 10 | — | — | Fish |
-| 11 | — | — | Military Building |
-| 12 | — | — | Horse and Camel |
+| class_id | strings SID | strings 中文 | 含义 | 代码验证 |
+|----------|------------|-------------|------|---------|
+| 0 | 13300 | 步弓手 | Archery / 远程单位 | custom_civ_bonus.py:687 `class_==0` 城堡 UU |
+| 3 | 13303 | 建筑 | Building | |
+| 4 | 13304 | 平民 | Villager | |
+| 6 | 13306 | 步兵 | Infantry | unique_techs.py:580 `class_==6` Huskarl |
+| 12 | 13312 | 骑兵 | Cavalry | custom_civ_bonus.py:352 `class_==12` 马厩单位 |
+| 13 | 13313 | 攻城武器 | Siege | |
+| 18 | 13318 | 僧侣 | Monk | |
+| 19 | 13319 | 贸易车 | Trade Cart | |
+| 22 | 13322 | 战船 | Ship | |
+| 30 | 13330 | 旗帜 | — | ⚠️ 注意：armor class 30=骆驼，unit class 30=旗帜，不要混淆 |
+| 44 | 13344 | 火枪手 | Gunpowder | custom_civ_bonus.py:1045 `class_==44` gunpowder |
+| 51 | 13351 | 组装的单位 | — | 抛石机/投石车等 |
+
+**完整 Class List（strings 13300-13366）：**
+
+| class_id | 中文 | class_id | 中文 | class_id | 中文 |
+|----------|------|----------|------|----------|------|
+| 0 | 步弓手 | 22 | 战船 | 44 | 火枪手 |
+| 1 | 古物 | 23 | 西班牙征服者 | 45 | 双手剑士 |
+| 2 | 贸易艇 | 24 | 战象 | 46 | 长枪兵 |
+| 3 | 建筑 | 25 | 英雄 | 47 | 侦察 |
+| 4 | 平民 | 26 | 骑象射手 | 48 | 矿场 |
+| 5 | 海洋鱼群 | 27 | 城墙 | 49 | 农田 |
+| 6 | 步兵 | 28 | 方阵步兵 | 50 | 长矛兵 |
+| 7 | 浆果灌木丛 | 29 | 家畜 | 51 | 组装的单位 |
+| 8 | 石矿 | 30 | 旗帜 | 52 | 箭塔 |
+| 9 | 被捕食动物 | 31 | 深海鱼类 | 53 | 登船 |
+| 10 | 捕食性动物 | 32 | 金矿 | 54 | 拆装的攻城单位 |
+| 11 | 其他 | 33 | 海滨鱼群 | 55 | 弩炮 |
+| 12 | 骑兵 | 34 | 悬崖 | 56 | 突袭者 |
+| 13 | 攻城武器 | 35 | 爆破兵 | 57 | 骑兵突袭者 |
+| 14 | 地形 | 36 | 骑射手 | 58 | 牲畜 |
+| 15 | 树木 | 37 | 幽灵 | 59 | 国王 |
+| 16 | 树桩 | 38 | 鸟 | 60 | 其他建筑 |
+| 17 | 治疗者 | 39 | 城门 | 61 | 可控制的动物 |
+| 18 | 僧侣 | 40 | 打捞堆 | | |
+| 19 | 贸易车 | 41 | 资源堆 | | |
+| 20 | 运输船 | 42 | 圣物 | | |
+| 21 | 捕鱼艇 | 43 | 带着圣物的僧侣 | | |
 
 ### Attack Type / Armor Type 完整对照 (攻击和护甲共用同一套 ID)
 
