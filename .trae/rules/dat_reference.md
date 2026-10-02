@@ -227,7 +227,7 @@ bind_effect(data, tech, effect)
 | 来源 | 路径 | 面向用户 | 覆盖范围 |
 |------|------|---------|---------|
 | **AGE3NamesV0007.ini** | `Tools_Builds\AGE3NamesV0007.ini [AoE2DEArmorNames]` | 编辑器(Age3Editor)/mod 开发者 | type 0-36（`NumAoE2DEArmors=37`） |
-| **strings 中文文本** | `resources\zh\strings\key-value\key-value-strings-utf8.txt` SID 12400-12599 | 游戏内玩家显示 | type 0-49, 60, 61（含 DLC/编年史新增） |
+| **strings 中文文本** | `resources\zh\strings\key-value\key-value-strings-utf8.txt` SID 12400-12599 | 游戏内玩家显示 | type 0-49, 60, 61 |
 
 **SID = type + 12400** ✅ 严格线性（这是所有编码类型中最规整的）。
 
@@ -281,7 +281,7 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 |------|-----------------|-----------------|------|
 | 37 | 重型攻城武器 | Heavy Siege | |
 | 38 | 掷矛手 | Skirmishers | |
-| 39 | 龙脉 | Royal Heirs | 编年史龙脉相关 |
+| 39 | 龙脉 | Royal Heirs | 埃塞俄比亚银冠科技 |
 | 40 | 未使用的护甲 40 | Unused Armor 40 | 保留位 |
 | 41 | 喷火船 | Fire Ships | |
 | 42-49 | 未使用的护甲 42-49 | Unused Armor 42-49 | 保留位 |
