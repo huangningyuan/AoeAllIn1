@@ -1,12 +1,33 @@
 # AoE2DE Dat 数据结构速查
 
 ## DatFile 入口
+
+**核心原理**：dat 的单位表是全文明共享的，每个文明通过 `civs[civ_id].units` 覆盖表 + effect（enable/disable unit、force/disable tech）+ 科技前置关系来构建自己的单位/科技可用性。科技树 JSON（CivTechTrees 目录下）是官方单独给的参考文件，可能和 dat 不匹配。
+
 ```python
-data.techs          # List[Tech]
+data.techs          # List[Tech] - 所有科技（tech.civ 控制文明归属）
 data.effects        # List[Effect]
-data.civs[0].units  # List[Unit] - 通用单位表
-data.civs[civ_id]   # 指定文明的单位覆盖（通常不直接用）
+data.civs[0].units  # List[Unit] - 通用单位表（默认值）
+data.civs[civ_id].units  # 指定文明的单位覆盖（该文明对此单位的修改）
 ```
+
+### Unit.creatable.train_locations
+
+`unit.creatable.train_locations` 是一个列表，列出**这个单位可以在哪些建筑里被生产**：
+- `train_locations[i].unit_id` = 生产它的建筑 ID（如 DOCK_ID=45, BARRACK_ID=12, CASTLE_ID=82）
+- `train_locations[i].button_id` = 在该建筑里的按钮位置
+- `train_locations[i].train_time` = 生产时间
+
+典型用法（项目中大量出现）：
+```python
+# 找出所有在马厩生产的骑兵单位
+for i, unit in enumerate(data.civs[0].units):
+    if unit and unit.creatable and STABLE_ID in list(
+            map(lambda x: x.unit_id, unit.creatable.train_locations)):
+        ...
+```
+
+> **注意**：建筑本身也有 creatable.train_locations，表示**这个建筑在哪里被建造**（Dock、Port、Shipyard 等都指向 VMBLD 118 占位，因为它们是隐藏建筑，需要 tech 控制）。
 
 ---
 
@@ -143,7 +164,7 @@ bind_effect(data, tech, effect)
 | 105 | — | — | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
 
 #### 建筑附属存储量 (Storage Amount)
-编年史（Wu/Shui 等）和 DLC 建筑有附属存储槽，用于建造奖励资源。每个建筑原生定义了多个 storage slot，每个 slot 固定一种资源类型（食物/石头等）。通过 type 0/4/5 修改存储量数值：
+编年史建筑有附属存储槽，用于建造奖励资源。每个建筑原生定义了多个 storage slot，每个 slot 固定一种资源类型（食物/石头等）。通过 type 0/4/5 修改存储量数值：
 
 | 值 | Constants.xs | 含义 | 典型案例 |
 |----|-------------|------|----------|
@@ -315,12 +336,22 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | `UNIV_ID` | 209 | 大学 |
 | `DOCK_ID` | 45 | 码头 |
 | `BLACKSMITH_ID` | 103 | 铁匠铺 |
+| `HARBOR_ID` | 1189 | 巨港 |
+| `PORT_ID` | 2172 | 编年史专属港口 |
+| `SHIPYARD_ID` | 2119 | 编年史专属造船厂 |
 | `CHRONICLE_CIV_IDS` | [46,47,48,54,55,56] | 编年史文明 |
 | `GAME_DATA_PATH` | — | 运行时解析的 mod dat 目录 |
 
 > **编年史文明判断方法**：
 > 1. 用 `civ_id in CHRONICLE_CIV_IDS` 直接查常量
-> 2. 检测文明 effect 里有没有 `type=101 (tech cost), tech_id=1138, resource_id=0, amount=0`（Tech 1138 = Paphos Shadow Tech，编年史文明通过把它成本设为 0 来直接激活，作为编年史标记）
+> 2. 检测文明 effect 里有没有 `type=101 (tech cost), tech_id=1138, resource_id=0, amount=0`（Tech 1138 = Paphos Shadow Tech，编年史文明原生 effect 把它成本设为 0 来激活，作为编年史标记）
+>
+> ⚠️ **重要**：Tech 1138 只是个标记，不是开关。普通文明就算自己加 effect 把 1138 cost 设为 0，也不会自动获得编年史专属的 Port(2172)、Shipyard(2119)、区域船等单位和科技。编年史的专属内容由多个原生机制共同控制：
+> - **civ 覆盖表**：编年史的 `civs[civ_id].units` 直接把 FSHSP(13)/COGXX(17) 等船的 train_locations 改到 Port(2172) 而不是 Dock(45)
+> - **enable tech 链**：Tech 1138 + Tech 1209 → Tech 1140 (Enable Shipyard, civ=-1, loc=-1 隐藏按钮) → Effect 1144 用 type=2 b=-1 启用 Shipyard(2119) 和 Shipyard2(2120)
+> - **互斥 UT 布局**：编年史科技树原生在 Castle 有两对互斥独特科技（7/8 位互斥银冠，12/13 位互斥金冠）
+>
+> 项目 mod 中 `civ_bonuses.py` 专门处理了让所有文明都能同时在 Dock 和 Port 生产船的逻辑。
 
 ---
 
@@ -335,7 +366,7 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 
 ## 按钮位置约定
 
-### 普通文明（DE 基础 + DLC）
+### 普通文明
 | 位置 | 内容 |
 |------|------|
 | 0~5 | 科技位（UT 常用 0 位） |

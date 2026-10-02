@@ -112,7 +112,7 @@
 - **编年史文明分两部**（`CHRONICLE_CIV_IDS = [46,47,48,54,55,56]`），科技树差异大：
   - **编年史 1**：`Achaemenids`(46)、`Athenians`(47)、`Spartans`(48) — 希腊化/波斯
   - **编年史 2**：`Macedonians`(54)、`Thracians`(55)、`Puru`(56) — 后续章节
-  - ⚠️ 49-53 (`Shu/Wu/Wei/Jurchens/Khitans`) 和 57-61 (`Muisca/Mapuche/Tupi/Saxons/Varangians`) **不属于编年史 DLC**，是独立 DLC
+  - ⚠️ 49-53 (`Shu/Wu/Wei/Jurchens/Khitans`) 和 57-61 (`Muisca/Mapuche/Tupi/Saxons/Varangians`) **不属于编年史**
 
 ### Unit / Tech 名称字段区分（避免混淆）
 
