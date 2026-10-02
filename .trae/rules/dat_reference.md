@@ -318,6 +318,10 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | `CHRONICLE_CIV_IDS` | [46,47,48,54,55,56] | 编年史文明 |
 | `GAME_DATA_PATH` | — | 运行时解析的 mod dat 目录 |
 
+> **编年史文明判断方法**：
+> 1. 用 `civ_id in CHRONICLE_CIV_IDS` 直接查常量
+> 2. 检测文明 effect 里有没有 `type=101 (tech cost), tech_id=1138, resource_id=0, amount=0`（Tech 1138 = Paphos Shadow Tech，编年史文明通过把它成本设为 0 来直接激活，作为编年史标记）
+
 ---
 
 ## 独特科技俗称
