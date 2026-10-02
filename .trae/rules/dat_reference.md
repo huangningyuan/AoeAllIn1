@@ -275,7 +275,7 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | 35 | Mamelukes | 马穆鲁克 | 马穆鲁克专属护甲类型。马穆鲁克的 unit class=12（骑兵），armor type=35 |
 | 36 | Heroes | 英雄和国王 | |
 
-#### DLC / 编年史扩展类型（仅 strings 存在，AGE3 V0007 未覆盖）
+#### 高号段类型（AGE3NamesV0007 无英文命名，strings 有中文）
 
 | type | strings 官方中文 | 英文 | 说明 |
 |------|-----------------|------|------|
