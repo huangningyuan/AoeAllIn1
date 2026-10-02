@@ -277,16 +277,16 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 
 #### 高号段类型（AGE3NamesV0007 无英文命名，strings 有中文）
 
-| type | strings 官方中文 | 英文 | 说明 |
-|------|-----------------|------|------|
-| 37 | 重型攻城武器 | Heavy Siege Weapons | |
-| 38 | 掷矛手 | Spear Thrower | |
-| 39 | 龙脉 | Dragon Axis | 编年史龙脉相关 |
-| 40 | 未使用的护甲 40 | Unused | 保留位 |
-| 41 | 喷火船 | Fire Ship | |
-| 42-49 | 未使用的护甲 42-49 | Unused | 保留位 |
-| 60 | 远程战船 | Ranged Warship | |
-| 61 | 保留 | Reserved | 官方标记 `<!--RESERVED-->` |
+| type | strings 官方中文 | strings 官方英文 | 说明 |
+|------|-----------------|-----------------|------|
+| 37 | 重型攻城武器 | Heavy Siege | |
+| 38 | 掷矛手 | Skirmishers | |
+| 39 | 龙脉 | Royal Heirs | 编年史龙脉相关 |
+| 40 | 未使用的护甲 40 | Unused Armor 40 | 保留位 |
+| 41 | 喷火船 | Fire Ships | |
+| 42-49 | 未使用的护甲 42-49 | Unused Armor 42-49 | 保留位 |
+| 60 | 远程战船 | Long-Range Warships | |
+| 61 | 保留 | <!--RESERVED--> | 官方标记 `<!--RESERVED-->` |
 
 ### Resource ID 常用值 (type 1/6/101 的 resource_id)
 
