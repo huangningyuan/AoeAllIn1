@@ -230,27 +230,27 @@ def add_civ_switch(data: DatFile, params: All_In_1_Params):
         append_tech(data, tech, effect)
 
         if civ_name == 'Sicilians':
-            move_unit_button(effect, 1659, 1)
+            move_unit_button(effect, 1659, 1, 0)
         else:
-            move_unit_button(effect, 1659, -1)
+            move_unit_button(effect, 1659, -1, 0)
         if civ_name == 'Bulgarians':
-            move_unit_button(effect, 1227, 1)
+            move_unit_button(effect, 1227, 1, 0)
         else:
-            move_unit_button(effect, 1227, -1)
+            move_unit_button(effect, 1227, -1, 0)
 
         if civ_name == 'Huns':
-            move_unit_button(effect, 886, 1)
-            move_unit_button(effect, 887, 1)
+            move_unit_button(effect, 886, 1, 0)
+            move_unit_button(effect, 887, 1, 0)
         else:
-            move_unit_button(effect, 886, -1)
-            move_unit_button(effect, 887, -1)
+            move_unit_button(effect, 886, -1, 0)
+            move_unit_button(effect, 887, -1, 0)
 
         if civ_name == 'Goths':
-            move_unit_button(effect, 759, 1)
-            move_unit_button(effect, 761, 1)
+            move_unit_button(effect, 759, 1, 0)
+            move_unit_button(effect, 761, 1, 0)
         else:
-            move_unit_button(effect, 759, -1)
-            move_unit_button(effect, 761, -1)
+            move_unit_button(effect, 759, -1, 0)
+            move_unit_button(effect, 761, -1, 0)
 
 
     lfc_offset = 6800

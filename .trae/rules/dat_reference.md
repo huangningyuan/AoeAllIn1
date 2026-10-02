@@ -56,6 +56,24 @@ AGE 截图中看到的 `Language File Name *` 数字 = strings 文件 SID。直�
 
 > **重要**：`unit.name` 和 `tech.name` 不是游戏内显示名！显示名必须走 `language_dll_name` → strings SID 这条路。项目创建的副本会把 `tech.name` 设成可读英文（如 `Forging`），方便代码引用，但 strings 里查不到，游戏内显示还是走 `language_dll_name`。
 
+### strings 编码体系总览
+
+**AGE 编辑器和游戏内地图编辑器共享同一套 strings 编码**。dat 文件里的 attr、class、resource、armor type 等数字编码，在 strings 文件（`key-value-strings-utf8.txt`）中都有对应的中文文本——分别落在 Attribute List、Class List、Resource List、Armor/Attack classes 几个段里。
+
+strings 文件路径（Steam 安装目录）：
+```
+C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\{zh|en}\strings\key-value\key-value-strings-utf8.txt
+```
+
+| 编码类型 | strings 段名 | SID 范围 | 与 dat 编码关系 | 公式 |
+|---------|-------------|---------|----------------|------|
+| **Attack/Armor Type** | Attack and Armor classes | 12400-12599 | `command.d` 里的 type | **SID = type + 12400** ✅ 严格线性 |
+| **Resource** | Resource List | 15000-15049 | type 1/6/101 的 `a`（resource_id） | **SID = res_id + 15000** ✅ 严格线性 |
+| **Attribute** | Attribute List | 12200-12621+ | type 0/4/5 的 `c`（attribute） | **非线性** ❌ 中间有跳跃（attr 7 在 strings 里无条目），需按中文查 |
+| **Class** | Class List | 13300-13359 | type 0/4/5 的 `b`（class_id） | **非线性** ❌ 需按中文查 |
+| 单位显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
+| 科技显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
+
 ### ResearchLocation (研发地点 / 按钮)
 | 属性 | 类型 | 说明 |
 |------|------|------|
@@ -107,17 +125,22 @@ bind_effect(data, tech, effect)
 > **注意**：`selected=1` 版本 (type 203/204/205) 只对**玩家自己选中的**单位生效，而 type 0/4/5 对所有单位生效。
 
 ### unit attribute 常用值 (type 0/4/5 的第 4 参数 = attribute)
-| 值 | 含义 | 备注 |
-|----|------|------|
-| 0 | HP | |
-| 8 | Armor | 用 utils 时自动编码 type（`value + 256 * armor_type`） |
-| 9 | Attack | 用 utils 时自动编码 type（`value + 256 * attack_type`） |
-| 14 | Range | |
-| 36 | Train time | 单位训练时间 |
-| 40 | Accuracy | |
-| 100 | Cost 乘子 | multiply_unit_cost 用这个 |
-| 103 | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值 |
-| 105 | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
+
+strings SID 见 Attribute List（SID 12200-12621+），**非线性**，需按中文查。下表已标注常用值对应 SID：
+
+| attr | strings SID | strings 中文 | 含义 | 备注 |
+|------|------------|-------------|------|------|
+| 0 | 12200 | 生命值 | HP | |
+| 5 | 12205 | 移动速度 | Speed | |
+| 8 | 12208 | 护甲 | Armor | 用 utils 时自动编码 type（`value + 256 * armor_type`） |
+| 9 | 12209 | 攻击力 | Attack | 用 utils 时自动编码 type（`value + 256 * attack_type`） |
+| 12 | 12212 | 最大射程 | Range | strings 叫"最大射程" |
+| 14 | 12214? | — | — | ⚠️ 待验证（strings 12214 = "运载量"） |
+| 36 | 12301 | 训练时间 | Train time | strings 叫"训练时间" |
+| 40 | — | — | Accuracy | |
+| 100 | — | — | Cost 乘子 | multiply_unit_cost 用这个 |
+| 103 | — | — | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值 |
+| 105 | — | — | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
 
 #### 建筑附属存储量 (Storage Amount)
 编年史（Wu/Shui 等）和 DLC 建筑有附属存储槽，用于建造奖励资源。每个建筑原生定义了多个 storage slot，每个 slot 固定一种资源类型（食物/石头等）。通过 type 0/4/5 修改存储量数值：
@@ -142,21 +165,24 @@ bind_effect(data, tech, effect)
 **修复代码位置**：`unique_techs.py` Thalassocracy 段之后（双修复：unit storage + effect 指令追加）
 
 ### class_id 常用值 (type 0/4/5 的第 3 参数，用 -1 表示 by unit_id)
-| 值 | 含义 |
-|----|------|
-| 0 | Archery (远程单位) |
-| 1 | Infantry |
-| 2 | Cavalry |
-| 3 | Ship |
-| 4 | Trade Cart |
-| 5 | Building |
-| 6 | Mountain Monk (骆驼骑兵) |
-| 7 | Siege |
-| 8 | Villager |
-| 9 | Monk |
-| 10 | Fish |
-| 11 | Military Building |
-| 12 | Horse and Camel |
+
+strings SID 见 Class List（SID 13300-13359），**非线性**，需按中文查。下表已标注常用值对应 SID：
+
+| class | strings SID | strings 中文 | 含义 |
+|-------|------------|-------------|------|
+| 0 | 13300 | 步弓手 | Archery (远程单位) |
+| 1 | 13306 | 步兵 | Infantry |
+| 2 | 13312 | 骑兵 | Cavalry |
+| 3 | 13322 | 战船 | Ship |
+| 4 | 13319 | 贸易车 | Trade Cart |
+| 5 | 13303 | 建筑 | Building |
+| 6 | — | — | Mountain Monk (骆驼骑兵) |
+| 7 | 13313 | 攻城武器 | Siege |
+| 8 | 13304 | 平民 | Villager |
+| 9 | 13318 | 僧侣 | Monk |
+| 10 | — | — | Fish |
+| 11 | — | — | Military Building |
+| 12 | — | — | Horse and Camel |
 
 ### Attack Type / Armor Type 完整对照 (攻击和护甲共用同一套 ID)
 
@@ -166,6 +192,8 @@ bind_effect(data, tech, effect)
 |------|------|---------|---------|
 | **AGE3NamesV0007.ini** | `Tools_Builds\AGE3NamesV0007.ini [AoE2DEArmorNames]` | 编辑器(Age3Editor)/mod 开发者 | type 0-36（`NumAoE2DEArmors=37`） |
 | **strings 中文文本** | `resources\zh\strings\key-value\key-value-strings-utf8.txt` SID 12400-12599 | 游戏内玩家显示 | type 0-49, 60, 61（含 DLC/编年史新增） |
+
+**SID = type + 12400** ✅ 严格线性（这是所有编码类型中最规整的）。
 
 utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 
@@ -223,6 +251,19 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | 42-49 | 未使用的护甲 42-49 | Unused | 保留位 |
 | 60 | 远程战船 | Ranged Warship | |
 | 61 | 保留 | Reserved | 官方标记 `<!--RESERVED-->` |
+
+### Resource ID 常用值 (type 1/6/101 的 resource_id)
+
+**严格线性：SID = res_id + 15000**，strings 见 Resource List（SID 15000-15049）。
+
+| res_id | strings SID | strings 中文 | 含义 |
+|--------|------------|-------------|------|
+| 0 | 15000 | 食物储备 | Food |
+| 1 | 15001 | 木材储备 | Wood |
+| 2 | 15002 | 石料储备 | Stone |
+| 3 | 15003 | 黄金储备 | Gold |
+
+> Resource 编码在 effect command 中出现在 type 1（资源 set/plus）、type 6（multiply_resource）、type 101（tech 成本/折扣）的 `resource_id` 参数位置。
 
 ---
 
