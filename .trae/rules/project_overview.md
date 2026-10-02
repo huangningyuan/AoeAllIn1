@@ -89,6 +89,57 @@
 
 ---
 
+## 命名来源约定
+
+项目中出现的名称来自多个源头，允许差异。以下是完整的来源层级和典型差异，**用于 AI 理解时快速定位"这个名称从哪来"**，避免混淆。
+
+### 来源层级（按使用位置）
+
+| # | 名称类型 | 格式 | 来源 | 用途 | 典型示例 |
+|---|---------|------|------|------|---------|
+| 1 | **dat 返回名** | 英文首字母大写，文明名带复数 s | `DatFile.parse()` → `get_civ_name()` | unit_switch.json 的 `civ_names` 字段、代码逻辑匹配 | Britons, Koreans, Achaemenids, Vikings |
+| 2 | **科技树 JSON 文件名** | 全大写，无复数 s | `CivTechTrees\*.json` | civ_tech_trees.md 的文件名匹配 | BRITONS, KOREANS, ACHAEMENIDS |
+| 3 | **civ_switch 中文映射** | 中文简称（项目约定） | `civ_switch.py` `civ_en_zh_dict` | mod strings 文件生成 | Britons→不列颠 |
+| 4 | **strings 官方中文** | 游戏内完整译名 | `key-value-strings-utf8.txt` SID 10271-10332 | 描述/文档时用、游戏内显示 | Varangians→瓦兰吉人 |
+| 5 | **AGE3NamesV0007.ini** | 编辑器英文术语 | `Tools_Builds\AGE3NamesV0007.ini` | 发 AGE 截图时对上文本 | Base Pierce, Eagle Warriors |
+| 6 | **代码变量/常量** | Snake Case 全大写 | Python 代码内部 | 常量定义 | `DOCK_ID`, `KHITANS_CA_DISCOUNT` |
+
+### 关键注意点
+
+- **dat 返回名 vs 科技树 JSON 文件名**：没有复数 s，全大写。例：dat 返回 `Koreans`，文件名 `KOREANS.json`
+- **civ_switch 中文 vs 官方中文允许差异**：以下几处已确认不同，**保留项目约定**：
+  - 编年史文明后缀：`Macedonians`→马其顿 vs 马其顿人、`Thracians`→色雷斯 vs 色雷斯人、`Puru`→普鲁 vs 普鲁人、`Saxons`→撒克逊 vs 撒克逊人、`Varangians`→瓦兰吉 vs 瓦兰吉人、`Danes`→丹麦 vs 丹麦人
+- **编年史文明分两部**（`CHRONICLE_CIV_IDS = [46,47,48,54,55,56]`），科技树差异大：
+  - **编年史 1**：`Achaemenids`(46)、`Athenians`(47)、`Spartans`(48) — 希腊化/波斯
+  - **编年史 2**：`Macedonians`(54)、`Thracians`(55)、`Puru`(56) — 后续章节
+  - ⚠️ 49-53 (`Shu/Wu/Wei/Jurchens/Khitans`) 和 57-61 (`Muisca/Mapuche/Tupi/Saxons/Varangians`) **不属于编年史 DLC**，是独立 DLC
+
+### Unit / Tech 名称字段区分（避免混淆）
+
+dat 中 Unit 和 Tech 都有 `name` 和 `language_dll_name` 两个字段，**含义完全不同**：
+
+| dat 字段 | 类型 | 含义 | 示例 |
+|---------|------|------|------|
+| `unit.name` | str | **内部代号**（不是显示名） | `MOSUN`, `HOUS`, `ARCHR_D` |
+| `unit.language_dll_name` | int | **游戏内显示名的 strings SID** | Mangudai = 6108 |
+| `tech.name` | str | 原生 tech = SID 字符串；项目副本 = 可读英文名 | 原生 `7067` / 副本 `Forging` |
+| `tech.language_dll_name` | int | **游戏内显示名的 strings SID** | Forging = 7067 |
+| `tech.language_dll_description` | int | 科技描述的 strings SID | Forging = 8067 |
+
+**查官方文本的方法**：AGE 截图看到的 `Language File Name *` 数字 → 直接在 `key-value-strings-utf8.txt` 搜这个 SID。编码规律详见 `dat_reference.md` 的 Unit 部分。
+
+**`unique_techs_config.json` 的 `tech_name`** → 用**官方英文名**（即 strings 里的英文文本，不是 SID 也不是内部代号）。
+
+### 已整理到专门文档的名称
+
+| 主题 | 位置 | 覆盖范围 |
+|------|------|---------|
+| Attack Type / Armor Type | `dat_reference.md` | type 0-61，AGE3Names vs strings 双栏对比（攻防护甲共用同一套编码，没有独立的 AttackNames section） |
+| Unit / Tech 字段映射 | `dat_reference.md` | `name` vs `language_dll_name` 区别、strings SID 编码规则 |
+| 科技树 Node 名称 | `civ_tech_trees.md` | `Name` 字段 = 游戏内显示名，配合 Node Type / Node Status 判断可用性 |
+
+---
+
 ## 注意事项
 - 一个科技不能出现在同一建筑的多个button位置（同一文明同一位置不能有两个科技）
 - 修改后运行`python update_all_in_1.py`验证

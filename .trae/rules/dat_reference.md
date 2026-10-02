@@ -16,10 +16,45 @@ data.civs[civ_id]   # 指定文明的单位覆盖（通常不直接用）
 | `civ` | int | 所属文明，**-1 = 所有文明可用** |
 | `effect_id` | int | 关联的 Effect 索引 |
 | `icon_id` | int | 图标 ID |
-| `name` | str | SID（原生 tech）或显示名（我们创建的副本）。effect.name 是效果显示名 |
+| `name` | str | 原生 tech 是 SID 字符串（如 `7067`），项目创建的副本设为可读英文名（如 `Forging`） |
+| `language_dll_name` | int | **官方英文名的 strings SID**（AGE 截图中的 "Language File Name *"） |
+| `language_dll_description` | int | **官方描述文本的 strings SID**（AGE 截图中的 "Language File Description"） |
+| `language_dll_help` | int | 帮助文本 SID（`language_dll_name + 100000`） |
 | `required_techs` | Tuple[int, 6] | 前置科技索引列表，**-1 = 空槽** |
 | `required_tech_count` | int | 最少需要多少个前置非-1 |
 | `research_locations` | List[ResearchLocation] | 研发地点列表。**原生 tech 通常只有一个**；`get_ut` 创建的副本也只有一个（同一科技在不同建筑中通过创建多个 tech 实例来保证按钮顺序）。**多个 location 的典型案例**是全文明开关科技（同按钮在多个建筑均可研发） |
+
+---
+
+## Unit (单位)
+| 属性 | 类型 | 说明 |
+|------|------|------|
+| `id` | int | dat 内部 ID（等于 unit_switch.json 的 unit_ids） |
+| `name` | str | **内部名**（如 `MOSUN`, `HOUS`, `ARCHR_D`），不是游戏内显示名 |
+| `language_dll_name` | int | **官方显示名的 strings SID**（AGE 截图中的 "Language File Name *"） |
+| `language_dll_creation` | int | "建造/训练"提示文本 SID（`language_dll_name + 1000`） |
+| `language_dll_help` | int | 帮助文本 SID（`language_dll_name + 100000`） |
+| `icon_id` | int | 按钮图标索引 |
+| `class_` | int | 单位类别（见 class_id 速查表） |
+| `hit_points` | int | HP |
+| `speed` | float | 速度 |
+| `train_sound` | int | 训练音效 |
+| `copy_id` | int | 复制来源 ID |
+| `base_id` | int | 基础单位 ID（用于升级链） |
+
+### 如何用 SID 找游戏内显示名
+AGE 截图中看到的 `Language File Name *` 数字 = strings 文件 SID。直接在 `key-value-strings-utf8.txt` 里搜这个数字就能找到官方文本。
+
+编码规律（原生 dat）：
+| 类型 | SID 公式 | 示例 |
+|------|---------|------|
+| 单位显示名 | `language_dll_name` 直接取 | Unit 70 Mangudai → 6108 |
+| 科技显示名 | `language_dll_name` 直接取 | Tech 67 Forging → 7067 |
+| 科技描述 | `language_dll_description` 直接取 | Forging → 8067 |
+| 单位创建提示 | `language_dll_name + 1000` | Mangudai → 7108 |
+| 帮助文本 | `language_dll_name + 100000` | Mangudai → 106108 |
+
+> **重要**：`unit.name` 和 `tech.name` 不是游戏内显示名！显示名必须走 `language_dll_name` → strings SID 这条路。项目创建的副本会把 `tech.name` 设成可读英文（如 `Forging`），方便代码引用，但 strings 里查不到，游戏内显示还是走 `language_dll_name`。
 
 ### ResearchLocation (研发地点 / 按钮)
 | 属性 | 类型 | 说明 |
@@ -123,39 +158,71 @@ bind_effect(data, tech, effect)
 | 11 | Military Building |
 | 12 | Horse and Camel |
 
-### Attack Type / Armor Type 常用值 (utils 中 type=参数，即 `value + 256 * type` 里的 type)
-来源：`AGE3NamesV0007.ini [AoE2DEArmorNames]`。攻击和护甲共用同一个 ID 体系。
+### Attack Type / Armor Type 完整对照 (攻击和护甲共用同一套 ID)
 
-| 值 | 含义 | 说明 |
-|----|------|------|
-| 0 | Unused | |
-| 1 | Infantry | 步兵 |
-| 2 | Turtle Ships | 龟船专属 |
-| 3 | Base Pierce | 远程（最常用！） |
-| 4 | Base Melee | 近战（最常用！） |
-| 5 | War Elephants | 战象 |
-| 8 | Cavalry | 骑兵 |
-| 11 | All Buildings (except Port) | 所有建筑（除港口） |
-| 13 | Stone Walls & Gates & Towers | 石墙/城门/塔楼 |
-| 14 | Predator Animals | 掠食动物 |
-| 15 | Archers | 弓箭手 |
-| 16 | Ships & Saboteur | 战舰/爆破者 |
-| 17 | Rams & Trebuchet & Siege Towers | 攻城器（最常用！） |
-| 19 | Unique Units (except Turtle Ship) | 独特单位 |
-| 20 | Siege Weapons | 攻城武器 |
-| 21 | Standard Buildings | 标准建筑 |
-| 23 | Gunpowder Units | 火药单位 |
-| 25 | Monks | 僧侣 |
-| 26 | Castle | 城堡 |
-| 27 | Spearmen | 矛兵 |
-| 28 | Cavalry Archers | 骑射手 |
-| 29 | Shock Infantry | 冲击步兵（旧称 Eagle Warriors） |
-| 30 | Camels | 骆驼 |
-| 31 | Leitis Attack | 旧立陶宛 Leitis（已弃用），现仅阿契美尼德 Sagaris 使用 |
-| 32 | Condottiero | 意大利佣兵 |
-| 34 | Fishing Ship | 渔船 |
-| 35 | Mamelukes | 马穆鲁克 |
-| 36 | Heroes | 英雄 |
+**两个来源，互为补充：**
+
+| 来源 | 路径 | 面向用户 | 覆盖范围 |
+|------|------|---------|---------|
+| **AGE3NamesV0007.ini** | `Tools_Builds\AGE3NamesV0007.ini [AoE2DEArmorNames]` | 编辑器(Age3Editor)/mod 开发者 | type 0-36（`NumAoE2DEArmors=37`） |
+| **strings 中文文本** | `resources\zh\strings\key-value\key-value-strings-utf8.txt` SID 12400-12599 | 游戏内玩家显示 | type 0-49, 60, 61（含 DLC/编年史新增） |
+
+utils 中编码公式：`value + 256 * type`（type 即下表的值）。
+
+#### 基础类型（type 0-36，两个来源均覆盖）
+
+| type | AGE3Names 英文 | strings 官方中文 | 差异 / 说明 |
+|------|---------------|-----------------|------------|
+| 0 | Unused | 未使用的护甲 0 | 保留位 |
+| 1 | Infantry | 步兵 | |
+| 2 | Turtle Ships | 主力舰 | 龟船等主力舰共用此护甲类型 |
+| 3 | Base Pierce | 远程伤害 | 远程武器（最常用！） |
+| 4 | Base Melee | 近战 | 近战武器（最常用！） |
+| 5 | War Elephants | 大象单位 | |
+| 6 | Unused | 未使用的护甲 6 | 保留位 |
+| 7 | Unused | 未使用的护甲 7 | 保留位 |
+| 8 | Cavalry | 骑兵 | |
+| 9 | Unused | 未使用的护甲 9 | 保留位 |
+| 10 | Unused | 未使用的护甲 10 | 保留位 |
+| 11 | All Buildings (**except Port**) | **所有建筑** | ⚠️ AGE3 标注"except Port"，但游戏内 Harbor（1189）实际也吃 type 11 伤害 |
+| 12 | Unused | 未使用的护甲 12 | 保留位 |
+| 13 | Stone Walls & Gates & Towers | **石料防御** | strings 更简洁，实际覆盖石墙、城门、塔楼 |
+| 14 | Predator Animals | 捕食性动物 | 狼、豹等掠食动物 |
+| 15 | Archers | 步弓手 | 远程步兵单位 |
+| 16 | Ships & Saboteur | 船舰 | 战舰、爆破者 |
+| 17 | Rams & Trebuchet & Siege Towers | **冲车** | ⚠️ strings 只写"冲车"但实际覆盖所有攻城器 |
+| 18 | Trees | 树木 | |
+| 19 | Unique Units (except Turtle Ship) | 独特单位 | |
+| 20 | Siege Weapons | 攻城武器 | |
+| 21 | Standard Buildings | 标准建筑 | |
+| 22 | Walls & Gates | 城墙与城门 | |
+| 23 | Gunpowder Units | 火药单位 | |
+| 24 | **Hunted Predator Animals** | **野猪** | AGE3 强调"被捕猎的掠食动物"，strings 具体到"野猪" |
+| 25 | Monks | 僧侣 | |
+| 26 | Castle | 城堡 | |
+| 27 | Spearmen | 长矛兵 | |
+| 28 | Cavalry Archers | 骑射手 | |
+| 29 | **Eagle Warriors** | **冲击步兵** | DE 版本已从"鹰战士"改名为"冲击步兵"，AGE3 是旧名 |
+| 30 | Camels | 骆驼单位 | |
+| 31 | **Leitis Attack** | **未使用的护甲 31** | ⚠️ DE 更新后此类型已废弃，strings 官方标为未使用；但阿契美尼德 Sagaris 仍使用此 type 值 |
+| 32 | Condottiero | 意大利佣兵 | |
+| 33 | Unused | 未使用的护甲 33 | 保留位 |
+| 34 | Fishing Ship | 捕鱼船 | |
+| 35 | Mamelukes | 马穆鲁克 | |
+| 36 | Heroes | 英雄和国王 | |
+
+#### DLC / 编年史扩展类型（仅 strings 存在，AGE3 V0007 未覆盖）
+
+| type | strings 官方中文 | 英文 | 说明 |
+|------|-----------------|------|------|
+| 37 | 重型攻城武器 | Heavy Siege Weapons | |
+| 38 | 掷矛手 | Spear Thrower | |
+| 39 | 龙脉 | Dragon Axis | 编年史龙脉相关 |
+| 40 | 未使用的护甲 40 | Unused | 保留位 |
+| 41 | 喷火船 | Fire Ship | |
+| 42-49 | 未使用的护甲 42-49 | Unused | 保留位 |
+| 60 | 远程战船 | Ranged Warship | |
+| 61 | 保留 | Reserved | 官方标记 `<!--RESERVED-->` |
 
 ---
 

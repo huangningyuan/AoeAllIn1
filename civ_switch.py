@@ -309,7 +309,7 @@ if __name__ == '__main__':
         'Japanese': '日本', 'Chinese': '中国', 'Byzantines': '拜占庭', 'Persians': '波斯',
         'Saracens': '萨拉森', 'Turks': '土耳其', 'Vikings': '维京', 'Mongols': '蒙古',
         'Celts': '凯尔特', 'Spanish': '西班牙', 'Aztecs': '阿兹特克', 'Mayans': '玛雅',
-        'Huns': '匈奴', 'Koreans': '朝鲜', 'Italians': '意大利', 'Hindustanis': '印度斯坦',
+        'Huns': '匈奴', 'Koreans': '高丽', 'Italians': '意大利', 'Hindustanis': '印度斯坦',
         'Incas': '印加', 'Magyars': '马扎尔', 'Slavs': '斯拉夫', 'Portuguese': '葡萄牙',
         'Ethiopians': '埃塞俄比亚', 'Malians': '马里', 'Berbers': '柏柏尔', 'Khmer': '高棉',
         'Malay': '马来', 'Burmese': '缅甸', 'Vietnamese': '越南', 'Bulgarians': '保加利亚',
@@ -337,3 +337,8 @@ if __name__ == '__main__':
 
     en.close()
     zh.close()
+    mod_path = utils.get_mod_path('All Civ Bonus Description')
+    utils.create_mod_zip(mod_path, 'AllCivBonusDescription.zip')
+    print('Zip file created.')
+    os.startfile(mod_path)
+    print('All done.')
