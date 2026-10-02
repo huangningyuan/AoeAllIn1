@@ -892,12 +892,6 @@
                     "tech_name": "Thunderclap Bombs"
                 },
                 {
-                    "source_id": 1483,
-                    "button": 7,
-                    "icon": "SIEGE_ENGINEERS_ICON_ID",
-                    "tech_name": "Northmen's Fury"
-                },
-                {
                     "source_id": 454,
                     "button": 7,
                     "tech_name": "Counterweights"
@@ -950,6 +944,12 @@
                     "button": 13,
                     "icon": "SHIPWRIGHT_ICON_ID",
                     "tech_name": "Circumnavigation"
+                },
+                {
+                    "source_id": 1483,
+                    "button": 6,
+                    "icon": "SIEGE_ENGINEERS_ICON_ID",
+                    "tech_name": "Northmen's Fury"
                 }
             ]
         },
@@ -1139,13 +1139,6 @@
                     "source_id": 1080,
                     "button": 13,
                     "tech_name": "Red Cliffs Tactics"
-                },
-                {
-                    "source_id": 1483,
-                    "button": 14,
-                    "icon": "SIEGE_ENGINEERS_ICON_ID",
-                    "tech_name": "Northmen's Fury",
-                    "register_as": "nf_dock_id"
                 }
             ]
         },
