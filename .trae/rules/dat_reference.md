@@ -168,20 +168,21 @@ bind_effect(data, tech, effect)
 
 **严格线性：SID = class_id + 13300** ✅。dat `unit.class_` 直接等于 strings Class List 的 index。
 
+> ⚠️ **重要区分**：这里的 `class_id` 是 **Class List（单位类别）**，和下面 Attack/Armor Type（护甲类型）是两套完全不同的编码。骆驼的**护甲类型**是 Attack/Armor Type 30，但其**单位类别**是 Class 12（骑兵）。马穆鲁克的**护甲类型**是 Attack/Armor Type 35，但其**单位类别**是 Class 12（骑兵）。判断"这是骆驼兵"要查 `unit.type_50.armours` 里有没有 armor type 30（见 `unique_techs.py:420`），不是查 `unit.class_`。
+
 | class_id | strings SID | strings 中文 | 含义 | 代码验证 |
 |----------|------------|-------------|------|---------|
-| 0 | 13300 | 步弓手 | Archery / 远程单位 | custom_civ_bonus.py:687 `class_==0` 城堡 UU |
+| 0 | 13300 | 步弓手 | Archery / 远程单位 | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
 | 3 | 13303 | 建筑 | Building | |
 | 4 | 13304 | 平民 | Villager | |
 | 6 | 13306 | 步兵 | Infantry | unique_techs.py:580 `class_==6` Huskarl |
-| 12 | 13312 | 骑兵 | Cavalry | custom_civ_bonus.py:352 `class_==12` 马厩单位 |
+| 12 | 13312 | 骑兵 | Cavalry / 马单位 | custom_civ_bonus.py:352 `class_==12` 覆盖含城堡骑兵 UU |
 | 13 | 13313 | 攻城武器 | Siege | |
 | 18 | 13318 | 僧侣 | Monk | |
 | 19 | 13319 | 贸易车 | Trade Cart | |
 | 22 | 13322 | 战船 | Ship | |
-| 30 | 13330 | 旗帜 | — | ⚠️ 注意：armor class 30=骆驼，unit class 30=旗帜，不要混淆 |
 | 44 | 13344 | 火枪手 | Gunpowder | custom_civ_bonus.py:1045 `class_==44` gunpowder |
-| 51 | 13351 | 组装的单位 | — | 抛石机/投石车等 |
+| 51 | 13351 | 组装的单位 | Assembled Unit | 抛石机/投石车等 |
 
 **完整 Class List（strings 13300-13366）：**
 
@@ -211,6 +212,8 @@ bind_effect(data, tech, effect)
 | 21 | 捕鱼艇 | 43 | 带着圣物的僧侣 | | |
 
 ### Attack Type / Armor Type 完整对照 (攻击和护甲共用同一套 ID)
+
+> ⚠️ **与 Class 的关键区别**：这一套编码是 **护甲/攻击类型**，出现在 `unit.type_50.attacks[i].class_` 和 `unit.type_50.armours[i].class_` 里。和上面的 Class List（`unit.class_`）是两套独立编码。例如骆驼骑兵的 `unit.class_` = 12（骑兵，Class List），但其 `armour.class_` 包含 30（骆驼单位，Armor Type）。
 
 **两个来源，互为补充：**
 
@@ -257,12 +260,12 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | 27 | Spearmen | 长矛兵 | |
 | 28 | Cavalry Archers | 骑射手 | |
 | 29 | **Eagle Warriors** | **冲击步兵** | DE 版本已从"鹰战士"改名为"冲击步兵"，AGE3 是旧名 |
-| 30 | Camels | 骆驼单位 | |
+| 30 | Camels | 骆驼单位 | 骆驼骑兵专属护甲类型。骆驼的 unit class=12（骑兵），armor type=30。`unique_techs.py:420` 用 `armor.class_==30` 识别骆驼 |
 | 31 | **Leitis Attack** | **未使用的护甲 31** | ⚠️ DE 更新后此类型已废弃，strings 官方标为未使用；但阿契美尼德 Sagaris 仍使用此 type 值 |
 | 32 | Condottiero | 意大利佣兵 | |
 | 33 | Unused | 未使用的护甲 33 | 保留位 |
 | 34 | Fishing Ship | 捕鱼船 | |
-| 35 | Mamelukes | 马穆鲁克 | |
+| 35 | Mamelukes | 马穆鲁克 | 马穆鲁克专属护甲类型。马穆鲁克的 unit class=12（骑兵），armor type=35 |
 | 36 | Heroes | 英雄和国王 | |
 
 #### DLC / 编年史扩展类型（仅 strings 存在，AGE3 V0007 未覆盖）
