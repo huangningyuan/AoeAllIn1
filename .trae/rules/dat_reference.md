@@ -172,20 +172,24 @@ bind_effect(data, tech, effect)
 
 | class_id | strings SID | strings 中文 | 含义 | 代码验证 |
 |----------|------------|-------------|------|---------|
-| 0 | 13300 | 步弓手 | Archery / 远程单位（包括弓箭手、弩手、投矛手等） | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
+| 0 | 13300 | 步弓手 | Archery / 远程单位（弓箭手、弩手、投矛手等） | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
 | 4 | 13304 | 平民 | Villager | |
-| 6 | 13306 | 步兵 | Infantry（兵营产的近战单位：剑士、长枪兵等；注意 strings 叫"步兵"但 Paladin 条顿圣骑士也在此类——兵营产但骑在马上） | unique_techs.py:580 `class_==6` Huskarl |
-| 12 | 13312 | 骑兵 | Cavalry / 马单位（骑在马上的单位，不限生产建筑） | custom_civ_bonus.py:352 `class_==12` 覆盖马厩产(Knight/Mameluke)和城堡产(Samurai/Scorpion) |
-| 13 | 13313 | 攻城武器 | Siege | |
+| 6 | 13306 | 步兵 | Infantry（近战单位，不限生产建筑。兵营产：剑士、长枪兵、鹰勇士；城堡产：条顿骑士、日本武士） | unique_techs.py:580 `class_==6` Huskarl |
+| 12 | 13312 | 骑兵 | Cavalry / 骑在马上的单位（不限生产建筑和攻击方式）。马厩产：游侠、骆驼兵、重装骆驼兵；城堡产：马穆鲁克 | custom_civ_bonus.py:352 `class_==12` |
+| 13 | 13313 | 攻城武器 | Siege（牵引抛石机 class_=13） | |
 | 18 | 13318 | 僧侣 | Monk | |
 | 19 | 13319 | 贸易车 | Trade Cart | |
 | 22 | 13322 | 战船 | Ship | |
-| 36 | 13336 | 骑射手 | Cavalry Archers（骑射类，不等同骑兵类） | Mangudai(突骑) class_=36，不是 12 |
-| 44 | 13344 | 火枪手 | Gunpowder | custom_civ_bonus.py:1045 `class_==44` gunpowder |
-| 51 | 13351 | 组装的单位 | Assembled Unit | 抛石机/投石车等 |
+| 36 | 13336 | 骑射手 | Cavalry Archers（骑射类，城堡产 UU：蒙古突骑、骆驼射手） | Mangudai(突骑) class_=36 ≠ 骑兵类 |
+| 44 | 13344 | 火枪手 | Gunpowder | custom_civ_bonus.py:1045 `class_==44` |
+| 51 | 13351 | 组装的单位 | Assembled Unit | 巨型投石机（组装状态）class_=51 |
+| 54 | 13354 | 拆装的攻城单位 | Disassembled siege | 巨型投石机 class_=54 |
+| 55 | 13355 | 弩炮 | Ballista / Scorpion | 弩炮 class_=55 |
 
-> ⚠️ **骑兵类 ≠ 马厩单位**：class 12 是"骑在马上的单位"，不限生产建筑。Knight（马厩）、Mameluke（马厩）、Samurai（城堡）、Scorpion（城堡）都是 class 12。反过来马厩还产 Camel Rider（class 不是 12）。
-> ⚠️ **骑兵类 ≠ 骑射类**：class 12 是骑兵（近战或投掷），class 36 是骑射手（如 Mangudai 蒙古突骑）。两者共享战马但 class 不同，判断时别搞混。
+> ⚠️ **步兵类 ≠ 兵营单位**：class 6 strings 叫"步兵"，但条顿骑士、日本武士这两个城堡产的 UU 也是 class 6。
+> ⚠️ **骑兵类 ≠ 马厩单位**：class 12 strings 叫"骑兵"（骑在马上的单位），但马穆鲁克是城堡产的，游侠和骆驼兵是马厩产的。
+> ⚠️ **骑兵类 ≠ 骑射类**：class 12 是骑兵（近战/投掷），class 36 是骑射手（远程）。蒙古突骑 class_=36，不是 12。
+> ⚠️ **弩炮 class_=55**：Scorpion 在游戏里指弩炮，strings Class List 里 class 55 就是"弩炮"。不要和攻城武器 class 13 混淆。
 
 **完整 Class List（strings 13300-13366）：**
 
