@@ -174,7 +174,7 @@ bind_effect(data, tech, effect)
 |----------|------------|-------------|------|---------|
 | 0 | 13300 | 步弓手 | Archery / 远程单位（包括弓箭手、弩手、投矛手等） | custom_civ_bonus.py:687 `class_==0` 城堡 UU 步弓手 |
 | 4 | 13304 | 平民 | Villager | |
-| 6 | 13306 | 步兵 | Infantry（包括剑士、长枪兵、帕拉丁等） | unique_techs.py:580 `class_==6` Huskarl |
+| 6 | 13306 | 步兵 | Infantry（兵营产的近战单位：剑士、长枪兵等；注意 strings 叫"步兵"但 Paladin 条顿圣骑士也在此类——兵营产但骑在马上） | unique_techs.py:580 `class_==6` Huskarl |
 | 12 | 13312 | 骑兵 | Cavalry / 马单位（骑在马上的单位，不限生产建筑） | custom_civ_bonus.py:352 `class_==12` 覆盖马厩产(Knight/Mameluke)和城堡产(Samurai/Scorpion) |
 | 13 | 13313 | 攻城武器 | Siege | |
 | 18 | 13318 | 僧侣 | Monk | |
