@@ -5,7 +5,7 @@ from constants import \
     HUTS_IDS, IUT_ICON_ID, KREPOST_ID, LARGE_CIV_ID, LUMBER_CAMP_ID, MARKET_ID, \
     MILL_ID, MINING_CAMP_ID, MONESTARY_ID, MULE_CART_ID, OUTPOST_ID, PAVILIONS_IDS, \
     SETTLEMENT_ID, SIEGE_ID, STABLE_ID, TC_ID, UNIV_ID, WONDER_ID, \
-    YURT_IDS
+    YURT_IDS, TENTS_IDS
 
 from all_in_1_params import All_In_1_Params
 from utils import append_tech, plus_resource, force_research_tech
@@ -110,6 +110,9 @@ def adding_switch(data: DatFile):
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 
     for i in HUTS_IDS:
+        activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
+
+    for i in TENTS_IDS:
         activate_switch_tech.research_locations.append(ResearchLocation(i, 1, 14, -1))
 
     force_research_tech(activate_effect, switch_tech_id)
