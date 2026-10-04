@@ -36,7 +36,7 @@
         ],
         "tech_ids": [
           "bm_dock_id",
-          "sit_t_dock_id",
+          "st_dock_id",
           "tb_dock_id",
           "roc_dock_id"
         ]
@@ -74,7 +74,8 @@
           691
         ],
         "tech_ids": [
-          376
+          376,
+          "art_dock_id"
         ]
       }
     ]

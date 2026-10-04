@@ -29,21 +29,23 @@ with open(_UNIT_SWITCH_PATH, 'r', encoding='utf-8') as _f:
     _UNIT_SWITCH_CATEGORIES = json.load(_f)
 
 
-def _resolve_id(raw_id, params):
+def _resolve_id(raw_id, params, kind):
     if isinstance(raw_id, int):
         return raw_id
     if isinstance(raw_id, str):
-        return params.other_params.get(raw_id)
-    return None
+        resolved = params.other_params.get(raw_id)
+        if resolved is None:
+            raise KeyError(
+                f"[{kind}] tech_ids/unit_ids 中引用的别名 '{raw_id}' "
+                f"未在 unique_techs_config.json 的 register_as 中注册，"
+                f"请补全对应配置或修正拼写。"
+            )
+        return resolved
+    raise ValueError(f"[{kind}] tech_ids/unit_ids 元素必须是 int 或 str，实际类型: {type(raw_id).__name__}")
 
 
-def _resolve_ids(raw_ids, params):
-    result = []
-    for raw_id in raw_ids:
-        resolved = _resolve_id(raw_id, params)
-        if resolved is not None:
-            result.append(resolved)
-    return result
+def _resolve_ids(raw_ids, params, kind):
+    return [_resolve_id(raw_id, params, kind) for raw_id in raw_ids]
 
 
 def _civ_matches(civ_match, civ_name, civ_id):
@@ -74,15 +76,18 @@ def _execute_unit_switch(effect, civ_name, civ_id, params):
 
         unit_button_id = category.get('unit_button_id')
         tech_button_id = category.get('tech_button_id')
+        cat_name = category.get('category_name', '<unknown>')
 
         all_uids = set()
         all_tids = set()
         for sc in category.get('switch_contents', []):
-            all_uids.update(_resolve_ids(sc.get('unit_ids', []), params))
-            all_tids.update(_resolve_ids(sc.get('tech_ids', []), params))
+            sc_name = sc.get('unit_name', '<unknown>')
+            all_uids.update(_resolve_ids(sc.get('unit_ids', []), params, f"{cat_name}/{sc_name}/unit_ids"))
+            all_tids.update(_resolve_ids(sc.get('tech_ids', []), params, f"{cat_name}/{sc_name}/tech_ids"))
 
-        enable_uids = set(_resolve_ids(target_sc.get('unit_ids', []), params))
-        enable_tids = set(_resolve_ids(target_sc.get('tech_ids', []), params))
+        target_sc_name = target_sc.get('unit_name', '<unknown>')
+        enable_uids = set(_resolve_ids(target_sc.get('unit_ids', []), params, f"{cat_name}/{target_sc_name}/unit_ids"))
+        enable_tids = set(_resolve_ids(target_sc.get('tech_ids', []), params, f"{cat_name}/{target_sc_name}/tech_ids"))
 
         for uid in (all_uids - enable_uids):
             move_unit_button(effect, uid, -1)
