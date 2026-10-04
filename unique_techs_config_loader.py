@@ -102,6 +102,13 @@ def generate_techs(data: DatFile, params, config=None):
 
             register_as = entry.get('register_as')
             if register_as:
+                if register_as in params.other_params:
+                    section_name = section.get('building', 'unknown')
+                    tech_label = entry.get('tech_name') or entry.get('source_id', '?')
+                    raise ValueError(
+                        f"Duplicate register_as '{register_as}' in section '{section_name}' "
+                        f"entry '{tech_label}'"
+                    )
                 params.other_params[register_as] = tech_id
 
     return {
