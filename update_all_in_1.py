@@ -77,7 +77,7 @@ def update_all_in_1(debug = True):
     print('Zip file created.')
     os.startfile(mod_path)
     print('All in 1 finished.')
-    deal_xs(units)
+    deal_xs()
 
 if __name__ == '__main__':
     update_all_in_1(False)

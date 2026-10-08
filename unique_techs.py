@@ -266,6 +266,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     paper_money_factor = 1.5 * 1.15 * (1 + (0.2 * 1.4)) * (1 + (0.2 * 1.4)) * (1 + (0.1 * 1.4)) * 1.05
     effect = get_new_effect(name)
     set_resource(effect, 266, paper_money_factor)
+    set_resource(effect, 33, 15)
     bind_effect(data, techs[paper_money_tech_id], effect)
 
     # --- Burgundian Vineyards source_id=754 ---

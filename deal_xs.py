@@ -1,104 +1,193 @@
-from genieutils import unit
 from constants import GAME_XS_PATH
 
 import utils
 import os
+import re
+import json
 
 
-def deal_xs(units: list[unit.Unit]):
+_XS_BASELINE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "xs_baselines.json")
+
+_FUNCTIONS_TO_WATCH = [
+    "EffectFunction3",
+    "EffectFunction13",
+    "EffectFunction14",
+    "EffectFunction15",
+    "EffectFunction16",
+]
+
+
+def _load_xs_baselines() -> dict:
+    if not os.path.exists(_XS_BASELINE_PATH):
+        return {}
+    try:
+        with open(_XS_BASELINE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {}
+
+
+def _save_xs_baselines(data: dict) -> None:
+    with open(_XS_BASELINE_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def _extract_function(content: str, func_name: str) -> str | None:
+    pattern = rf'void\s+{re.escape(func_name)}\([^)]*\)\s*\{{'
+    match = re.search(pattern, content)
+    if not match:
+        return None
+    start = match.start()
+    depth = 0
+    pos = match.end() - 1
+    while pos < len(content):
+        if content[pos] == '{':
+            depth += 1
+        elif content[pos] == '}':
+            depth -= 1
+            if depth == 0:
+                return content[start:pos + 1]
+        pos += 1
+    return None
+
+
+def _diff_text(old: str, new: str) -> list:
+    diffs = []
+    old_lines = old.splitlines()
+    new_lines = new.splitlines()
+    max_len = max(len(old_lines), len(new_lines))
+    for i in range(max_len):
+        o = old_lines[i] if i < len(old_lines) else None
+        n = new_lines[i] if i < len(new_lines) else None
+        if o is None:
+            diffs.append(f"  + NEW only: {n}")
+        elif n is None:
+            diffs.append(f"  - OLD only: {o}")
+        elif o != n:
+            diffs.append(f"  @@ line {i+1}:")
+            diffs.append(f"    - {o}")
+            diffs.append(f"    + {n}")
+    return diffs
+
+
+def _check_official_changes(original_content: str) -> None:
+    baselines = _load_xs_baselines()
+    updated = False
+
+    for func_name in _FUNCTIONS_TO_WATCH:
+        current_func = _extract_function(original_content, func_name)
+        key = func_name
+
+        if key not in baselines:
+            if current_func is None:
+                print(f"[XSTracker] {func_name}: not present in official Effects.xs (recorded as absent)")
+            else:
+                print(f"[XSTracker] NEW {func_name}: found ({len(current_func.splitlines())} lines, baseline recorded)")
+            baselines[key] = current_func
+            updated = True
+        else:
+            baseline = baselines[key]
+            if baseline is None and current_func is not None:
+                print(f"[XSTracker] CHANGE DETECTED {func_name}: was ABSENT, now PRESENT ({len(current_func.splitlines())} lines)")
+                baselines[key] = current_func
+                updated = True
+            elif baseline is not None and current_func is None:
+                print(f"[XSTracker] CHANGE DETECTED {func_name}: was PRESENT ({len(baseline.splitlines())} lines), now ABSENT")
+                baselines[key] = None
+                updated = True
+            elif baseline is not None and current_func is not None and baseline != current_func:
+                diffs = _diff_text(baseline, current_func)
+                print(f"[XSTracker] CHANGE DETECTED {func_name}:")
+                for line in diffs:
+                    print(line)
+                print(f"  (old: {len(baseline.splitlines())} lines, new: {len(current_func.splitlines())} lines)")
+                baselines[key] = current_func
+                updated = True
+
+    if updated:
+        _save_xs_baselines(baselines)
+
+
+def _replace_effect_function14(content: str) -> str:
+    old_block = (
+        r'(xsTaskAmount\(cTaskAttrWorkValue1, 0\.01\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrProductivityResource, cAttributeGoldFarmingProductivity\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrResourceOut, cAttributeGold\);)\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrCombatLevelFlag, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrSearchWaitTime, 3\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrAutoSearch, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrEnableTargeting, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrOwnerType, 5\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrGatherType, 1\);\s*\n'
+        r'\s*\n'
+        r'\s*xsTask\(FarmerMaleID, cTaskTypeGenerateResources, cFarmClass, playerId\);\s*\n'
+        r'\s*xsTask\(FarmerFemaleID, cTaskTypeGenerateResources, cFarmClass, playerId\);'
+    )
+    new_block = (
+        r'\1\n'
+        r'\n'
+        r'  xsTask(FarmerMaleID, cTaskTypeAdditionalResource, -1, playerId);\n'
+        r'  xsTask(FarmerFemaleID, cTaskTypeAdditionalResource, -1, playerId);'
+    )
+    new_content, count = re.subn(old_block, new_block, content)
+    if count == 0:
+        print("[Effects.xs] EffectFunction14: old pattern not matched, official may have changed — manual review needed")
+    else:
+        print(f"[Effects.xs] EffectFunction14: rewritten to new-style (cTaskTypeAdditionalResource, -1)")
+    return new_content
+
+
+def _replace_effect_function15(content: str) -> str:
+    old_block = (
+        r'(xsTaskAmount\(cTaskAttrWorkValue1, 0\.01\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrProductivityResource, cAttributeChoppingGoldProductivity\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrResourceOut, cAttributeGold\);)\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrCombatLevelFlag, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrSearchWaitTime, 3\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrAutoSearch, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrEnableTargeting, 1\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrOwnerType, 5\);\s*\n'
+        r'\s*xsTaskAmount\(cTaskAttrGatherType, 1\);\s*\n'
+        r'\s*\n'
+        r'\s*xsTask\(LumberjackMaleID, cTaskTypeGenerateResources, cTreeClass, playerId\);\s*\n'
+        r'\s*xsTask\(LumberjackFemaleID, cTaskTypeGenerateResources, cTreeClass, playerId\);'
+    )
+    new_block = (
+        r'\1\n'
+        r'\n'
+        r'  xsTask(LumberjackMaleID, cTaskTypeAdditionalResource, -1, playerId);\n'
+        r'  xsTask(LumberjackFemaleID, cTaskTypeAdditionalResource, -1, playerId);'
+    )
+    new_content, count = re.subn(old_block, new_block, content)
+    if count == 0:
+        print("[Effects.xs] EffectFunction15: old pattern not matched, official may have changed — manual review needed")
+    else:
+        print(f"[Effects.xs] EffectFunction15: rewritten to new-style (cTaskTypeAdditionalResource, -1)")
+    return new_content
+
+
+def deal_xs():
     xs_path = GAME_XS_PATH
     mod_xs_path = os.path.join(utils.get_mod_path(), 'resources', '_common', 'xs')
     if not os.path.exists(mod_xs_path):
         os.makedirs(mod_xs_path, exist_ok=True)
-    
-    # 读取Constants.xs文件，提取Object Classes信息
-    constants_xs_path = os.path.join(xs_path, 'Constants.xs')
-    if not os.path.exists(constants_xs_path):
-        raise FileNotFoundError(f"Constants.xs file not found at {constants_xs_path}")
-    
-    with open(constants_xs_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    # 找到Object Classes部分
-    import re
-    # 首先定位// Object Classes标题行
-    object_classes_start = content.find('// Object Classes')
-    if object_classes_start == -1:
-        raise ValueError("Object Classes section not found in Constants.xs")
-    
-    # 从标题行开始提取内容，直到下一个//==============或文件结束
-    section_content = content[object_classes_start:]
-    section_end = section_content.find('//==============', section_content.find('//==============') + 1)
-    if section_end != -1:
-        section_content = section_content[:section_end]
-    
-    # 从section_content中提取所有extern const int定义，直接匹配完整的变量名
-    class_matches = re.findall(r'extern const int (c\w+) = (\d+);', section_content)
-    
-    if not class_matches:
-        raise ValueError("No class definitions found in Object Classes section")
-    
-    # 过滤掉cSentinelEndClass
-    class_matches = [(name, value) for name, value in class_matches if name != 'cSentinelEnd']
-    
-    if not class_matches:
-        raise ValueError("No class definitions found after filtering")
 
-    # 创建类名列表，直接使用完整的变量名
-    class_list = []
-    for class_name, value in class_matches:
-        class_list.append(class_name)
-
-    creatable_class_set = set()
-    for unit in units:
-        if not unit:
-            continue
-        creatable = unit.creatable
-        if creatable and len(creatable.train_locations) > 0 \
-                and creatable.train_locations[0].button_id > 0 \
-                and creatable.train_locations[0].unit_id > 0:
-            creatable_class_set.add(unit.class_)
-    print(class_list)
-    exclude_class_set = {'cBuildingClass', 'cGateClass', 'cFarmClass', 'cTowerClass', 'cWallClass'}
-    valid_class_set = set()
-    for class_id in creatable_class_set:
-        if class_id < len(class_list) and class_list[class_id] not in exclude_class_set:
-            valid_class_set.add(class_list[class_id])
-
-    # 处理Effects.xs文件
     effects_xs_path = os.path.join(xs_path, 'Effects.xs')
     mod_effects_xs_path = os.path.join(mod_xs_path, 'Effects.xs')
-    
+
     if os.path.exists(effects_xs_path):
-        # 读取Effects.xs文件
         with open(effects_xs_path, 'r', encoding='utf-8') as f:
             effects_content = f.read()
-        
-        # 按照要求修改文件内容
-        import re
-        # 找到OrdoCavalry函数
-        ordo_cavalry_pattern = r'(void OrdoCavalry\(int ClassTarget = -1, int playerId = -1\)\s*\{[\s\S]*?\n)\s*xsTask\(ClassTarget, cTaskTypeStinger, -1, playerId\);[\s\S]*?(xsTaskAmount\(cTaskAttrWorkValue1, -1\.5\);[\s\S]*?\})'
-        
-        def replace_ordo_cavalry(match):
-            # 获取函数开头部分
-            function_start = match.group(1)
-            # 生成遍历valid_class_set的xsTask调用，保持与原代码一致的缩进
-            xs_task_calls = ''
-            # 确保valid_class_set是有序的，使用sorted()排序
-            for class_name in sorted(valid_class_set):
-                xs_task_calls += f'  xsTask(ClassTarget, cTaskTypeStinger, {class_name}, playerId);\n'
-            # 组合新的函数内容
-            return function_start + xs_task_calls + '}'
-        
-        # 替换函数内容
-        modified_effects_content = re.sub(ordo_cavalry_pattern, replace_ordo_cavalry, effects_content)
-        
-        # 写入到mod目录
+
+        _check_official_changes(effects_content)
+
+        modified_effects_content = effects_content
+        modified_effects_content = _replace_effect_function14(modified_effects_content)
+        modified_effects_content = _replace_effect_function15(modified_effects_content)
+
         with open(mod_effects_xs_path, 'w', encoding='utf-8') as f:
             f.write(modified_effects_content)
-        
+
         print(f"Effects.xs modified and copied to mod directory: {mod_effects_xs_path}")
     else:
         print(f"Effects.xs not found at {effects_xs_path}")
-    
-    return valid_class_set
