@@ -28,12 +28,12 @@ def load_strings(filepath):
                 text = m.group(2)
                 result[sid] = text
     return result
-SKIP_NODE_TYPES = {'UniqueUnit', 'RegionalBuilding', 'None'}
+SKIP_NODE_TYPES = {'UniqueUnit', 'RegionalBuilding', 'UniqueBuilding'}
 
 UNIT_NODE_TYPES = {'Unit', 'RegionalUnit'}
-BUILDING_TECH_TYPES = {'BuildingTech'}
-UNIT_LIKE_TYPES = UNIT_NODE_TYPES | BUILDING_TECH_TYPES
-TECH_NODE_TYPES = {'Research', 'UnitUpgrade', 'UniqueTech'}
+BUILDING_LIKE_TYPES = {'BuildingTech', 'BuildingNonTech'}
+UNIT_LIKE_TYPES = UNIT_NODE_TYPES | BUILDING_LIKE_TYPES
+TECH_NODE_TYPES = {'Research', 'UnitUpgrade', 'UniqueTech', 'RegionalTech'}
 
 # Tech 35 "Galleon" is the player-facing clickable tech (research_locations set,
 # but effect_id=-1, no effect of its own). Real ship upgrades for Galleon/
@@ -179,6 +179,8 @@ def main():
                 disabled_upgrade.add(tid)
             if tid not in SKIP_MAKEAVAIL_DISABLE_TECHS:
                 s.update(info['make_avail_units'])
+                for _src, dst in info['upgrade_pairs']:
+                    s.add(dst)
 
         for tid in status['enabled_techs']:
             info = tech_effect_cache.get(tid)

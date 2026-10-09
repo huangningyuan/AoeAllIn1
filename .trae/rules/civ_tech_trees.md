@@ -37,7 +37,7 @@ C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat\CivTe
 
 | Key | 类型 | 说明 |
 |-----|------|------|
-| civ_id | int | 文明索引（1=Britons, 编年史在 46-56 区间） |
+| civ_id | int | 文明索引（1=Britons）。编年史文明共 6 个，按名称枚举：Achaemenids(46), Athenians(47), Spartans(48), Macedonians(54), Thracians(55), Puru(56)——**不是连续区间**，中间夹着 Shu(49), Wu(50), Wei(51), Jurchens(52), Khitans(53) |
 | civ_techs_units | list | **核心**：单位、升级、科技、独特单位、独特科技全在这里（按 Node Type 区分） |
 | civ_techs_buildings | list | 建筑节点 |
 
@@ -59,27 +59,35 @@ C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\_common\dat\CivTe
 
 | Node Type | 匹配 dat 的方式 | 示例 |
 |-----------|----------------|------|
-| `Research` / `UniqueTech` | `Node ID == dat tech ID` | Dry Dock Node ID=744, tech ID=744 |
+| `Research` / `UniqueTech` / `RegionalTech` | `Node ID == dat tech ID` | Cranequins Node ID=1452, tech ID=1452 |
 | `UnitUpgrade` | `Trigger Tech ID == dat tech ID` | Galleon Node ID=442, Trigger Tech ID=21 (War Galley 升级), 实际升级由 tech 911 完成 |
 | `Unit` / `RegionalUnit` | `Node ID == dat unit ID` | Dromon Node ID=1795, unit ID=1795 |
-| `BuildingNonTech` / `BuildingTech` | `Node ID == dat unit ID`（建筑也是 unit） | Mining Camp Node ID=584 |
+| `BuildingNonTech` / `BuildingTech` | `Node ID == dat unit ID`（建筑也是 unit） | Mining Camp Node ID=584, House Node ID=70 |
+| `None`（精锐升级节点） | 同时用 `Trigger Tech ID == dat tech ID` + `Node ID == dat unit ID` | Elite Cannon Galleon Node ID=691, Trigger Tech ID=376 |
 
 ## Node Type 取值
 
 | Node Type | 含义 | 分组 |
 |-----------|------|------|
 | Unit | 普通可训练单位（Archer, Militia） | UNIT_LIKE |
-| UniqueUnit | 独特单位（Samurai, Longbowman） | SKIP（不参与匹配） |
+| UniqueUnit | 独特单位（Samurai, Longbowman） | SKIP（固定独特单位，不可能被 disable） |
 | RegionalUnit | 区域特殊单位（Dromon, Lou Chuan, Catapult Galleon — 替代默认 Cannon Galleon） | UNIT_LIKE |
 | UnitUpgrade | 单位升级（Man-at-Arms->Champion, War Galley->Galleon） | TECH |
-| BuildingNonTech | 可建造建筑（Dock, Castle） | BUILDING |
-| BuildingTech | 建筑科技节点（如 Mining Camp） | UNIT_LIKE |
+| BuildingNonTech | 可建造建筑（House, Dock, Gate, Keep, Bombard Tower） | UNIT_LIKE |
+| BuildingTech | 建筑科技节点（如 Mining Camp, Lumber Camp — 可被 tech 间接替换） | UNIT_LIKE |
 | RegionalBuilding | 区域特殊建筑（未在 check 脚本中处理） | SKIP |
+| UniqueBuilding | 独特建筑（Feitoria, Krepost, Donjon, Folwark, Harbor, Fortified Outpost） | SKIP（固定独特建筑） |
 | UniqueTech | 独特科技（银冠/金冠） | TECH |
+| RegionalTech | 区域科技（Cranequins — 替代默认 Hand Cannon） | TECH |
 | Research | 可研发科技（铁匠铺/大学/修道院等） | TECH |
-| None | 无类型（根节点或占位） | SKIP |
+| **None** | **无 Node Type 但有完整 Node ID + Trigger Tech ID 的节点**（全是精锐升级） | **根据 Use Type 判断** |
+| None（无 ID） | 真正的根占位节点 | SKIP |
 
-精锐升级识别：Name 以 "Elite " 开头 + Node Type = UnitUpgrade。
+### None 类型节点特殊说明
+
+JSON 中所有 Node Type=`None` 且有有效 `Node ID` 和 `Trigger Tech ID` 的节点（共 51 个，全部 Use Type=`Unit`），**都是精锐升级节点**，它们的 `Trigger Tech ID` 指向 dat 中的精锐科技 ID，`Node ID` 指向升级后的精锐单位 ID。这类节点在 check 脚本中**不跳过**，按 `Use Type` 归入相应分组处理。
+
+精锐升级识别：`Node Type=None` + `Use Type="Unit"` + 有有效 `Trigger Tech ID`。
 
 ### 节点类型功能分组（来自 check_civ_tech_trees.py）
 
@@ -87,9 +95,11 @@ check 脚本中定义了三个分组，决定哪些节点会参与 dat↔JSON �
 
 | 分组 | Node Types | 说明 |
 |------|-----------|------|
-| **SKIP_NODE_TYPES** | `UniqueUnit`, `RegionalBuilding`, `None` | 不参与任何匹配，这些节点要么是固定独特单位（不可能被 disable），要么是根占位符 |
-| **UNIT_LIKE_TYPES** | `Unit`, `RegionalUnit`, `BuildingTech` | **可被 type=2 (enable/disable unit) 直接控制**。dat Tech Tree Effect 中出现 type=2 b=0 的 unit_id，JSON 中对应 Node ID 的 Unit/BuildingTech 节点应 NotAvailable |
-| **TECH_NODE_TYPES** | `Research`, `UnitUpgrade`, `UniqueTech` | **被 type=8/102 (force/disable tech) 间接控制**。通过 tech 的 effect 中的 type=2 b=1/0 (make_avail/disable unit) 和 type=3 (upgrade) 来影响单位可用性 |
+| **SKIP_NODE_TYPES** | `UniqueUnit`, `RegionalBuilding`, `UniqueBuilding` | 固定独特单位/建筑或区域占位，不可能被 Tech Tree disable |
+| **UNIT_LIKE_TYPES** | `Unit`, `RegionalUnit`, `BuildingNonTech`, `BuildingTech` | **可被 type=2 (enable/disable unit) 直接控制**。dat Tech Tree Effect 中出现 type=2 b=0 的 unit_id，JSON 中对应 Node ID 的节点应 NotAvailable |
+| **TECH_NODE_TYPES** | `Research`, `UnitUpgrade`, `UniqueTech`, `RegionalTech` | **被 type=102 (disable tech) 间接控制**。disable tech 后需要展开该 tech 的 effect 才能知道哪些 unit 被间接触发（type=2 b=0 disable / type=2 b=1 make_avail / type=3 upgrade） |
+
+**None 类型节点动态归属**：有有效 `Trigger Tech ID` 且 `Use Type="Unit"` 的归入 TECH_NODE_TYPES（它们是精锐升级，本质是 UnitUpgrade）；无有效 ID 的真正占位节点跳过。
 
 关键区别：type=2 只能直接 disable unit，**不能直接 disable tech**（tech 只能被 type=102 disable，且 disable tech 后需要展开其 effect 才能知道哪些 unit 被间接触发）。
 
@@ -101,7 +111,7 @@ check 脚本中定义了三个分组，决定哪些节点会参与 dat↔JSON �
 | ResearchRequired | 可用但需前置 | **视为可用**，参与匹配 |
 | NotAvailable | 无法获得（如拜占庭的 Cannon Galleon 被 Dromon 替代） | 排除 |
 
-判断标准：能按 Name 匹配到节点 **且** Node Status != NotAvailable。
+判断标准：通过 **Node ID** 或 **Trigger Tech ID** 定位到节点 **且** Node Status != NotAvailable。**不使用 Name 匹配**——单位/科技名称在编年史文明、区域替换、本地化字符串中都可能不唯一或不一致。
 
 ## 关键关系：Node ID = dat 文件 ID
 
@@ -156,28 +166,41 @@ def load_civ_tree(civ_filename):
         return None
     return json.load(open(path, "r", encoding="utf-8"))
 
-def find_node(nodes, name_filter=None, node_type=None):
-    results = []
-    for node in nodes:
-        if not isinstance(node, dict):
-            continue
-        if name_filter and name_filter not in node.get("Name", ""):
-            continue
-        if node_type and node.get("Node Type") != node_type:
-            continue
-        results.append(node)
-    return results
+def get_all_nodes(data):
+    nodes = []
+    for arr in ['civ_techs_units', 'civ_techs_buildings']:
+        for node in data.get(arr, []):
+            if isinstance(node, dict):
+                nodes.append(node)
+    return nodes
 
-def civ_has_unit(data, unit_name):
-    for node in data.get("civ_techs_units", []):
-        if not isinstance(node, dict):
-            continue
-        if node.get("Name") != unit_name:
-            continue
-        if node.get("Node Status") == "NotAvailable":
-            return False
-        return True
-    return False
+def find_by_node_id(data, node_id):
+    """按 Node ID 查找节点（Unit/Building/Research 直接 Node ID=dat ID）"""
+    for node in get_all_nodes(data):
+        if node.get('Node ID') == node_id:
+            return node
+    return None
+
+def find_by_trigger_tech_id(data, tech_id):
+    """按 Trigger Tech ID 查找节点（UnitUpgrade / None 精锐升级）"""
+    for node in get_all_nodes(data):
+        if node.get('Trigger Tech ID') == tech_id:
+            return node
+    return None
+
+def node_is_available(node):
+    """判断节点在 JSON 中是否可用"""
+    return node is not None and node.get('Node Status') != 'NotAvailable'
+
+def civ_has_unit(data, unit_id):
+    """通过 Unit ID 判断文明是否拥有该单位"""
+    node = find_by_node_id(data, unit_id)
+    return node_is_available(node)
+
+def civ_has_upgrade(data, trigger_tech_id):
+    """通过 Trigger Tech ID 判断文明是否拥有该升级"""
+    node = find_by_trigger_tech_id(data, trigger_tech_id)
+    return node_is_available(node)
 
 def get_all_civ_files():
     files = [f.replace(".json", "")
@@ -188,29 +211,43 @@ def get_all_civ_files():
 
 ## 实际工作流
 
-### 确认哪些文明拥有 Dromon
+### 确认哪些文明拥有 Dromon（Unit ID=1795）
+
+Dromon 在 JSON 中 Node ID=1795（RegionalUnit），替代默认的 Cannon Galleon。通过 Unit ID 查询：
 
 ``python
+DROMON_ID = 1795
+
 all_civs = get_all_civ_files()
 dromon_civs = []
 for civ_file in all_civs:
     data = load_civ_tree(civ_file)
-    if data and civ_has_unit(data, "Dromon"):
+    if data and civ_has_unit(data, DROMON_ID):
         dromon_civs.append(civ_file)
 # ['ARMENIANS', 'BYZANTINES', 'GOTHS', 'HUNS', 'ROMANS'] -> 首字母大写填 civ_names
 ``
 
-### 攻城船区分
+### 攻城船区分（RegionalUnit Node ID 判断）
+
+攻城船 RegionalUnit 的 Node ID 各不相同，可直接用 ID 判断：
+
+| 船名 | Node ID | 所属文明 |
+|------|---------|---------|
+| Dromon | 1795 | Byzantines, Armenians, Goths, Huns, Romans |
+| Lou Chuan | 1600 | Khmer |
+| Catapult Galleon | 1800 | (需查具体 ID) |
 
 ``python
-for ship_name in ["Dromon", "Lou Chuan", "Catapult Galleon"]:
-    if civ_has_unit(data, ship_name):
+SHIP_ID_MAP = {DROMON_ID: 'Dromon', LOU_CHUAN_ID: 'Lou Chuan', ...}
+for ship_id, ship_name in SHIP_ID_MAP.items():
+    if civ_has_unit(data, ship_id):
         break
 else:
     pass  # 默认 Cannon Galleon
-``
 
-注意：Cannon Galleon 在有 Dromon/Lou Chuan/Catapult Galleon 的文明中 Node Status = NotAvailable，不是节点不存在。
+# 注意：Cannon Galleon (Node ID=420) 在有 RegionalUnit 的文明中 Node Status = NotAvailable，
+# 不是节点不存在。RegionalUnit 替代而非覆盖。
+``
 
 ## 核心机制：dat Tech Tree Effect vs JSON Node Status
 
@@ -294,11 +331,11 @@ def build_tech_effect_cache(data, cache, tech_id):
 
 ## 与 unit_switch.json 对应
 
-| 科技树字段 | unit_switch.json 字段 |
-|------------|----------------------|
-| Node ID | unit_ids（直接填数字） |
-| Node Status | 判断文明是否应归入该 switch_content |
-| Name | unit_name（逻辑名） |
-| Building ID | 反查建筑类型 |
+| 科技树字段 | unit_switch.json 字段 | 说明 |
+|------------|----------------------|------|
+| Node ID | unit_ids（直接填数字） | **唯一的匹配依据**，不使用 Name |
+| Node Status | 判断文明是否应归入该 switch_content | 只看 ID 对应的 JSON 节点 |
+| Name | unit_name（逻辑名） | **仅标签/注释用途**，不参与任何匹配逻辑 |
+| Building ID | 反查建筑类型 | 可选，通过 Building ID 反查建筑 button_id |
 
 编年史文明（ACHAEMENIDS, ATHENIANS, MACEDONIANS, PURU, SPARTANS, THRACIANS）科技树中可能缺少某些节点，通常落到 default:true 分支处理。
