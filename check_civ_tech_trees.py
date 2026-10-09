@@ -434,7 +434,7 @@ def main():
     print(f"\n{'='*70}")
     print(f"问题 ({len(rows)})")
     print(f"{'='*70}")
-    print(f"| 文明 | 科技 | 科技树中可用 | dat中可用 |")
+    print(f"| 文明 | 科技 | 科技树中可用 | 实际可用 |")
     print(f"|------|------|-------------|-----------|")
     for r in rows:
         note = f" ({r['note']})" if r.get('note') else ''
