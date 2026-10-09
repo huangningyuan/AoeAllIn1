@@ -145,6 +145,73 @@ bind_effect(data, tech, effect)
 
 > **注意**：`selected=1` 版本 (type 203/204/205) 只对**玩家自己选中的**单位生效，而 type 0/4/5 对所有单位生效。
 
+### 文明 Tech Tree Effect（判断单位/科技可用性的唯一权威）
+
+**核心原理**：dat 的 `data.effects` 数组中，每个文明都有一个 Effect，`effect.name` 以 `" Tech Tree"` 结尾。这个 Effect 包含了该文明对所有 tech 和 unit 的 enable/disable 操作。科技树 JSON（CivTechTrees 目录）是官方单独给的参考文件，可能和 dat 不匹配——**dat 才是运行时的真实行为，JSON 只是显示用**。
+
+```python
+# 找到所有文明的 Tech Tree Effect
+tech_tree_effects = {}
+for eff in data.effects:
+    if eff.name.endswith('Tech Tree'):
+        civ_name = eff.name[:-10]  # 去掉 " Tech Tree" 后缀
+        tech_tree_effects[civ_name] = eff
+```
+
+Tech Tree Effect 中的三种关键指令：
+
+| type | 触发条件 | 含义 | 对 JSON Node Status 的预期 |
+|------|---------|------|--------------------------|
+| **102** | `cmd.d = tech_id` | 该 tech 及其 effect 中定义的 make_avail/disable/upgrade **全部**对这个文明失效 | 该 tech 对应的 Research/UnitUpgrade/UniqueTech 节点 → NotAvailable |
+| **8** + `b=12` + `d=1.0` | `cmd.a = tech_id` | 该 tech 的 **disable_units 和 upgrade_pairs** 对这个文明额外生效；同时解除该 tech 原本会 make_avail 的禁用 | Trigger Tech ID = 该 tech ID 的 UnitUpgrade → NotAvailable；该 tech effect 中 make_avail 的 unit 的禁用被解除 |
+| **2** + `b=0` | `cmd.a = unit_id` | 直接 disable 一个单位/建筑 | Node ID = 该 unit_id 的 Unit/RegionalUnit/BuildingTech → NotAvailable |
+
+#### 如何从 disable tech 推导最终被禁用的单位
+
+disable tech 后不能只看 tech ID，需要**展开该 tech 的 effect**：
+
+```python
+def build_tech_effect_cache(data, cache, tech_id):
+    tech = data.techs[tech_id]
+    teff = data.effects[tech.effect_id]  # 注意：effect_id=-1 或越界表示 tech 没有实际效果
+    make_avail_units, disable_units, upgrade_pairs = [], [], []
+    for tcmd in teff.effect_commands:
+        if tcmd.type == 2 and tcmd.b == 1:
+            make_avail_units.append(tcmd.a)      # 研发该 tech 后会解锁这些 unit
+        elif tcmd.type == 2 and tcmd.b == 0:
+            disable_units.append(tcmd.a)          # 研发该 tech 后会禁用这些 unit
+        elif tcmd.type == 3:
+            upgrade_pairs.append((tcmd.a, tcmd.b))
+    return {
+        'make_avail_units': make_avail_units,
+        'disable_units': disable_units,
+        'upgrade_pairs': upgrade_pairs,
+    }
+```
+
+然后合并所有 disabled tech 的 `make_avail_units`（加上 direct disable 的 unit）得到最终 `eff_disabled_units`。
+
+**土耳其城堡的特殊处理**：Tech 137 `Castle -- Age Three`（civ=-1，effect `type=2 a=82 b=1` enable Castle）被土耳其 Tech Tree Effect **disable**，但土耳其同时启用了专属的 Tech 354 `Turk Castle`（civ=10，同样 `type=2 a=82 b=1`）作为替代。在 check_civ_tech_trees.py 中 137 被列入 `SKIP_MAKEAVAIL_DISABLE_TECHS`，意思是"即使 dat disable 了 137，也不要把它 make_avail 的 Castle(82) 算入 effective_disabled_units"——因为土耳其有 354 兜底。这是 check 工具的容错逻辑，不影响实际数据。
+
+#### "点击科技" vs "辅助升级科技"分离（以 Tech 35 为例）
+
+dat 中存在一种两层科技结构：
+
+- **层 1：玩家实际点击的科技** —— 有按钮、有 `research_locations`、有前置、`effect_id=-1`（自己不做 effect）
+- **层 2：辅助升级科技** —— 把层 1 作为前置、`effect_id>=0`（做真正的 type=2 enable/disable、type=3 upgrade）
+
+攻城船升级的具体映射：
+
+| 层 1（点击科技） | 层 2（辅助科技） | 升级链 |
+|-----------------|-----------------|--------|
+| **Tech 35 `Galleon`**（civ=-1, `effect_id=-1`） | **Tech 911**（`required_techs=(35, ...)`） | War Galley(21) → Galleon(442) |
+| — | **Tech 246**（`required_techs=(35, ...)`） | Fire Galley(52) → Fast Fire Ship(532) |
+| — | **Tech 904**（`required_techs=(35, ...)`） | Cannon Galleon(1792) → Carrack(1794) |
+
+科技树 JSON 的 UnitUpgrade 节点，`Trigger Tech ID` 统一指向**层 1 科技**（玩家操作层），而不是层 2 辅助科技。判断"某文明是否禁用了 Galleon 升级"时，需要同时检查：层 1 Tech 35 是否被 disable，**以及** 层 2 Tech 911 是否被 disable——任何一个被 disable 都应该导致 JSON 中对应 UnitUpgrade 节点为 NotAvailable。
+
+同样的映射关系也存在于 RegionalUnit（Dromon/Lou Chuan 等）的升级链中。
+
 ### unit attribute 常用值 (type 0/4/5 的第 4 参数 = attribute)
 
 **基本线性：SID = attr + 12200**（中间有少量跳跃缺口，如 attr 7/31/35-39 无 strings 条目）。完整列表见 strings Attribute List（SID 12200-12609）。

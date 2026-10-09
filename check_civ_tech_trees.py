@@ -35,8 +35,11 @@ BUILDING_TECH_TYPES = {'BuildingTech'}
 UNIT_LIKE_TYPES = UNIT_NODE_TYPES | BUILDING_TECH_TYPES
 TECH_NODE_TYPES = {'Research', 'UnitUpgrade', 'UniqueTech'}
 
-# tech 35 (Heavy Warships) has NO effect (effect_id=-1), it's an age gate.
-# The actual ship upgrades for Galleon/Fast Fire Ship/Carrack are done by these techs.
+# Tech 35 "Galleon" is the player-facing clickable tech (research_locations set,
+# but effect_id=-1, no effect of its own). Real ship upgrades for Galleon/
+# Fast Fire Ship/Carrack are done by layer-2 helper techs that require Tech 35
+# as a prerequisite (required_techs=(35, ...)). JSON UnitUpgrade nodes point
+# Trigger Tech ID at layer-1 (player-facing), so we must also check layer-2.
 TECH_35_REAL_UPGRADES = {911, 246, 904}
 
 # Known exceptions: (civ_file, node_type, node_id) — do NOT flag these
@@ -54,8 +57,11 @@ EXCEPTIONS = {
     },
 }
 
-# These techs are disabled by some civs but their make_avail_units should NOT
-# be treated as effectively disabled (they're just age-gating placeholders).
+# Tech 137 "Castle -- Age Three" is the universal (civ=-1) tech that enables
+# Castle(82) via effect type=2 a=82 b=1. Turks disable 137 but use their own
+# exclusive Tech 354 "Turk Castle" (civ=10, same effect) as a replacement.
+# We must NOT treat 137's make_avail_units as effectively disabled for Turks
+# — they still get Castle through 354.
 SKIP_MAKEAVAIL_DISABLE_TECHS = {
     137,  # Castle -- Age Three
 }
