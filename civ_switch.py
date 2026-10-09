@@ -1,5 +1,6 @@
 import json
 import os
+import civ_name as civ_names
 import constants
 from constants import BARRACK_ID, BLACKSMITH_ID, CASTLE_ID, MILL_ID, MULE_CART_ID, STABLE_ID
 
@@ -309,24 +310,6 @@ if __name__ == '__main__':
     en_file_name = os.path.join(mod_path, 'resources', 'en', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
     zh_file_name = os.path.join(mod_path, 'resources', 'zh', 'strings', 'key-value', 'key-value-modded-strings-utf8.txt')
     offset = 26800
-    civ_en_zh_dict = {
-        'Britons': '不列颠', 'Franks': '法兰克', 'Goths': '哥特', 'Teutons': '条顿',
-        'Japanese': '日本', 'Chinese': '中国', 'Byzantines': '拜占庭', 'Persians': '波斯',
-        'Saracens': '萨拉森', 'Turks': '土耳其', 'Vikings': '维京', 'Mongols': '蒙古',
-        'Celts': '凯尔特', 'Spanish': '西班牙', 'Aztecs': '阿兹特克', 'Mayans': '玛雅',
-        'Huns': '匈奴', 'Koreans': '高丽', 'Italians': '意大利', 'Hindustanis': '印度斯坦',
-        'Incas': '印加', 'Magyars': '马扎尔', 'Slavs': '斯拉夫', 'Portuguese': '葡萄牙',
-        'Ethiopians': '埃塞俄比亚', 'Malians': '马里', 'Berbers': '柏柏尔', 'Khmer': '高棉',
-        'Malay': '马来', 'Burmese': '缅甸', 'Vietnamese': '越南', 'Bulgarians': '保加利亚',
-        'Tatars': '鞑靼', 'Cumans': '库曼', 'Lithuanians': '立陶宛', 'Burgundians': '勃艮第',
-        'Sicilians': '西西里', 'Poles': '波兰', 'Bohemians': '波西米亚', 'Dravidians': '达罗毗荼',
-        'Bengalis': '孟加拉', 'Gurjaras': '瞿折罗', 'Romans': '罗马', 'Armenians': '亚美尼亚',
-        'Georgians': '格鲁吉亚', 'Achaemenids': '阿契美尼德', 'Athenians': '雅典',
-        'Spartans': '斯巴达', 'Wei': '魏', 'Shu': '蜀', 'Wu': '吴', 'Jurchens': '女真',
-        'Khitans': '契丹', 'Puru': '普鲁', 'Thracians': '色雷斯', 'Macedonians': '马其顿',
-        'Muisca': '穆伊斯卡', 'Mapuche': '马普切', 'Tupi': '图皮',
-        'Saxons': '撒克逊', 'Danes': '丹麦', 'Varangians': '瓦兰吉',
-    }
     en = open(en_file_name, 'w')
     zh = open(zh_file_name, 'w', encoding='utf-8')
     en.write('26800 "enable all civ bonus"\n')
@@ -338,7 +321,7 @@ if __name__ == '__main__':
     for i in range(1, len(civs)):
         civ_name = get_civ_name(civs, i)
         en.write('%d "switch to %s"\n' % (offset + i, civ_name))
-        zh.write('%d "切换到%s"\n' % (offset + i, civ_en_zh_dict[civ_name]))
+        zh.write('%d "切换到%s"\n' % (offset + i, civ_names.to_zh(civ_name)))
 
     en.close()
     zh.close()
