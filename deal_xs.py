@@ -126,14 +126,14 @@ def _replace_effect_function14(content: str) -> str:
     new_block = (
         r'\1\n'
         r'\n'
-        r'  xsTask(FarmerMaleID, cTaskTypeAdditionalResource, -1, playerId);\n'
-        r'  xsTask(FarmerFemaleID, cTaskTypeAdditionalResource, -1, playerId);'
+        r'  xsTask(FarmerMaleID, cTaskTypeAdditionalResource, cFarmClass, playerId);\n'
+        r'  xsTask(FarmerFemaleID, cTaskTypeAdditionalResource, cFarmClass, playerId);'
     )
     new_content, count = re.subn(old_block, new_block, content)
     if count == 0:
         print("[Effects.xs] EffectFunction14: old pattern not matched, official may have changed — manual review needed")
     else:
-        print(f"[Effects.xs] EffectFunction14: rewritten to new-style (cTaskTypeAdditionalResource, -1)")
+        print(f"[Effects.xs] EffectFunction14: rewritten to new-style")
     return new_content
 
 
@@ -155,14 +155,14 @@ def _replace_effect_function15(content: str) -> str:
     new_block = (
         r'\1\n'
         r'\n'
-        r'  xsTask(LumberjackMaleID, cTaskTypeAdditionalResource, -1, playerId);\n'
-        r'  xsTask(LumberjackFemaleID, cTaskTypeAdditionalResource, -1, playerId);'
+        r'  xsTask(LumberjackMaleID, cTaskTypeAdditionalResource, cTreeClass, playerId);\n'
+        r'  xsTask(LumberjackFemaleID, cTaskTypeAdditionalResource, cTreeClass, playerId);'
     )
     new_content, count = re.subn(old_block, new_block, content)
     if count == 0:
         print("[Effects.xs] EffectFunction15: old pattern not matched, official may have changed — manual review needed")
     else:
-        print(f"[Effects.xs] EffectFunction15: rewritten to new-style (cTaskTypeAdditionalResource, -1)")
+        print(f"[Effects.xs] EffectFunction15: rewritten to new-style")
     return new_content
 
 

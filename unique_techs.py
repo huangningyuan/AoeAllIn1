@@ -1,4 +1,6 @@
 import copy
+from asyncio.events import BaseDefaultEventLoopPolicy
+
 import constants
 from constants import \
     BARRACK_ID, CHRONICLE_CIV_IDS, DOCK_ID, DOCK_IDS, DONJON_ID, GOTH_AGE4_DISCOUNT, \
@@ -275,6 +277,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     bv_factor = 2 * 1.15 * 1.05
     set_resource(effect, 236, bv_factor)
+    set_resource(effect, 33, 14)
     bind_effect(data, techs[bv_tech_id], effect)
 
     # --- Forced Levy source_id=625 ---

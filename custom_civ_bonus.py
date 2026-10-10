@@ -593,6 +593,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, transhumance_tech_id)
             append_tech(data, tech, effect)
+            name = 'enable farm'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            tech.civ = 53
+            effect = get_new_effect(name)
+            enable_unit(effect, 50)
+            append_tech(data, tech, effect)
         case 'Khmer':
             name = 'Khmer Requirements'
             tech = get_new_tech(name)
