@@ -13,7 +13,7 @@ from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
     set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
-    set_tech_discount
+    set_tech_discount, check_effect, multiply_unit_attribute
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
@@ -697,6 +697,34 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
     research_tech(effect, 981)
+    append_tech(data, tech, effect)
+
+    name = 'elite fire lancer'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, 982)
+    append_tech(data, tech, effect)
+
+    additional_tc_ids = [2275, 2276, 2277]
+    effect = check_effect(effects, 421)
+    for i in additional_tc_ids:
+        multiply_unit_attribute(effect, i, -1, 13,  1.1)
+
+    name = 'Persians + Achemenids TC Age3'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    for i in additional_tc_ids:
+        multiply_unit_attribute(effect, i, -1, 13, 1.15 / 1.1)
+    append_tech(data, tech, effect)
+
+    name = 'Persians + Achemenids TC Age4'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+    effect = get_new_effect(name)
+    for i in additional_tc_ids:
+        multiply_unit_attribute(effect, i, -1, 13, 1.2 / 1.15)
     append_tech(data, tech, effect)
 
 
