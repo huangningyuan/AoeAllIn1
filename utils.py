@@ -373,7 +373,7 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
                     continue
                 if ec.type not in target_types:
                     continue
-                if eff_idx == 340 and ec.c == 0:
+                if eff_idx in (340, 1266) and ec.c == 0:
                     continue
                 if ec.a in source_set:
                     pattern_map[(ec.type, ec.c, ec.d)].append(ec.a)
