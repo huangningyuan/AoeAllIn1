@@ -18,6 +18,7 @@ from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
+from utils import add_require_tech
 from utils import replace_require_tech
 from utils import set_require_techs, get_tech_id_by_name, set_tech_cost, plus_resource, set_tech_time, \
     multiply_unit_cost, multiply_unit_attack, multiply_unit_hp, multiply_unit_attribute, multiply_resource, \
@@ -161,7 +162,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.effect_id = 944
             append_tech(data, tech)
             for i in range(942, 948):
-                replace_require_tech(techs[i], -1, params.switch_tech_id)
+                add_require_tech(techs[i], params.switch_tech_id)
             techs[957].civ = -1
             name = 'enable Priest Warrior'
             tech = get_new_tech(name)
@@ -449,7 +450,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             move_unit_button(effect, 2556, 1)
             append_tech(data, tech, effect)
             for i in (1354, 1355, 1356):
-                replace_require_tech(techs[i], -1, params.switch_tech_id)
+                add_require_tech(techs[i], params.switch_tech_id)
         case 'Italians':
             # cheap gunpowder units ext
             effect = check_effect(effects, 555)
@@ -554,7 +555,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             techs[701].civ = -1
             techs[702].civ = -1
             # winged hussar
-            replace_require_tech(techs[786], -1, params.imp_duplicate_tech_id)
+            add_require_tech(techs[786], params.imp_duplicate_tech_id)
         case 'Macedonians':
             # doctrines
             name = 'disable doctrines'

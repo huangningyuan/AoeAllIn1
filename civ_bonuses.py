@@ -19,6 +19,7 @@ from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
+from utils import add_require_tech
 from utils import replace_require_tech
 from utils import research_tech
 
@@ -238,8 +239,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     replace_require_tech(tech, 113, params.castle_duplicate_tech_id)
                 elif 103 in tech.required_techs:
                     replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
-                replace_require_tech(tech, -1, params.switch_tech_id)
-                tech.required_tech_count += 1
+                add_require_tech(tech, params.switch_tech_id, update_count=True)
                 effect = effects[tech.effect_id]
                 if len(effect.effect_commands) > 0:
                     first_command = effect.effect_commands[0]
