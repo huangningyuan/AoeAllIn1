@@ -2,7 +2,7 @@ from all_in_1_params import All_In_1_Params
 from genieutils.datfile import DatFile
 from utils import append_tech
 from utils import get_new_tech
-from utils import replace_tuple
+from utils import replace_require_tech
 from utils import set_require_techs
 
 FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 659, 660, 661, 666, 667, 668, 755,
@@ -19,12 +19,12 @@ def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):
     print('Dealing Required tech...')
     for i, tech in enumerate(data.techs):
         if i in FEUDAL_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, 101, params.early_feudal_tech_id)
+            replace_require_tech(tech, 101, params.early_feudal_tech_id)
         elif i in CASTLE_AGE_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, 102, params.early_castle_tech_id)
+            replace_require_tech(tech, 102, params.early_castle_tech_id)
         elif i in IMPERIAL_AGE_REQUIRE_TECH_LIST:
-            tech.required_techs = replace_tuple(tech.required_techs, 103, params.early_imp_duplicate_tech_id)
-            tech.required_techs = replace_tuple(tech.required_techs, 115, params.early_imp_duplicate_tech_id)
+            replace_require_tech(tech, 103, params.early_imp_duplicate_tech_id)
+            replace_require_tech(tech, 115, params.early_imp_duplicate_tech_id)
 
     flemish_revolution_tech = data.techs[FLEMISH_REVOLUTION_TECH_ID]
     flemish_revolution_tech.required_techs = (115, params.switch_tech_id, 758, -1, -1, -1)

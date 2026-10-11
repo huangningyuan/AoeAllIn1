@@ -18,7 +18,7 @@ from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
-from utils import replace_tuple
+from utils import replace_require_tech
 from utils import set_require_techs, get_tech_id_by_name, set_tech_cost, plus_resource, set_tech_time, \
     multiply_unit_cost, multiply_unit_attack, multiply_unit_hp, multiply_unit_attribute, multiply_resource, \
     set_unit_attribute, plus_unit_armor, set_resource, upgrade_unit, research_tech, plus_unit_attribute, enable_tech, \
@@ -41,8 +41,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech_id = append_tech(data, tech)
             # enable Achaemenids TC techs
             for i in range(1195, 1198):
-                techs[i].required_techs = replace_tuple(techs[i].required_techs, append_tech_tech_id, -1)
-                techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
+                replace_require_tech(techs[i], append_tech_tech_id, -1)
+                replace_require_tech(techs[i], achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
             name = 'enable dock, port'
             append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
@@ -141,13 +141,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in append_tech_ship_upgrade_tech_ids:
                 tech = copy.deepcopy(techs[i])
                 tech.civ = -1
-                tech.required_techs = replace_tuple(techs[i].required_techs, append_tech_tech_id, params.switch_tech_id)
+                replace_require_tech(tech, append_tech_tech_id, params.switch_tech_id)
                 if 101 in tech.required_techs:
-                    tech.required_techs = replace_tuple(tech.required_techs, 101, params.feudal_duplicate_tech_id)
+                    replace_require_tech(tech, 101, params.feudal_duplicate_tech_id)
                 elif 102 in tech.required_techs:
-                    tech.required_techs = replace_tuple(tech.required_techs, 102, params.castle_duplicate_tech_id)
+                    replace_require_tech(tech, 102, params.castle_duplicate_tech_id)
                 elif 103 in tech.required_techs:
-                    tech.required_techs = replace_tuple(tech.required_techs, 103, params.imp_duplicate_tech_id)
+                    replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
                 effect = get_new_effect(tech.name)
                 force_tech(effect, i)
                 research_tech(effect, i)
@@ -161,7 +161,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.effect_id = 944
             append_tech(data, tech)
             for i in range(942, 948):
-                techs[i].required_techs = replace_tuple(techs[i].required_techs, -1, params.switch_tech_id)
+                replace_require_tech(techs[i], -1, params.switch_tech_id)
             techs[957].civ = -1
             name = 'enable Priest Warrior'
             tech = get_new_tech(name)
@@ -340,13 +340,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 plus_unit_attribute(effect, i, -1, 1, 7)
                 plus_unit_attribute(effect, i, -1, 23, 7)
             append_tech(data, tech, effect)
-            # name = 'enable Rocket Cart'
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            # effect = get_new_effect(name)
-            # research_tech(effect, 979)
-
-            append_tech(data, tech, effect)
             name = 'enable Dragon Ship'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, 246)
@@ -455,24 +448,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(effect, 1353)
             move_unit_button(effect, 2556, 1)
             append_tech(data, tech, effect)
-            name = 'Settlement Age2 upgrade'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1354)
-            append_tech(data, tech, effect)
-            name = 'Settlement Age3 upgrade'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1355)
-            append_tech(data, tech, effect)
-            name = 'Settlement Age4 upgrade'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1356)
-            append_tech(data, tech, effect)
+            for i in (1354, 1355, 1356):
+                replace_require_tech(techs[i], -1, params.switch_tech_id)
         case 'Italians':
             # cheap gunpowder units ext
             effect = check_effect(effects, 555)
@@ -577,7 +554,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             techs[701].civ = -1
             techs[702].civ = -1
             # winged hussar
-            techs[786].required_techs = replace_tuple(techs[786].required_techs, -1, params.imp_duplicate_tech_id)
+            replace_require_tech(techs[786], -1, params.imp_duplicate_tech_id)
         case 'Macedonians':
             # doctrines
             name = 'disable doctrines'

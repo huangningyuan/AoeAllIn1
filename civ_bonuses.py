@@ -19,7 +19,7 @@ from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
-from utils import replace_tuple
+from utils import replace_require_tech
 from utils import research_tech
 
 TECH_TO_REMOVE = [286, 287, 500,
@@ -228,20 +228,18 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 tech.name = tech.name.replace('C-Bonus, ', '')
                 tech.name = tech.name.replace('C-Bonus ', '')
                 tech.civ = -1
-                required_techs = tech.required_techs
-                if 101 in required_techs:
-                    required_techs = replace_tuple(required_techs, 101, params.feudal_duplicate_tech_id)
-                elif 1209 in required_techs:
-                    required_techs = replace_tuple(required_techs, 1209, params.feudal_duplicate_tech_id)
-                elif 102 in required_techs:
-                    required_techs = replace_tuple(required_techs, 102, params.castle_duplicate_tech_id)
-                elif 113 in required_techs:
-                    required_techs = replace_tuple(required_techs, 113, params.castle_duplicate_tech_id)
-                elif 103 in required_techs:
-                    required_techs = replace_tuple(required_techs, 103, params.imp_duplicate_tech_id)
-                required_techs = replace_tuple(required_techs, -1, params.switch_tech_id)
+                if 101 in tech.required_techs:
+                    replace_require_tech(tech, 101, params.feudal_duplicate_tech_id)
+                elif 1209 in tech.required_techs:
+                    replace_require_tech(tech, 1209, params.feudal_duplicate_tech_id)
+                elif 102 in tech.required_techs:
+                    replace_require_tech(tech, 102, params.castle_duplicate_tech_id)
+                elif 113 in tech.required_techs:
+                    replace_require_tech(tech, 113, params.castle_duplicate_tech_id)
+                elif 103 in tech.required_techs:
+                    replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
+                replace_require_tech(tech, -1, params.switch_tech_id)
                 tech.required_tech_count += 1
-                tech.required_techs = required_techs
                 effect = effects[tech.effect_id]
                 if len(effect.effect_commands) > 0:
                     first_command = effect.effect_commands[0]

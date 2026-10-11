@@ -145,6 +145,19 @@ def replace_tuple(t: tuple, origin, replace):
     return t
 
 
+def add_require_tech(tech: Tech, new_tech_id, update_count=False):
+    for i in range(len(tech.required_techs)):
+        if tech.required_techs[i] == -1:
+            tech.required_techs = tech.required_techs[:i] + (new_tech_id,) + tech.required_techs[i + 1:]
+            if update_count and i >= tech.required_tech_count:
+                tech.required_tech_count = i + 1
+            return
+
+
+def replace_require_tech(tech: Tech, old_tech_id, new_tech_id):
+    tech.required_techs = replace_tuple(tech.required_techs, old_tech_id, new_tech_id)
+
+
 def enable_tech(effect: Effect, tech_id):
     effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 1))
 
