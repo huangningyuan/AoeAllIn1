@@ -1,5 +1,4 @@
 import copy
-from asyncio.events import BaseDefaultEventLoopPolicy
 
 import constants
 from constants import \

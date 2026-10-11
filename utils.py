@@ -158,32 +158,40 @@ def replace_require_tech(tech: Tech, old_tech_id, new_tech_id):
     tech.required_techs = replace_tuple(tech.required_techs, old_tech_id, new_tech_id)
 
 
+def _append_ec(effect: Effect, ec: EffectCommand):
+    key = (ec.type, ec.a, ec.b, ec.c, ec.d)
+    for c in effect.effect_commands:
+        if c.type == ec.type and c.a == ec.a and c.b == ec.b and c.c == ec.c and abs(c.d - ec.d) < 0.001:
+            return
+    effect.effect_commands.append(ec)
+
+
 def enable_tech(effect: Effect, tech_id):
-    effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 1))
+    _append_ec(effect, EffectCommand(8, tech_id, 12, -1, 1))
 
 
 def force_tech(effect: Effect, tech_id):
-    effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 2))
+    _append_ec(effect, EffectCommand(8, tech_id, 12, -1, 2))
 
 
 def disable_tech(effect: Effect, tech_id):
-    effect.effect_commands.append(EffectCommand(102, -1, -1, -1, tech_id))
+    _append_ec(effect, EffectCommand(102, -1, -1, -1, tech_id))
 
 
 def research_tech(effect: Effect, tech_id):
-    effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 3))
+    _append_ec(effect, EffectCommand(8, tech_id, 12, -1, 3))
 
 def force_research_tech(effect: Effect, tech_id):
-    effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 2))
-    effect.effect_commands.append(EffectCommand(8, tech_id, 12, -1, 3))
+    force_tech(effect, tech_id)
+    research_tech(effect, tech_id)
 
 
 def enable_unit(effect: Effect, unit_id):
-    effect.effect_commands.append(EffectCommand(2, unit_id, 1, -1, 0))
+    _append_ec(effect, EffectCommand(2, unit_id, 1, -1, 0))
 
 
 def disable_unit(effect: Effect, unit_id):
-    effect.effect_commands.append(EffectCommand(2, unit_id, 0, -1, 0))
+    _append_ec(effect, EffectCommand(2, unit_id, 0, -1, 0))
 
 
 def set_unit_attribute(effect: Effect, unit_id, class_id, attribute, value, selected=0):
@@ -265,6 +273,7 @@ def get_tech_id_by_name(data: DatFile, name: str):
     return -1
 
 def extend_effect(effect: Effect, unit_ids = [], class_ids=[]):
+    existing = set((c.type, c.a, c.b, c.c, c.d) for c in effect.effect_commands)
     command_set = set(map(lambda command: (command.type, command.c, command.d), effect.effect_commands))
     for command in command_set:
         if isinstance(unit_ids, int):
@@ -272,9 +281,17 @@ def extend_effect(effect: Effect, unit_ids = [], class_ids=[]):
         if isinstance(class_ids, int):
             class_ids = [class_ids]
         for unit_id in unit_ids:
-            effect.effect_commands.append(EffectCommand(command[0], unit_id, -1, command[1], command[2]))
+            ec = EffectCommand(command[0], unit_id, -1, command[1], command[2])
+            key = (ec.type, ec.a, ec.b, ec.c, ec.d)
+            if key not in existing:
+                effect.effect_commands.append(ec)
+                existing.add(key)
         for class_id in class_ids:
-            effect.effect_commands.append(EffectCommand(command[0], -1, class_id, command[1], command[2]))
+            ec = EffectCommand(command[0], -1, class_id, command[1], command[2])
+            key = (ec.type, ec.a, ec.b, ec.c, ec.d)
+            if key not in existing:
+                effect.effect_commands.append(ec)
+                existing.add(key)
 
 
 def set_require_techs(tech: Tech, *args):
@@ -350,6 +367,7 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
 
         for eff in all_effects:
             pattern_map = defaultdict(list)
+            existing_target = defaultdict(set)
             for ec in eff.effect_commands:
                 if ec.b != -1:
                     continue
@@ -357,9 +375,12 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
                     continue
                 if ec.a in source_set:
                     pattern_map[(ec.type, ec.c, ec.d)].append(ec.a)
+                if ec.a in target_set:
+                    existing_target[(ec.type, ec.c, ec.d)].add(ec.a)
 
             for (etype, ec_attr, ec_val), existing_a in pattern_map.items():
-                missing = target_set - set(existing_a)
+                already_have = set(existing_a) | existing_target[(etype, ec_attr, ec_val)]
+                missing = target_set - already_have
                 for mid in missing:
                     eff.effect_commands.append(
                         EffectCommand(etype, mid, -1, ec_attr, ec_val)

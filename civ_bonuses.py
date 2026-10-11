@@ -155,6 +155,15 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             else:
                 tech_tree_bonus_effect_commands.append(effect_command)
 
+        _seen = set()
+        deduped = []
+        for _cmd in tech_tree_bonus_effect_commands:
+            _key = (_cmd.type, _cmd.a, _cmd.b, _cmd.c, round(_cmd.d, 3))
+            if _key not in _seen:
+                _seen.add(_key)
+                deduped.append(_cmd)
+        tech_tree_bonus_effect_commands = deduped
+
         tech = get_new_tech(reverse_name)
         set_require_techs(tech, params.switch_tech_id)
         tech.civ = i
@@ -581,7 +590,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     multiply_resource(effect, 512, 1.2 * 1.05)
     append_tech(data, tech, effect)
 
-    name = 'Early Champi'
+    name = 'Enable Champi'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
