@@ -1,5 +1,21 @@
 # AoE2DE Dat 数据结构速查
 
+## 权威参考文档
+
+> 以下网站是 AoE2DE UGC（用户生成内容）官方 Wiki，涵盖 dat 属性完整定义、XS 常量和函数、伤害计算公式等。**比本速查更全面、更权威**，遇到疑问优先查阅。
+
+| 页面 | 内容 | URL |
+|------|------|-----|
+| **Attributes** | dat 中所有 unit attribute 的完整定义（含 flag 位含义表） | https://ugc.aoe2.rocks/general/attributes/attributes/ |
+| **Constants.xs** | XS 脚本所有常量值定义 | https://ugc.aoe2.rocks/general/xs/constants/constants/ |
+| **Effects.xs** | XS 脚本 EffectFunction 实现和 xsEffectAmount 函数 | https://ugc.aoe2.rocks/general/xs/effects/effects/ |
+| **Damage Calculation** | 伤害计算公式、36 个 Damage Class 完整列表 | https://ugc.aoe2.rocks/general/damage_calculation/ |
+| **Guides / Scenario XML** | XS 脚本编写教程 | https://ugc.aoe2.rocks/general/guides/scenario-xml/ |
+| **Resources** | dat 资源类型定义 | https://ugc.aoe2.rocks/general/resources/resources/ |
+| **Tasks** | dat task（单位行为）定义 | https://ugc.aoe2.rocks/general/tasks/tasks/ |
+
+---
+
 ## DatFile 入口
 
 **核心原理**：dat 的单位表是全文明共享的，每个文明通过 `civs[civ_id].units` 覆盖表 + effect（enable/disable unit、force/disable tech）+ 科技前置关系来构建自己的单位/科技可用性。科技树 JSON（CivTechTrees 目录下）是官方单独给的参考文件，可能和 dat 不匹配。
@@ -229,6 +245,58 @@ dat 中存在一种两层科技结构：
 | 100 | — | — | Cost 乘子 | multiply_unit_cost 用这个（无 strings 条目） |
 | 103 | — | — | Cost amount | set_unit_attribute(attr=103) 修改单位成本数值（无 strings 条目） |
 | 105 | — | — | Train time | set_unit_attribute(attr=105) 修改训练时间（Corvinian Army 用的） |
+
+#### Attr 63 — Combat Ability（break_off_combat 位域）
+
+**SID = 12263**。这是一个 **Combinable bit field**，控制单位的多种攻击行为。原生定义在 `unit.type_50.break_off_combat` 字段，科技 effect 通过 type 0/4/5 的 `c=63` 来修改。
+
+> ⚠️ 这是**加法型（非异或）位域**：多个科技 ADD 同一 bit 时会数值叠加而非保持 1，导致进位错误。详见 `analyze_combat_attr.py` 的冲突扫描和修复逻辑。
+
+| Bit | 官方名称 | 含义 | 典型使用者 |
+|-----|---------|------|-----------|
+| **1** | Ignore melee and pierce armours of the targeted unit | 无视目标的近战和远程护甲 | Bessians（无视护甲攻击） |
+| **2** | Resist armour-ignoring attacks | 抵抗无视护甲的攻击（自己有护甲减免） | — |
+| **4** | Damage the targeted unit's melee and pierce armors by 1, for a minimum of 0 | 攻击时先把目标护甲 -1（Obuch 效果） | Obuch（波兰） |
+| **8** | Attack ground ability | 拥有地面攻击能力 | 攻城器、弓箭手等 |
+| **16** | Bulk volley release | 齐射/散射（kipchak/攻城武器） | Kipchak，投石机 |
+| **32** | Enable aura ability (task 155) | 启用光环能力（task 155） | Stronghold Castle、Caravanserai、Centurion |
+| **64** | Invert aura ability (task 155) to boost self | 反向光环：给自己加 buff（Monaspa），需 Auto Search = 1 | Monaspa（格鲁吉亚） |
+| **128** | Activate stringer ability (task 157) | 激活毒箭/串珠能力（task 157） | OotS（苏丹亲兵）、Curare（图皮） |
+
+**代码位置**：`analyze_combat_attr.py:8` 的 `BIT_NAMES` 字典目前还是猜测名，可参考上表更新。
+
+#### 常用 Flag 类属性速查
+
+以下 attribute 也是位域或枚举值，完整定义见 https://ugc.aoe2.rocks/general/attributes/attributes/
+
+| attr | strings SID | 名称 | 类型 | 关键字段 |
+|------|------------|------|------|---------|
+| 19 | — | Projectile Smart Mode | enum | 0=无弹道, 1=有弹道, 2=miss 仍满伤 |
+| 28 | — | Fog Visibility | enum | 0=不可见, 1=始终可见, 2=存活可见, 3=反相, 4= Doppelganger |
+| 29 | — | Occlusion Mode | bit field | 位 1=显示轮廓, 位 2=其他单位在此单位后显示轮廓, 位 4=foundation 轮廓 |
+| 30 | — | Garrison Type | bit field | 1=村民, 2=步兵, 4=骑兵, 8=僧侣, 16=牲畜, 32=攻城器, 64=船 |
+| 40 | — | Hero Status | bit field | 1=英雄, 2=不可招降, 4=自动回血, 8=默认防御姿态, 16=保护阵型, 32=删除确认, 64=英雄光环, 128=反转除 1 外所有位 |
+| 44 | — | Blast Attack Level | bit field | 0-3=伤害范围等级, 位 8=无视友军, 位 64=距离衰减（仅步兵）, 位 128=方向锥形范围 |
+| 45 | — | Blast Defense Level | enum | 0-3=对范围伤害的抗性等级 |
+| 53 | — | Terrain Restriction ID | enum | 见完整列表，常用：4=陆地, 7=除水外全部, 0=全部 |
+| 54 | — | Unit Trait | bit field | 1=可驻扎, 2=船, 4=可建造其他建筑（Serjeants）, 8=可变形（Ratha）, 16=自动侦察 |
+| 61 | — | Charge Event | 条件值 | 配合 Charge Type 使用，不同 type 下含义不同 |
+| 62 | — | Charge Type | enum | -5=建造建筑, -4=招降, -3=光环, -2=变形（攻击地面）, -1=临时变形, 1=冲锋攻击, 6-7=齐射投射物 |
+| 67 | — | Projectile Hit Mode | enum | 0=只命中目标, 1=路径上可伤单位, 2=路径上所有单位 |
+| 68 | — | Projectile Vanish Mode | enum | 0=首次命中消失, 1=穿透, 2=始终生成死亡单位 |
+| 78 | — | Obstruction Type | enum | 0/1=方形可穿过, 2/3=方形有碰撞, 4=无轮廓可穿过, 5=圆形有碰撞, 10=山专用, 12=忽略硬障碍 |
+| 79 | — | Blockage Class | enum | 0=默认, 1=资源, 2=单位, 3=建筑, 4=墙, 5=门, 6=悬崖 |
+| 80 | — | Selection Effect | enum | 0=HP 条, 1=HP 条+轮廓, 2=无, 3=轮廓 |
+| 81 | — | Special Ability | bit field | 位 3=启用冲锋攻击（task 133） |
+| 114 | — | Formation Category | enum | 0=不使用阵型, 1=机动, 2=主体, 3=远程, 4=长程, 5=保护 |
+| 127 | — | Disabled Unit Flag | bit field | 1=禁用, 2=限量生产（死亡后不可再训）, 4=限量生产（可再训） |
+| 128 | — | Attack Priority | enum | 1=单位>建筑, 2=建筑>单位, 3=仅建筑 |
+| 129 | — | Invulnerability Level | 条件值 | >0=HP 倍率, <0=固定 HP 值 |
+| 130 | — | Garrison Firepower | 条件值 | >0=DPS 倍率, <0=固定 DPS 加成 |
+| 166 | — | Undead Flag | bit field | 1=显示亡灵图形, 2=不计入击杀统计, 4=驻扎无敌 |
+| 185 | — | Fly Mode | enum | 0=所有单位, 1=所有投射物 |
+| 187 | — | Hill Mode | enum | 0=无限制（农田）, 2=仅平地（TC）, 3=允许一层高差（大多数建筑） |
+| 190 | — | Task Swap Group | enum | 0=无, 1=男村民, 2=女村民, 3=渔船 |
 
 #### 建筑附属存储量 (Storage Amount)
 编年史建筑有附属存储槽，用于建造奖励资源。每个建筑原生定义了多个 storage slot，每个 slot 固定一种资源类型（食物/石头等）。通过 type 0/4/5 修改存储量数值：

@@ -6,8 +6,14 @@ COMBAT_ATTR = 63
 CLASS_OFFSET = 900
 
 BIT_NAMES = {
-    1: 'bit1 Harass', 2: 'bit2', 4: 'bit4 Bessian', 8: 'bit8',
-    16: 'bit16', 32: 'bit32 Aura', 64: 'bit64 Aura', 128: 'bit128 OotS/Curare',
+    1: 'IgnoreMeleePierceArmor',
+    2: 'ResistArmorIgnoring',
+    4: 'DamageTargetArmorBy1',
+    8: 'AttackGround',
+    16: 'BulkVolley',
+    32: 'EnableAuraTask155',
+    64: 'InvertAuraBoostSelf',
+    128: 'ActivateStringerTask157',
 }
 
 BUILDING_NAMES = {

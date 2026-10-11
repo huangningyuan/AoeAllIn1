@@ -1,5 +1,16 @@
 # AoE2DE XS Scripting (Constants.xs & Effects.xs) 参考
 
+## 权威参考文档
+
+> **本速查的权威来源**：https://ugc.aoe2.rocks/general/ 是 AoE2DE UGC 官方 Wiki，包含完整的 Constants.xs 常量列表、Effects.xs 所有 EffectFunction 实现、以及 XS 脚本教程。本速查是精简摘录，遇到查询不到的常量或函数优先查阅该站点。
+
+| 页面 | URL |
+|------|-----|
+| Constants.xs 完整常量表 | https://ugc.aoe2.rocks/general/xs/constants/constants/ |
+| Effects.xs 函数实现 | https://ugc.aoe2.rocks/general/xs/effects/effects/ |
+| Attribute 完整定义 | https://ugc.aoe2.rocks/general/attributes/attributes/ |
+| XS 编写教程 | https://ugc.aoe2.rocks/general/guides/scenario-xml/ |
+
 ## 文件位置
 
 ``
