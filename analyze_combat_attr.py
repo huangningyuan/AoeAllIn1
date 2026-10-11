@@ -46,13 +46,13 @@ def _parse_xs():
     with open(CONST_PATH, 'r', encoding='utf-8') as f:
         const_content = f.read()
     all_consts = {}
-    for m in re.finditer(r'(\w+ID|c\w+Class|c\w+ID)\s*=\s*(-?\d+)', const_content):
+    for m in re.finditer(r'(\w+ID|c\w+)\s*=\s*(-?\d+)', const_content):
         all_consts[m.group(1)] = int(m.group(2))
 
     with open(XS_PATH, 'r', encoding='utf-8') as f:
         xs_lines = f.readlines()
     for line in xs_lines:
-        m = re.search(r'(\w+ID|c\w+Class)\s*=\s*(-?\d+)', line)
+        m = re.search(r'(\w+ID|c\w+)\s*=\s*(-?\d+)', line)
         if m:
             all_consts.setdefault(m.group(1), int(m.group(2)))
 
@@ -71,7 +71,7 @@ def _parse_xs():
             if params_str.strip():
                 for p in params_str.split(','):
                     p = p.strip()
-                    pname = p.split()[-1].split('=')[0].strip()
+                    pname = p.split('=')[0].strip().split()[-1]
                     params.append(pname)
             func_params[current_func] = params
             brace_depth = line.count('{') - line.count('}')
