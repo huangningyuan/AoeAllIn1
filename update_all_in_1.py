@@ -15,6 +15,7 @@ from ftt import deal_ftt
 from genieutils.datfile import DatFile
 from unique_techs import add_unique_techs
 from utils import auto_extend_building_effects
+from analyze_combat_attr import scan_attr63_conflicts, apply_attr63_fixes
 import mutex
 
 
@@ -62,6 +63,13 @@ def update_all_in_1(debug = True):
         "tc": (TC_IDS_ORIGINAL, TC_IDS),
         "castle": (CASTLE_IDS_ORIGINAL, CASTLE_IDS),
     })
+    print('Scanning attr=63 combat aura conflicts...')
+    plan = scan_attr63_conflicts(data)
+    if plan:
+        a, j, t = apply_attr63_fixes(data, plan)
+        print('  %d conflicts: %d techs appended, %d joint techs created, %d corrections.' % (len(plan), a, j, t))
+    else:
+        print('  No conflicts found.')
     print('Saving Data...')
     data.save(target_file_name)
     print('Data saved.')
