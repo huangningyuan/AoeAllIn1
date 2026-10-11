@@ -365,13 +365,15 @@ def auto_extend_building_effects(data: DatFile, building_ids_by_group: dict) -> 
         source_set = set(source_ids)
         target_set = set(target_ids)
 
-        for eff in all_effects:
+        for eff_idx, eff in enumerate(all_effects):
             pattern_map = defaultdict(list)
             existing_target = defaultdict(set)
             for ec in eff.effect_commands:
                 if ec.b != -1:
                     continue
                 if ec.type not in target_types:
+                    continue
+                if eff_idx == 340 and ec.c == 0:
                     continue
                 if ec.a in source_set:
                     pattern_map[(ec.type, ec.c, ec.d)].append(ec.a)
