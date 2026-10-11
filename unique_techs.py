@@ -591,6 +591,13 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # ===== APPLY MUTEX (delayed, after all effect modifications) =====
     apply_mutex_groups(data, result)
 
+    # ===== DISABLE UNREPLACED COPIES IN ORIGINAL EFFECTS =====
+    # 必须在 apply_mutex_groups 之后调用：
+    #   mutex 对多副本 source 会在原 effect 里 disable 副本 tech（无 dedup 地 append），
+    #   这里补上 mutex 未覆盖的单副本场景，并通过 dedup 防止重复追加。
+    from unique_techs_config_loader import disable_unreplaced_copies_in_original_effects
+    disable_unreplaced_copies_in_original_effects(data, result)
+
     # ===== FOOTER: spacer techs =====
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())

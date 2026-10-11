@@ -202,3 +202,34 @@ def apply_mutex_groups(data: DatFile, result: dict, extra_groups: list[list[int]
             "Techs": group_techs,
         }
         _mutex.LINKED_TECHS.setdefault('LinkedTechs', []).append(entry)
+
+
+def disable_unreplaced_copies_in_original_effects(data: DatFile, result: dict):
+    """
+    对于JSON配置的独特科技副本，如果副本仍然使用原始source tech的effect（未被bind_effect替换），
+    则在原始effect中添加 disable_tech(type=102) 指令。
+
+    目的：防止玩家先在原版研发了 source tech，然后在游戏内开启 AllIn1 后又研发副本 tech，
+    导致同一个 effect 被执行两次、属性加成重复。
+
+    判断依据：副本 tech 的 effect_id 是否仍等于 data.techs[source_id].effect_id。
+    被 bind_effect 替换过的副本（effect_id 指向新建的 effect）会被自动跳过，
+    因为它们和原 effect 无关。
+    """
+    from utils import disable_tech
+
+    all_tech_ids_map = result['source_id_to_all_tech_ids']
+
+    for source_id, copy_tech_ids in all_tech_ids_map.items():
+        orig_effect_id = data.techs[source_id].effect_id
+        orig_effect = data.effects[orig_effect_id]
+
+        existing_disable = {
+            cmd.d for cmd in orig_effect.effect_commands
+            if cmd.type == 102
+        }
+
+        for copy_tid in copy_tech_ids:
+            if data.techs[copy_tid].effect_id == orig_effect_id:
+                if copy_tid not in existing_disable:
+                    disable_tech(orig_effect, copy_tid)
