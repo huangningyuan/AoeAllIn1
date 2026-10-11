@@ -12,7 +12,8 @@ from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
-    set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect
+    set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
+    set_tech_discount
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
@@ -535,6 +536,51 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)
     set_resource(effect, 502, (athenians_lumberjack_food + shu_lumberjack_food) * 1.15 * 1.05 * (1 + 0.2 * 1.4) / 1.2)
+    append_tech(data, tech, effect)
+
+    name = 'Athenians + Armenians Age2'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    multiply_resource(effect, 502, (1 + 0.2 * 1.4) / 1.2)
+    append_tech(data, tech, effect)
+
+    name = 'Athenians + Armenians Age3'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    multiply_resource(effect, 502, (1 + 0.1 * 1.4) / 1.1)
+    append_tech(data, tech, effect)
+
+    name = 'Cheap archery attack (Shu + Bulgarians)'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    for i in (199, 200, 201):
+        for cost in techs[i].resource_costs:
+            if cost.type == 0:
+                set_tech_cost(effect, i, cost.type, cost.amount * 0.75 * 0.5)
+    append_tech(data, tech, effect)
+
+    name = 'Armenians + Poles Age1'
+    tech = get_new_tech(name)
+    set_require_techs(tech, 278, params.switch_tech_id)
+    effect = get_new_effect('Armenians + Poles + Romans + Koreans Mining')
+    multiply_resource(effect, 241, (1 + (0.15 * 1.4) / 1.15) * 1.05 * 1.2)
+    disable_tech(effect, 806)
+    disable_tech(effect, 807)
+    tech_id, effect_id = append_tech(data, tech, effect)
+    name = 'Armenians + Poles Age2'
+    tech = get_new_tech(name)
+    set_require_techs(tech, 279, params.switch_tech_id)
+    tech.effect_id = effect_id
+    append_tech(data, tech)
+
+    name = 'Puru + Koreans + Romans Stone Mining food generation'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    multiply_resource(effect, 512, 1.2 * 1.05)
     append_tech(data, tech, effect)
 
     name = 'Early Champi'

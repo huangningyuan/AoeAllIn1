@@ -44,7 +44,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, append_tech_tech_id, -1)
                 techs[i].required_techs = replace_tuple(techs[i].required_techs, achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
-            name = 'Elite War Chariot'
             name = 'enable dock, port'
             append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
             tech = get_new_tech(name)
@@ -181,18 +180,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 1204)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-            name = 'Athenians + Armenians Age2'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            multiply_resource(effect, 502, (1 + 0.2 * 1.4) / 1.2)
-            append_tech(data, tech, effect)
-            name = 'Athenians + Armenians Age3'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            multiply_resource(effect, 502, (1 + 0.1 * 1.4) / 1.1)
-            append_tech(data, tech, effect)
             # Athenians lumberjack
             effect = check_effect(effects, 1119)
             for command in effect.effect_commands:
@@ -200,13 +187,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     command.b = 1
                     break
         case 'Aztecs':
-            name = 'military units train faster ext'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (23, 44, 47):
+            effect = check_effect(effects, 447)
+            original_class = set()
+            for command in effect.effect_commands:
+                if command.type == 5 and command.a == -1 and command.c == 101:
+                    original_class.add(command.b)
+            for i in {23, 44, 47} - original_class:
                 multiply_unit_attribute(effect, -1, i, 101, 1 / 1.15)
-            append_tech(data, tech, effect)
         case 'Bengalis':
             effect = check_effect(effects, 865)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -261,15 +248,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     set_tech_discount(effect, i, 0, 0.5)
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
-            name = 'Cheap archery attack (Shu + Bulgarians)'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (199, 200, 201):
-                for cost in techs[i].resource_costs:
-                    if cost.type == 0:
-                        set_tech_cost(effect, i, cost.type, cost.amount * 0.75 * 0.5)
-            append_tech(data, tech, effect)
             name = 'Cheap cavalry armor'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -345,19 +323,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             tech.effect_id = 651
             append_tech(data, tech)
-            # attack type for manipur
-            archer_armor_class = 15
-            addtional_attack = AttackOrArmor(archer_armor_class, 0)
-            for unit in units:
-                if unit and unit.creatable and unit.class_ == 12 and len(unit.creatable.train_locations) > 0:
-                    archer_attack_flag = False
-                    for attack in unit.type_50.attacks:
-                        if attack.class_ == archer_armor_class:
-                            archer_attack_flag = True
-                            break
-                    if not archer_attack_flag:
-                        for civ in data.civs:
-                            civ.units[unit.id].type_50.attacks.append(addtional_attack)
         case 'Byzantines':
             name = 'Byzantines Imperial Camel Discount'
             tech = get_new_tech(name)
@@ -365,14 +330,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             multiply_unit_cost(effect, 207, -1, 0.75)
             append_tech(data, tech, effect)
-        case 'Celts':
-            # siege fire rate
-            effect = check_effect(effects, 385)
-            original_classes = set(map(lambda command: command.b, effect.effect_commands))
-            original_units = set(map(lambda command: command.a, effect.effect_commands))
-            for i in constants.siege_units:
-                if i not in original_units and units[i].class_ not in original_classes:
-                    multiply_unit_attribute(effect, i, -1, 10, 0.8)
         case 'Chinese':
             name = 'TC Pop and LoS ext'
             tech = get_new_tech(name)
@@ -383,14 +340,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 plus_unit_attribute(effect, i, -1, 1, 7)
                 plus_unit_attribute(effect, i, -1, 23, 7)
             append_tech(data, tech, effect)
-            name = 'enable Rocket Cart'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 979)
-            move_unit_button(effect, 1904, 22)
-            move_unit_button(effect, 1907, 22)
-            move_tech_button(effect, 980, 27)
+            # name = 'enable Rocket Cart'
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+            # effect = get_new_effect(name)
+            # research_tech(effect, 979)
+
             append_tech(data, tech, effect)
             name = 'enable Dragon Ship'
             tech = get_new_tech(name)
@@ -459,8 +414,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in constants.gunpowder_units:
                 if i not in origin_units:
                     extend_units.append(i)
-                    # plus_unit_armor(effect, i, -1, 1, 3)
-                    # plus_unit_armor(effect, i, -1, 1, 4)
             extend_effect(effect, extend_units)
             name = 'enable Imperial Camel Rider'
             tech = get_new_tech(name)
@@ -787,19 +740,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 multiply_unit_hp(effect, i, -1, 2)
             append_tech(data, tech, effect)
         case 'Poles':
-            name = 'Armenians + Poles Age1'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 278, params.switch_tech_id)
-            effect = get_new_effect('Armenians + Poles + Romans + Koreans Mining')
-            multiply_resource(effect, 241, (1 + (0.15 * 1.4) / 1.15) * 1.05 * 1.2)
-            disable_tech(effect, 806)
-            disable_tech(effect, 807)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            name = 'Armenians + Poles Age2'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 279, params.switch_tech_id)
-            tech.effect_id = effect_id
-            append_tech(data, tech)
             name = 'Reverse Poles Stone Mining Gold'
             tech = get_new_tech(name)
             set_require_techs(tech, 806, params.switch_tech_id)
@@ -885,12 +825,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.repeatable = 1
             effect = get_new_effect(name)
             plus_unit_attribute(effect, 82, -1, 71, 2, 1)
-            append_tech(data, tech, effect)
-            name = 'Puru + Koreans + Romans Stone Mining food generation'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            multiply_resource(effect, 512, 1.2 * 1.05)
             append_tech(data, tech, effect)
             name = 'Cavalry Auras'
             tech = get_new_tech(name)
