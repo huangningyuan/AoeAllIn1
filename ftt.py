@@ -4,7 +4,7 @@ from genieutils.effect import EffectCommand
 
 from all_in_1_params import All_In_1_Params
 from constants import ELITE_PHALANGITE_TECH_ID
-from utils import enable_tech, append_tech
+from utils import enable_tech, append_tech, set_require_techs
 from utils import get_new_effect
 from utils import get_new_tech
 
@@ -43,7 +43,7 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     name = 'All in 1 FTT'
     tech = get_new_tech()
     tech.name = name
-    tech.required_techs = (params.switch_tech_id, -1, -1, -1, -1, -1)
+    set_require_techs(tech, params.switch_tech_id)
     tech.required_tech_count = 1
     tech.civ = -1
     effect = get_new_effect()
