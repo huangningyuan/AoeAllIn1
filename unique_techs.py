@@ -412,25 +412,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
             extend_units.append(unit)
     extend_effect(effect, extend_units)
 
-    # --- Maghrebi Camels source_id=579 ---
-    ma_ca_effect_id = sid2effect[579]
-    effect = check_effect(effects, ma_ca_effect_id)
-    original_units = set(map(lambda command: command.a, effect.effect_commands))
-    camels = []
-    for i, unit in enumerate(units):
-        if unit and unit.creatable and unit.type_50:
-            for armor in unit.type_50.armours:
-                if armor.class_ == 30:
-                    camels.append(i)
-                    break
-    extend_units = list()
-    for i in camels:
-        if i not in original_units:
-            extend_units.append(i)
-    extend_effect(effect, extend_units)
-
-
-
     # ===== COMBINATION VARIANTS =====
 
     # --- Paper Money + Grand Trunk Road ---
