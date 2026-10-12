@@ -132,6 +132,7 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 1750, 24)
     # Longship
     move_unit_button(effect, 250, 21)
+    move_unit_button(effect, 533, 21)
     move_tech_button(effect, 372, 26)
     # Turtle ship
     move_unit_button(effect, 831, 22)
