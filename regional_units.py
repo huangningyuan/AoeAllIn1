@@ -33,6 +33,8 @@ WAR_CHARIOT_UPGRADE_TECH_IDS = {1171}
 
 CAMEL_ID = 329
 
+ELITE_EAGLE_TECH_ID = 434
+
 
 def _age_to_replacement(age_id: int, build_id: int,
                         params: All_In_1_Params) -> int | None:
@@ -143,6 +145,13 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
     regional_unit_ids = set(regional_units.keys())
     unit_to_make_avail_tech = scan_dat_make_avail(data, regional_unit_ids)
 
+    tech_display_names: dict[int, str] = {}
+    for info in regional_units.values():
+        if info['trigger_tech_id'] is not None:
+            tech_display_names[info['trigger_tech_id']] = info['name']
+    for tid, info in regional_techs.items():
+        tech_display_names[tid] = info['name']
+
     make_avail_techs_seen = set()
     upgrade_techs_seen = set()
 
@@ -160,9 +169,10 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
             make_avail_techs_seen.add(make_avail_tid)
 
             orig = data.techs[make_avail_tid]
-            dup = _dup_tech_from_orig(orig, f'Dup {orig.name}', params,
+            display_name = tech_display_names.get(make_avail_tid, orig.name)
+            dup = _dup_tech_from_orig(orig, f'Dup {display_name}', params,
                                       unit_build_id=info.get('build_id', -1))
-            effect = get_new_effect(f'Dup {orig.name} effect')
+            effect = get_new_effect(f'Dup {display_name} effect')
             force_research_tech(effect, make_avail_tid)
             append_tech(data, dup, effect)
         else:
@@ -187,7 +197,7 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
     for info in regional_units.values():
         if info['trigger_tech_id'] is not None:
             all_upgrade_orig_ids.add(info['trigger_tech_id'])
-    all_upgrade_orig_ids -= HOPLITE_UPGRADE_TECH_IDS | WAR_CHARIOT_UPGRADE_TECH_IDS
+    all_upgrade_orig_ids -= HOPLITE_UPGRADE_TECH_IDS | WAR_CHARIOT_UPGRADE_TECH_IDS | {ELITE_EAGLE_TECH_ID}
     all_upgrade_orig_ids -= HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS
     all_upgrade_orig_ids -= make_avail_techs_seen
 
@@ -210,7 +220,8 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
             continue
 
         reqs = _early_upgrade_reqs(orig, params)
-        req_tech = get_new_tech(f'Requirement {orig.name}')
+        display_name = tech_display_names.get(orig_tid, orig.name)
+        req_tech = get_new_tech(f'Requirement {display_name}')
         set_require_techs(req_tech, *reqs)
         req_id = append_tech(data, req_tech)
         add_require_tech(orig, req_id)

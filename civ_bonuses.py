@@ -154,9 +154,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     continue
                 else:
                     tech_tree_bonus_effect_commands.append(effect_command)
-            elif effect_command.type == 2:
+            elif effect_command.type == 2 and effect_command.b == 0:
                 enable_unit(reverse_effect, effect_command.a)
-            elif effect_command.b == 0:
                 continue
             elif effect_command.type == 18:
                 continue
@@ -650,22 +649,16 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     force_research_tech(effect, e_war_chariot_tech_id)
     append_tech_effect(data, tech, effect)
 
-    name = 'enable Ibirapema'
+    name = 'elite eagle'
     tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
     effect = get_new_effect(name)
-    force_research_tech(effect, 1390)
-    move_unit_button(effect, 2582, 31)
-    move_unit_button(effect, 2584, 31)
-    move_tech_button(effect, ELITE_IBIRAPEMA_TEMP_TECH_ID, 32)
-    append_tech(data, tech, effect)
-    techs[ELITE_IBIRAPEMA_TEMP_TECH_ID].civ = -1
+    force_tech(effect, 434)
+    append_tech_effect(data, tech, effect)
 
-    name = 'enable Temple Guard'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
-    force_research_tech(effect, 1400)
     move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
     elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
     elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
@@ -675,7 +668,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         move_unit_button(effect, i, 31, 0)
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
-    techs[ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
 
     additional_tc_ids = [2275, 2276, 2277]
     effect = check_effect(effects, 421)
