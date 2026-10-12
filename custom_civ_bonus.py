@@ -124,6 +124,13 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 320)
             append_tech(data, tech, effect)
 
+            name = 'Force Elite Steppe Lancer for Chronicle'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
+            effect = get_new_effect(name)
+            force_tech(effect, 715)
+            append_tech(data, tech, effect)
+
             name = 'enable Imp units'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
@@ -346,14 +353,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, 246)
             tech.effect_id = 1010
             append_tech(data, tech)
-
-        case 'Cumans':
-            name = 'Feudal Siege'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.feudal_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 49)
-            append_tech(data, tech, effect)
         case 'Georgians':
             # Cavalry regeneration ext
             for i in (954, 961):
@@ -454,7 +453,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 multiply_unit_cost(effect, i, -1, 0.8)
             name = 'Condottiero'
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, 522)
             append_tech(data, tech, effect)

@@ -1,28 +1,28 @@
 import copy
-import constants
-from constants import \
-    ARCHERY_RANGE_ID, BARRACK_ID, BURGUNDIAN_ECO_TECH_DISCOUNT, CASTLE_ID, CHRONICLE_CIV_IDS, DRAVIDIANS_TECH_DISCOUNT, \
-    ELITE_IBIRAPEMA_TEMP_TECH_ID, ELITE_PHALANGITE_TECH_ID, ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, MONESTARY_ID, TEMPLE_GUARD_IDS
 
 from genieutils.datfile import DatFile
 from genieutils.effect import EffectCommand
 
+import constants
 from all_in_1_params import All_In_1_Params
+from constants import \
+    ARCHERY_RANGE_ID, BARRACK_ID, BURGUNDIAN_ECO_TECH_DISCOUNT, CASTLE_ID, CHRONICLE_CIV_IDS, \
+    ELITE_IBIRAPEMA_TEMP_TECH_ID, ELITE_PHALANGITE_TECH_ID, ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, \
+    MONESTARY_ID, TEMPLE_GUARD_IDS
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from regional_units import activate_all_regional_units
+from utils import add_require_tech
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
     set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
-    set_tech_discount, check_effect, multiply_unit_attribute
+    check_effect, multiply_unit_attribute, disable_unit
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
-from utils import add_require_tech
 from utils import replace_require_tech
-from utils import research_tech
 
 TECH_TO_REMOVE = [286, 287, 500,
                   641, 649, 664, 699, 700, 701,
@@ -85,10 +85,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         civ_imp_bonus_ids.append(list())
         civ_custom_bonus_ids.append(list())
         civ_ut_ids.append(list())
-    for i, tech in enumerate(techs):
+    for i in range(constants.ORIGINAL_TECH_NUM):
+        tech = techs[i]
         if tech.civ == -1:
-            continue
-        if tech.effect_id == -1:
             continue
         research_location = tech.research_locations[0]
         if research_location.location_id == CASTLE_ID and (
@@ -149,7 +148,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     continue
                 else:
                     tech_tree_bonus_effect_commands.append(effect_command)
-            elif effect_command.type == 2 and effect_command.b == 0:
+            elif effect_command.type == 2:
+                enable_unit(reverse_effect, effect_command.a)
+            elif effect_command.b == 0:
                 continue
             elif effect_command.type == 18:
                 continue
@@ -192,7 +193,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             name = civ_name + " Feudal Bonus"
             effect = get_new_effect(name)
             for bonus_id in bonus_ids:
-                research_tech(effect, bonus_id)
+                force_research_tech(effect, bonus_id)
 
             tech = get_new_tech(name)
             set_require_techs(tech, params.feudal_duplicate_tech_id, params.switch_tech_id)
@@ -207,7 +208,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             name = civ_name + " Castle Bonus"
             effect = get_new_effect(name)
             for bonus_id in bonus_ids:
-                research_tech(effect, bonus_id)
+                force_research_tech(effect, bonus_id)
 
             tech = get_new_tech(name)
             set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
@@ -222,7 +223,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             name = civ_name + " Imp Bonus"
             effect = get_new_effect(name)
             for bonus_id in bonus_ids:
-                research_tech(effect, bonus_id)
+                force_research_tech(effect, bonus_id)
 
             tech = get_new_tech(name)
             set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
@@ -250,11 +251,14 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 elif 103 in tech.required_techs:
                     replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
                 add_require_tech(tech, params.switch_tech_id, update_count=True)
-                effect = effects[tech.effect_id]
-                if len(effect.effect_commands) > 0:
-                    first_command = effect.effect_commands[0]
-                else:
+                if tech.effect_id == -1:
                     first_command = None
+                else:
+                    effect = effects[tech.effect_id]
+                    if len(effect.effect_commands) > 0:
+                        first_command = effect.effect_commands[0]
+                    else:
+                        first_command = None
                 if first_command and first_command.type == 1 and first_command.a in (91, 92, 93, 94):
                     new_effect = copy.deepcopy(effect)
                     for command in new_effect.effect_commands:
@@ -271,7 +275,10 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     new_tech_id, effect_id = append_tech(data, tech, new_effect)
                     disable_tech(reverse_effect, new_tech_id)
                 else:
-                    disable_tech(reverse_effect, append_tech(data, tech))
+                    effect = get_new_effect(tech.name)
+                    force_research_tech(effect, tech_id)
+                    tech_id, effect_id = append_tech(data, tech, effect)
+                    disable_tech(reverse_effect, tech_id)
 
                 # Incas + Khitans/Romans Blacksmith upgrade
                 if tech_id in (474, 475, 476, 477, 478, 479):
@@ -706,6 +713,15 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             creatable.train_locations[1].unit_id = 2172
             if civ_id in CHRONICLE_CIV_IDS:
                 creatable.train_locations[0].unit_id = 45
+
+    name = 'Disable units'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id)
+    effect = get_new_effect(name)
+    for i in (562, 584):
+        disable_unit(effect, i)
+    append_tech(data, tech, effect)
+
     sample_units = data.civs[0].units
     split_line_unit = get_new_unit(sample_units)
     for civ in data.civs:

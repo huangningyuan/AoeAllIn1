@@ -5,12 +5,11 @@ from all_in_1_params import All_In_1_Params
 from genieutils.datfile import DatFile
 
 from utils import append_tech
-from utils import disable_tech
 from utils import enable_unit
 from utils import force_research_tech
-from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
+from utils import replace_require_tech
 from utils import set_require_techs
 
 BARRACK_ID = 12
@@ -51,7 +50,7 @@ def _dup_tech_from_orig(orig, dup_name: str, params: All_In_1_Params,
     if build_id == -1 and orig.research_locations:
         build_id = orig.research_locations[0].location_id
 
-    req_ids = [r for r in orig.required_techs if r != -1]
+    req_ids = [r for r in orig.required_techs if r != -1 and r != 104]
 
     replaced = []
     for r in req_ids:
@@ -113,6 +112,7 @@ def scan_dat_make_avail(data: DatFile, regional_unit_ids: set[int]):
 def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
     """Global one-shot activation for all regional units and their upgrades."""
     print('Activating regional units...')
+    append_tech(data, get_new_tech('Enable regional units'), get_new_effect('Enable regional units effect'))
 
     regional_units, regional_techs = scan_regional_nodes()
     regional_unit_ids = set(regional_units.keys())
@@ -180,12 +180,15 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
             continue
         upgrade_techs_seen.add(orig_tid)
 
-        dup = _dup_tech_from_orig(orig, f'Dup {orig.name}', params)
-        effect = get_new_effect(f'Dup {orig.name} effect')
-        force_tech(effect, orig_tid)
+        reqs = [r for r in orig.required_techs if r != -1 and r != 104]
+        set_require_techs(orig, *reqs)
 
-        new_tid, _ = append_tech(data, dup, effect)
-        disable_tech(data.effects[orig.effect_id], new_tid)
+        build_id = orig.research_locations[0].location_id if orig.research_locations else -1
+        for age_tid in (101, 102, 103, 115):
+            if age_tid in orig.required_techs:
+                rep = _age_to_replacement(age_tid, build_id, params)
+                if rep is not None:
+                    replace_require_tech(orig, age_tid, rep)
 
     print(f'Regional units activated: {len(make_avail_techs_seen)} make-avail, '
-          f'{len(upgrade_techs_seen)} upgrade duplicates')
+          f'{len(upgrade_techs_seen)} upgrade techs patched')
