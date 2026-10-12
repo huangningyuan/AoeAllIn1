@@ -124,12 +124,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 320)
             append_tech(data, tech, effect)
 
-            # name = 'Force Elite Steppe Lancer for Chronicle'
-            # tech = get_new_tech(name)
-            # set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
-            # effect = get_new_effect(name)
-            # force_tech(effect, 715)
-            # append_tech(data, tech, effect)
+            name = 'Force Elite Steppe Lancer for Chronicle'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
+            effect = get_new_effect(name)
+            force_tech(effect, 715)
+            append_tech(data, tech, effect)
 
             name = 'enable Imp units'
             tech = get_new_tech(name)
