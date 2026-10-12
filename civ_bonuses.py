@@ -25,9 +25,10 @@ from utils import get_new_tech
 from utils import replace_require_tech
 
 TECH_TO_REMOVE = [286, 287, 500,
-                  641, 649, 664, 699, 700, 701,
-                  702, 788, 789, 792, 809, 810,
-                  811, 806, 807, 808, 957,
+                  641, 649, 664,
+                  699, 700, 701, 702, 788, 789,
+                  # 792, 809, 810, 811,
+                  806, 807, 808, 957,
                   721, 288, 388,
                   323, 324, 326, 299, 303, 305,
                   310, 867, 868, 869, 1071,
@@ -98,8 +99,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if research_location.location_id >= 0:
             continue
         if research_location.research_time > 0:
-            continue
-        if tech.name.endswith('(make avail)'):
             continue
         if tech.name.find('post-imp') > -1:
             continue
@@ -720,6 +719,14 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     for i in (562, 584):
         disable_unit(effect, i)
+    append_tech(data, tech, effect)
+
+    name = 'Enable Feudal Units'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    # stable
+    force_research_tech(effect, 25)
     append_tech(data, tech, effect)
 
     sample_units = data.civs[0].units

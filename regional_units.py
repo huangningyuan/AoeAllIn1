@@ -4,12 +4,12 @@ import os
 from all_in_1_params import All_In_1_Params
 from genieutils.datfile import DatFile
 
+from utils import add_require_tech
 from utils import append_tech
 from utils import enable_unit
 from utils import force_research_tech
 from utils import get_new_effect
 from utils import get_new_tech
-from utils import replace_require_tech
 from utils import set_require_techs
 
 BARRACK_ID = 12
@@ -30,6 +30,8 @@ HOPLITE_UPGRADE_TECH_IDS = {1137}
 WAR_CHARIOT_UNIT_IDS = {2150, 2151}
 WAR_CHARIOT_MAKE_AVAIL_TECH_IDS = {1169}
 WAR_CHARIOT_UPGRADE_TECH_IDS = {1171}
+
+CAMEL_ID = 329
 
 
 def _age_to_replacement(age_id: int, build_id: int,
@@ -60,10 +62,33 @@ def _dup_tech_from_orig(orig, dup_name: str, params: All_In_1_Params,
     if params.switch_tech_id not in replaced:
         replaced.append(params.switch_tech_id)
 
-    dup = get_new_tech(dup_name)
-    dup.civ = -1
-    set_require_techs(dup, *replaced)
-    return dup
+    tech = get_new_tech(dup_name)
+    set_require_techs(tech, *replaced)
+    return tech
+
+
+def _age_to_previous_switch(age_id: int, params: All_In_1_Params) -> int | None:
+    if age_id == FEUDAL_AGE_TECH:
+        return params.switch_tech_id
+    elif age_id == CASTLE_AGE_TECH:
+        return params.feudal_duplicate_tech_id
+    elif age_id in (IMPERIAL_AGE_TECH, DUPLICATE_IMPERIAL_TECH):
+        return params.castle_duplicate_tech_id
+    return None
+
+
+def _early_upgrade_reqs(orig, params: All_In_1_Params) -> list[int]:
+    req_ids = [r for r in orig.required_techs if r != -1 and r != 104]
+
+    replaced = []
+    for r in req_ids:
+        rep = _age_to_previous_switch(r, params)
+        replaced.append(rep if rep is not None else r)
+
+    if params.switch_tech_id not in replaced:
+        replaced.append(params.switch_tech_id)
+
+    return replaced
 
 
 def scan_regional_nodes():
@@ -123,7 +148,7 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
 
     # --- Base units ---
     for unit_id, info in sorted(regional_units.items()):
-        if unit_id in HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS:
+        if unit_id in HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS | {CAMEL_ID}:
             continue
         if info['link_id'] is not None:
             continue
@@ -180,15 +205,15 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
             continue
         upgrade_techs_seen.add(orig_tid)
 
-        reqs = [r for r in orig.required_techs if r != -1 and r != 104]
-        set_require_techs(orig, *reqs)
-
         build_id = orig.research_locations[0].location_id if orig.research_locations else -1
-        for age_tid in (101, 102, 103, 115):
-            if age_tid in orig.required_techs:
-                rep = _age_to_replacement(age_tid, build_id, params)
-                if rep is not None:
-                    replace_require_tech(orig, age_tid, rep)
+        if build_id != BARRACK_ID:
+            continue
+
+        reqs = _early_upgrade_reqs(orig, params)
+        req_tech = get_new_tech(f'Requirement {orig.name}')
+        set_require_techs(req_tech, *reqs)
+        req_id = append_tech(data, req_tech)
+        add_require_tech(orig, req_id)
 
     print(f'Regional units activated: {len(make_avail_techs_seen)} make-avail, '
           f'{len(upgrade_techs_seen)} upgrade techs patched')

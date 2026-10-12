@@ -124,12 +124,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 320)
             append_tech(data, tech, effect)
 
-            name = 'Force Elite Steppe Lancer for Chronicle'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
-            effect = get_new_effect(name)
-            force_tech(effect, 715)
-            append_tech(data, tech, effect)
+            # name = 'Force Elite Steppe Lancer for Chronicle'
+            # tech = get_new_tech(name)
+            # set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
+            # effect = get_new_effect(name)
+            # force_tech(effect, 715)
+            # append_tech(data, tech, effect)
 
             name = 'enable Imp units'
             tech = get_new_tech(name)
@@ -358,21 +358,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (954, 961):
                 extend_effect(check_effect(effects, i), [1263])
         case 'Gurjaras':
-            name = 'enable camel scout'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.feudal_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 1755)
-            append_tech(data, tech, effect)
-            name = 'enable shrivamsha'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 1751)
-            move_unit_button(effect, 1751, 22)
-            move_unit_button(effect, 1753, 22)
-            move_tech_button(effect, 843, 27)
-            append_tech(data, tech, effect)
             name = 'enable elite shrivamsha'
             tech = get_new_tech(name)
             set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
@@ -717,31 +702,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             multiply_resource(effect, 241, 1 / 1.15)
             append_tech(data, tech, effect)
-            name = 'Disable origin Villager Regeneration'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            disable_tech(effect, 792)
-            disable_tech(effect, 809)
-            disable_tech(effect, 810)
-            disable_tech(effect, 811)
-            append_tech(data, tech, effect)
-            name = 'Villager Regeneration Feudal'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.feudal_duplicate_tech_id, params.switch_tech_id)
-            tech.effect_id = 815
-            append_tech(data, tech)
-            append_tech(data, tech)
-            name = 'Villager Regeneration Castle'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            tech.effect_id = 815
-            append_tech(data, tech)
-            name = 'Villager Regeneration Imp'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
-            tech.effect_id = 815
-            append_tech(data, tech)
         case 'Portuguese':
             name = 'Foraging Wood'
             tech = get_new_tech(name)

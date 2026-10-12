@@ -125,6 +125,10 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, 1171, 32)
     # slinger
     move_unit_button(effect, 185, 21)
+    # shrivamsha
+    move_unit_button(effect, 1751, 22)
+    move_unit_button(effect, 1753, 22)
+    move_tech_button(effect, 843, 27)
     append_tech(data, tech, effect)
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
