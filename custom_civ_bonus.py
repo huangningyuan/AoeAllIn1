@@ -308,6 +308,33 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 65)
             append_tech(data, tech, effect)
+            name = 'Dup. Feudal Eco tech Requirement'
+            origin_tech_id = 758
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, origin_tech_id)
+            tech.required_tech_count = 1
+            tech_id = append_tech(data, tech)
+            for tech in techs:
+                if origin_tech_id in tech.required_techs:
+                    replace_require_tech(tech, origin_tech_id, tech_id)
+            name = 'Dup. Castle Eco tech Requirement'
+            origin_tech_id = 759
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, origin_tech_id)
+            tech.required_tech_count = 1
+            tech_id = append_tech(data, tech)
+            for tech in techs:
+                if origin_tech_id in tech.required_techs:
+                    replace_require_tech(tech, origin_tech_id, tech_id)
+            name = 'Dup. Imperial Eco tech Requirement'
+            origin_tech_id = 760
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, origin_tech_id)
+            tech.required_tech_count = 1
+            tech_id = append_tech(data, tech)
+            for tech in techs:
+                if origin_tech_id in tech.required_techs:
+                    replace_require_tech(tech, origin_tech_id, tech_id)
         case 'Burmese':
             name = 'Cheap Monastery Techs'
             tech = get_new_tech(name)

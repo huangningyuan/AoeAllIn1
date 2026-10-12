@@ -5,11 +5,10 @@ from utils import get_new_tech
 from utils import replace_require_tech
 from utils import set_require_techs
 
-FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 659, 660, 661, 666, 667, 668, 755,
-                            906]
+FEUDAL_REQUIRE_TECH_LIST = [14, 55, 87, 202, 213, 216, 278, 659, 906]
 CASTLE_AGE_REQUIRE_TECH_LIST = [13, 48, 162, 182, 197, 203, 207, 249, 279]
-IMPERIAL_AGE_REQUIRE_TECH_LIST = [12, 47, 96, 209, 217, 221, 264, 429, 436, 85, 377, 218,
-                                  1291]
+IMPERIAL_AGE_REQUIRE_TECH_LIST = [12, 47, 96, 209, 217, 221, 264, 429, 436, 85, 377, 218, 1454,
+                                  1352, 1291, 434, 1391, 1401]
 EAGLE_WARRIOR_TECH_ID = 384
 ELITE_EAGLE_TECH_ID = 434
 FLEMISH_REVOLUTION_TECH_ID = 755
