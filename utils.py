@@ -15,6 +15,8 @@ from genieutils.unit import ResourceCost
 from genieutils.unit import ResourceStorage
 from genieutils.unit import Unit
 
+from all_in_1_params import All_In_1_Params
+
 
 def get_civ_name(civs: list[Civ], idx):
     match idx:
@@ -157,6 +159,18 @@ def add_require_tech(tech: Tech, new_tech_id, update_count=False):
 def replace_require_tech(tech: Tech, old_tech_id, new_tech_id):
     tech.required_techs = replace_tuple(tech.required_techs, old_tech_id, new_tech_id)
 
+def make_require_age_earlier(tech: Tech, params: All_In_1_Params):
+    if params.feudal_duplicate_tech_id in tech.required_techs:
+        tech.required_techs = replace_tuple(tech.required_techs, params.feudal_duplicate_tech_id, -1)
+        tech.required_tech_count -= 1
+    elif params.castle_duplicate_tech_id in tech.required_techs:
+        tech.required_techs = replace_tuple(tech.required_techs, params.castle_duplicate_tech_id, params.feudal_duplicate_tech_id)
+        return params.feudal_duplicate_tech_id
+    elif params.imp_duplicate_tech_id in tech.required_techs:
+        tech.required_techs = replace_tuple(tech.required_techs, params.imp_duplicate_tech_id, params.castle_duplicate_tech_id)
+        return params.castle_duplicate_tech_id
+
+    return params.switch_tech_id
 
 def _append_ec(effect: Effect, ec: EffectCommand):
     key = (ec.type, ec.a, ec.b, ec.c, ec.d)

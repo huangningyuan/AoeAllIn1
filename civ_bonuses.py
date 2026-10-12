@@ -2,18 +2,20 @@ import copy
 
 from genieutils.datfile import DatFile
 from genieutils.effect import EffectCommand
+from genieutils.tech import ResearchResourceCost
 
 import constants
 from all_in_1_params import All_In_1_Params
+from chronicle_issues import deal_with_chronicle_issues
 from constants import \
     ARCHERY_RANGE_ID, BARRACK_ID, BURGUNDIAN_ECO_TECH_DISCOUNT, CASTLE_ID, CHRONICLE_CIV_IDS, \
-    ELITE_IBIRAPEMA_TEMP_TECH_ID, ELITE_PHALANGITE_TECH_ID, ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, \
+    ELITE_IBIRAPEMA_TEMP_TECH_ID, ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, \
     MONESTARY_ID, TEMPLE_GUARD_IDS
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from regional_units import activate_all_regional_units
-from utils import add_require_tech
+from utils import add_require_tech, make_require_age_earlier
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
     set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
     check_effect, multiply_unit_attribute, disable_unit
@@ -32,9 +34,10 @@ TECH_TO_REMOVE = [286, 287, 500,
                   721, 288, 388,
                   323, 324, 326, 299, 303, 305,
                   310, 867, 868, 869, 1071,
-                  241, 242, 1058,
+                  241, 242, 1058, 885,
                   1059, 995, 1067, 1004, 355,
-                  1397, 1353]
+                  1397, 1353,
+                  1169, 1170, 1171]
 
 
 def filter_101discount_bonus(effect_command: EffectCommand):
@@ -88,21 +91,25 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         civ_ut_ids.append(list())
     for i in range(constants.ORIGINAL_TECH_NUM):
         tech = techs[i]
+        required_techs = tech.required_techs
+        research_location = tech.research_locations[0]
         if tech.civ == -1:
             continue
-        research_location = tech.research_locations[0]
-        if research_location.location_id == CASTLE_ID and (
+        elif research_location.location_id == CASTLE_ID and (
                 research_location.button_id in (7, 8) or (
                 research_location.button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
-        if research_location.location_id >= 0:
+        elif research_location.location_id > 0:
+            civ_custom_bonus_ids[tech.civ].append(i)
             continue
-        if research_location.research_time > 0:
+        elif research_location.research_time > 0:
             continue
-        if tech.name.find('post-imp') > -1:
+        elif tech.name.find('post-imp') > -1:
             continue
-        if i in TECH_TO_REMOVE:
+        elif tech.effect_id == -1 and required_techs[0] == 104 and tech.required_tech_count == 1:
+            continue
+        elif i in TECH_TO_REMOVE:
             continue
         tech_required_tech_count = tech.required_tech_count
         required_techs = tech.required_techs
@@ -275,9 +282,24 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     disable_tech(reverse_effect, new_tech_id)
                 else:
                     effect = get_new_effect(tech.name)
-                    force_research_tech(effect, tech_id)
-                    tech_id, effect_id = append_tech(data, tech, effect)
-                    disable_tech(reverse_effect, tech_id)
+                    if len(tech.research_locations) > 0 and tech.research_locations[0].location_id > 0:
+                        name = 'force ' + tech.name
+                        tech.name = name
+                        effect.name = name
+                        if tech.research_locations[0].location_id == BARRACK_ID:
+                            new_age_tech_id = make_require_age_earlier(tech, params)
+                            add_require_tech(techs[tech_id], new_age_tech_id)
+                        tech.research_locations = []
+                        tech.resource_costs = (ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0))
+                        # early barrack techs
+                        force_tech(effect, tech_id)
+                    else:
+                        name = 'force research ' + tech.name
+                        tech.name = name
+                        effect.name = name
+                        force_research_tech(effect, tech_id)
+                    new_tech_id, effect_id = append_tech(data, tech, effect)
+                    disable_tech(reverse_effect, new_tech_id)
 
                 # Incas + Khitans/Romans Blacksmith upgrade
                 if tech_id in (474, 475, 476, 477, 478, 479):
@@ -610,16 +632,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     force_research_tech(effect, e_hoplite_tech_id)
     append_tech(data, tech, effect)
 
-    name = 'enable Phalangite'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_research_tech(effect, 1290)
-    move_unit_button(effect, 2384, 31)
-    move_tech_button(effect, ELITE_PHALANGITE_TECH_ID, 32)
-    append_tech(data, tech, effect)
-    techs[ELITE_PHALANGITE_TECH_ID].civ = -1
-
     name = 'enable War Chariot'
     e_war_chariot_tech_id = 1171
     tech = get_new_tech(name)
@@ -686,6 +698,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         multiply_unit_attribute(effect, i, -1, 13, 1.2 / 1.15)
     append_tech(data, tech, effect)
 
+    deal_with_chronicle_issues(data, params)
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())

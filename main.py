@@ -15,7 +15,4 @@ if __name__ == '__main__':
     techs = data.techs
     tech_cost = list()
     units = data.civs[0].units
-    for effect in effects:
-        for command in effect.effect_commands:
-            if command.type in (1, 6) and command.a == 274:
-                print(effect.name)
+    print (techs[748])

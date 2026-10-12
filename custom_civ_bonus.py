@@ -1,28 +1,28 @@
 import copy
-import constants
-from constants import \
-    BARRACK_ID, BLOODLINE_ID, CASTLE_ID, DOCK_ID, FRANKS_FORAGER_WORK_RATE, HOUSE_ID, \
-    MAPUCHE_FORAGER_WORK_RATE, MONESTARY_ID, PORT_ID, ROMAN_CIV_WORK_RATE, SHIPYARD_ID, SIEGE_ID, \
-    STABLE_ID, TC_IDS, WP_WITH_RELIC_ID
 
 from genieutils.datfile import DatFile
 from genieutils.tech import ResearchResourceCost
-from genieutils.unit import BuildingAnnex, AttackOrArmor
+from genieutils.unit import BuildingAnnex
 
+import constants
 from all_in_1_params import All_In_1_Params
+from constants import \
+    BARRACK_ID, BLOODLINE_ID, CASTLE_ID, FRANKS_FORAGER_WORK_RATE, HOUSE_ID, \
+    MAPUCHE_FORAGER_WORK_RATE, MONESTARY_ID, ROMAN_CIV_WORK_RATE, SIEGE_ID, \
+    STABLE_ID, WP_WITH_RELIC_ID, PAPHOS_SHADOW_TECH_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
+from utils import add_require_tech
 from utils import check_effect
 from utils import disable_tech, extend_effect, force_research_tech, disable_unit
 from utils import enable_unit
 from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
-from utils import add_require_tech
 from utils import replace_require_tech
 from utils import set_require_techs, get_tech_id_by_name, set_tech_cost, plus_resource, set_tech_time, \
     multiply_unit_cost, multiply_unit_attack, multiply_unit_hp, multiply_unit_attribute, multiply_resource, \
-    set_unit_attribute, plus_unit_armor, set_resource, upgrade_unit, research_tech, plus_unit_attribute, enable_tech, \
+    set_unit_attribute, plus_unit_armor, set_resource, upgrade_unit, research_tech, plus_unit_attribute, \
     set_tech_discount, set_tech_time_discount, append_tech
 
 
@@ -33,7 +33,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
     units = data.civs[0].units
     match civ_name:
         case 'Achaemenids':
-            append_tech_tech_id = 1138
             achaemenids_tech_id = 1103
             name = 'Achaemenids or All in 1'
             tech = get_new_tech(name)
@@ -42,126 +41,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech_id = append_tech(data, tech)
             # enable Achaemenids TC techs
             for i in range(1195, 1198):
-                replace_require_tech(techs[i], append_tech_tech_id, -1)
+                replace_require_tech(techs[i], PAPHOS_SHADOW_TECH_ID, -1)
                 replace_require_tech(techs[i], achaemenids_tech_id, tech_id)
                 techs[i].required_tech_count -= 1
-            name = 'enable dock, port'
-            append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, DOCK_ID)
-            set_unit_attribute(effect, PORT_ID, -1, 58, -1)
-            enable_unit(effect, PORT_ID)
-            force_tech(effect, 1143)
-            research_tech(effect, 1143)
-            append_tech(data, tech, effect)
-            name = 'enable dock techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, append_tech_tech_id)
-            effect = get_new_effect(name)
-            for command in effects[1145].effect_commands:
-                if command.type == 102:
-                    enable_tech(effect, int(command.d))
-            append_tech_dock_tech_id, effect_id = append_tech(data, tech, effect)
-            name = 'enable Feudal units'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, SHIPYARD_ID)
-            force_tech(effect, 1147)
-            research_tech(effect, 1147)
-            force_tech(effect, 1150)
-            research_tech(effect, 1150)
-            force_tech(effect, 1153)
-            research_tech(effect, 1153)
-            force_tech(effect, 384)
-            append_tech(data, tech, effect)
-            name = 'enable Castle units'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1158)
-            force_research_tech(effect, 426)
-            force_research_tech(effect, 630)
-            force_research_tech(effect, 837)
-            force_research_tech(effect, 480)
-            append_tech(data, tech, effect)
-            tech = get_new_tech('Macedonians')
-            tech.civ = 54
-            macedonians_id = append_tech(data, tech)
-            tech = get_new_tech('Thracians')
-            tech.civ = 55
-            thracians_id = append_tech(data, tech)
-            tech = get_new_tech('Puru')
-            tech.civ = 56
-            puru_id = append_tech(data, tech)
-            name = 'Chronicle civs requirement'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 1258, 1259, 1260, macedonians_id, thracians_id, puru_id)
-            tech.required_tech_count = 1
-            chronicle_civs_requirement = append_tech(data, tech)
-            params.other_params['chronicle_civs_requirement'] = chronicle_civs_requirement
-            name = 'append_tech Gambesons'
-            gambeson_tech_id = 875
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, chronicle_civs_requirement)
-            tech.required_tech_count = 3
-            effect = get_new_effect(name)
-            force_research_tech(effect, gambeson_tech_id)
-            append_tech(data, tech, effect)
-            name = 'free append_tech paragons'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, chronicle_civs_requirement)
-            effect = get_new_effect(name)
-            research_tech(effect, 1173)
-            research_tech(effect, 1174)
-            append_tech(data, tech, effect)
-            name = 'append_tech siege onagers'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 257, chronicle_civs_requirement)
-            effect = get_new_effect(name)
-            force_tech(effect, 320)
-            append_tech(data, tech, effect)
-
-            name = 'Force Elite Steppe Lancer for Chronicle'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
-            effect = get_new_effect(name)
-            force_tech(effect, 715)
-            append_tech(data, tech, effect)
-
-            name = 'enable Imp units'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 1160)
-            research_tech(effect, 172)
-            research_tech(effect, 188)
-            enable_tech(effect, 481)
-            force_tech(effect, 631)
-            enable_tech(effect, 837)
-            force_tech(effect, 236)
-            force_tech(effect, 481)
-            force_tech(effect, 838)
-            force_research_tech(effect, 64)
-            append_tech(data, tech, effect)
-            for i in append_tech_ship_upgrade_tech_ids:
-                tech = copy.deepcopy(techs[i])
-                tech.civ = -1
-                replace_require_tech(tech, append_tech_tech_id, params.switch_tech_id)
-                if 101 in tech.required_techs:
-                    replace_require_tech(tech, 101, params.feudal_duplicate_tech_id)
-                elif 102 in tech.required_techs:
-                    replace_require_tech(tech, 102, params.castle_duplicate_tech_id)
-                elif 103 in tech.required_techs:
-                    replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
-                effect = get_new_effect(tech.name)
-                force_tech(effect, i)
-                research_tech(effect, i)
-                tech_id, effect_id = append_tech(data, tech, effect)
-                disable_tech(effects[techs[append_tech_dock_tech_id].effect_id], tech_id)
-            disable_tech(effect, 1167)
         case 'Armenians':
             name = 'Mule Cart'
             tech = get_new_tech(name)
@@ -314,6 +196,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, 906)
             effect = get_new_effect(name)
             force_tech(effect, 65)
+            append_tech(data, tech, effect)
+            name = 'Feudal eco tech requirement'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 758)
             append_tech(data, tech, effect)
         case 'Burmese':
             name = 'Cheap Monastery Techs'
@@ -710,31 +598,10 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             forager_wood_prod_rate = effects[510].effect_commands[0].d
             set_resource(effect, 267, forager_wood_prod_rate * ROMAN_CIV_WORK_RATE * FRANKS_FORAGER_WORK_RATE * MAPUCHE_FORAGER_WORK_RATE)
             append_tech(data, tech, effect)
-            name = 'enable Feitoria'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 1021)
-            append_tech(data, tech, effect)
             # cheap conquisidator
             effect = check_effect(effects, 33)
             multiply_unit_cost(effect, -1, 23, 0.8)
         case 'Puru':
-            name = 'Enable Sannahya'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 1327)
-            move_unit_button(effect, 2390, 23)
-            move_unit_button(effect, 2391, 23)
-            append_tech(data, tech, effect)
-            name = 'elite Sannahya'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 1328)
-            move_tech_button(effect, 1328, 28)
-            append_tech(data, tech, effect)
             # Remove Puru Emplacement
             _e = check_effect(effects, 1266)
             _e.effect_commands.pop(-1)
