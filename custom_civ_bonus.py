@@ -433,13 +433,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.effect_id = 678
             tech_id = append_tech(data, tech)
             reverse_tech_ids.append(tech_id)
-            name = 'enable slinger'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 185)
-            move_unit_button(effect, 185, 21)
-            append_tech(data, tech, effect)
             name = 'enable settlement'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -463,7 +456,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
-            enable_tech(effect, 522)
+            force_research_tech(effect, 522)
             append_tech(data, tech, effect)
         case 'Jurchens':
             name = 'enable Grenadier'

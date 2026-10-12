@@ -11,6 +11,7 @@ from all_in_1_params import All_In_1_Params
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
+from regional_units import activate_all_regional_units
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
     set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
     set_tech_discount, check_effect, multiply_unit_attribute
@@ -319,6 +320,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             disable_tech(reverse_effect, tech_id)
         for j in range(5):
             append_tech(data, get_new_tech(), get_new_effect())
+
+    activate_all_regional_units(data, params)
     deal_tech_requrirement(data, params)
 
     name = 'Enable Unique Warships'
@@ -328,12 +331,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     enable_unit(effect, 250)
     enable_unit(effect, 831)
     enable_unit(effect, 1004)
-    move_unit_button(effect, 250, 21)
-    move_unit_button(effect, 533, 21)
-    move_unit_button(effect, 831, 22)
-    move_unit_button(effect, 832, 22)
-    move_unit_button(effect, 1004, 23)
-    move_unit_button(effect, 1006, 23)
     append_tech(data, tech, effect)
     name = 'Enable Imperial Unique Warships'
     tech = get_new_tech(name)
@@ -341,14 +338,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     enable_unit(effect, 1750)
     enable_unit(effect, 1948)
-    move_unit_button(effect, 1750, 24)
     force_tech(effect, 372)
-    move_tech_button(effect, 372, 26)
     force_tech(effect, 448)
-    move_tech_button(effect, 448, 27)
     force_tech(effect, 597)
-    move_tech_button(effect, 597, 28)
-    move_tech_button(effect, 22, 11)
     append_tech(data, tech, effect)
 
     # Catapult Galleon requirements
@@ -590,22 +582,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     multiply_resource(effect, 512, 1.2 * 1.05)
     append_tech(data, tech, effect)
 
-    name = 'Enable Champi'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    enable_unit(effect, 74)
-    force_research_tech(effect, 1350)
-    append_tech(data, tech, effect)
-
-    name = 'Early Varangian Guard'
-    varangian_tech_id = 1453
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_research_tech(effect, varangian_tech_id)
-    append_tech(data, tech, effect)
-
     name = 'enable Hoplite'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
@@ -619,9 +595,11 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     tech = copy.deepcopy(techs[e_hoplite_tech_id])
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     tech.civ = -1
+    food = tech.resource_costs[0].amount
+    gold = tech.resource_costs[1].amount
     tech.research_locations[0].button_id = 8
-    tech.resource_costs[0].amount = 150
-    tech.resource_costs[1].amount = 275
+    tech.resource_costs[0].amount = int(food * TUPI_FOOD_DISCOUNT * DRAVIDIANS_TECH_DISCOUNT)
+    tech.resource_costs[1].amount = int(gold * DRAVIDIANS_TECH_DISCOUNT)
     effect = get_new_effect(name)
     force_research_tech(effect, e_hoplite_tech_id)
     append_tech(data, tech, effect)
@@ -642,9 +620,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
     effect = get_new_effect(name)
     force_research_tech(effect, 1169)
-    move_unit_button(effect, 2150, 31)
-    move_unit_button(effect, 2151, 31)
-    move_tech_button(effect, e_war_chariot_tech_id, 32)
     disable_tech(effect, e_war_chariot_tech_id)
     append_tech(data, tech, effect)
 
@@ -656,14 +631,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     force_research_tech(effect, e_war_chariot_tech_id)
     append_tech_effect(data, tech, effect)
-
-    # Eagle Warrior
-    name = 'Enable Eagle Warrior'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    force_research_tech(effect, 433)
-    append_tech(data, tech, effect)
 
     name = 'enable Ibirapema'
     tech = get_new_tech(name)
@@ -691,22 +658,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         move_unit_button(effect, i, 24, 1)
     append_tech(data, tech, effect)
     techs[ELITE_TEMPLE_GUARD_TECH_ID].civ = -1
-
-    name = 'enable fire lancer'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_research_tech(effect, 981)
-    append_tech(data, tech, effect)
-
-    e_fire_lancer_tech_id = 982
-    name = 'elite fire lancer'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-    effect = get_new_effect(name)
-    force_tech(effect, e_fire_lancer_tech_id)
-    tech_id, effect_id = append_tech(data, tech, effect)
-    disable_tech(effects[techs[e_fire_lancer_tech_id].effect_id], tech_id)
 
     additional_tc_ids = [2275, 2276, 2277]
     effect = check_effect(effects, 421)
