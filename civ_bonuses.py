@@ -696,15 +696,17 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
-    research_tech(effect, 981)
+    force_research_tech(effect, 981)
     append_tech(data, tech, effect)
 
+    e_fire_lancer_tech_id = 982
     name = 'elite fire lancer'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
     effect = get_new_effect(name)
-    force_tech(effect, 982)
-    append_tech(data, tech, effect)
+    force_tech(effect, e_fire_lancer_tech_id)
+    tech_id, effect_id = append_tech(data, tech, effect)
+    disable_tech(effects[techs[e_fire_lancer_tech_id].effect_id], tech_id)
 
     additional_tc_ids = [2275, 2276, 2277]
     effect = check_effect(effects, 421)
