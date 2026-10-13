@@ -37,7 +37,8 @@ TECH_TO_REMOVE = [286, 287, 500,
                   241, 242, 1058, 885,
                   1059, 995, 1067, 1004, 355,
                   1397, 1353,
-                  1169, 1170, 1171]
+                  1169, 1170, 1171,
+                  1195, 1196, 1197]
 
 
 def filter_101discount_bonus(effect_command: EffectCommand):
@@ -95,21 +96,40 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         research_location = tech.research_locations[0]
         if tech.civ == -1:
             continue
-        elif research_location.location_id == CASTLE_ID and (
-                research_location.button_id in (7, 8) or (
+        is_unit_upgrade = False
+        if tech.effect_id >= 0 and tech.effect_id < len(effects):
+            is_unit_upgrade = any(
+                ec.type == 3 for ec in effects[tech.effect_id].effect_commands
+            )
+        if research_location.location_id == CASTLE_ID and (
+                research_location.button_id in (6, 7, 8) or (
                 research_location.button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
-        elif research_location.location_id > 0:
+        elif research_location.location_id > 0 and not is_unit_upgrade:
             civ_custom_bonus_ids[tech.civ].append(i)
             continue
-        elif research_location.research_time > 0:
+        elif research_location.research_time > 0 and not is_unit_upgrade:
             continue
         elif tech.name.find('post-imp') > -1:
             continue
         elif tech.effect_id == -1 and required_techs[0] == 104 and tech.required_tech_count == 1:
             continue
         elif i in TECH_TO_REMOVE:
+            continue
+        if is_unit_upgrade:
+            age_preqs = [
+                rt for rt in tech.required_techs[:tech.required_tech_count]
+                if rt in (101, 102, 103, 104, 113, 1209)
+            ]
+            if 103 in age_preqs:
+                civ_imp_bonus_ids[tech.civ].append(i)
+            elif 102 in age_preqs or 113 in age_preqs:
+                civ_castle_bonus_ids[tech.civ].append(i)
+            elif 101 in age_preqs or 1209 in age_preqs:
+                civ_feudal_bonus_ids[tech.civ].append(i)
+            else:
+                civ_bonus_ids[tech.civ].append(i)
             continue
         tech_required_tech_count = tech.required_tech_count
         required_techs = tech.required_techs
@@ -177,66 +197,48 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         tech_id, effect_id = append_tech(data, tech, reverse_effect)
         all_in_1_reverse_tech_ids[civ_name] = tech_id
 
-        bonus_ids = civ_bonus_ids[i]
-        if len(bonus_ids) > 0 or len(tech_tree_bonus_effect_commands) > 0:
-            name = civ_name + " Bonus"
+        def _force_by_researchable(effect_, bid):
+            rl = techs[bid].research_locations[0]
+            if rl.location_id > 0:
+                force_tech(effect_, bid)
+            else:
+                force_research_tech(effect_, bid)
+
+        def _make_bonus_group(prefix, req_ids, bonus_ids, extra_effect_commands=None):
+            if len(bonus_ids) == 0 and not extra_effect_commands:
+                return None
+            name = civ_name + prefix
             effect = get_new_effect(name)
-            effect.effect_commands = tech_tree_bonus_effect_commands
-            for bonus_id in bonus_ids:
-                force_research_tech(effect, bonus_id)
-
+            if extra_effect_commands:
+                effect.effect_commands = extra_effect_commands
+            for bid in bonus_ids:
+                _force_by_researchable(effect, bid)
             tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
+            set_require_techs(tech, *req_ids)
             tech.civ = -1
+            new_tid, _ = append_tech(data, tech, effect)
+            disable_tech(reverse_effect, new_tid)
+            return new_tid
 
-            tech_id, effect_id = append_tech(data, tech, effect)
-            disable_tech(reverse_effect, tech_id)
-            all_in_1_civ_bonus_tech_ids[civ_name] = tech_id
+        tid = _make_bonus_group(" Bonus", (params.switch_tech_id,),
+                                civ_bonus_ids[i], tech_tree_bonus_effect_commands)
+        if tid is not None:
+            all_in_1_civ_bonus_tech_ids[civ_name] = tid
 
-        bonus_ids = civ_feudal_bonus_ids[i]
-        if len(bonus_ids) > 0:
-            name = civ_name + " Feudal Bonus"
-            effect = get_new_effect(name)
-            for bonus_id in bonus_ids:
-                force_research_tech(effect, bonus_id)
+        tid = _make_bonus_group(" Feudal Bonus", (params.feudal_duplicate_tech_id, params.switch_tech_id),
+                                civ_feudal_bonus_ids[i])
+        if tid is not None:
+            all_in_1_civ_feudal_bonus_tech_ids[civ_name] = tid
 
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.feudal_duplicate_tech_id, params.switch_tech_id)
-            tech.civ = -1
+        tid = _make_bonus_group(" Castle Bonus", (params.castle_duplicate_tech_id, params.switch_tech_id),
+                                civ_castle_bonus_ids[i])
+        if tid is not None:
+            all_in_1_civ_castle_bonus_tech_ids[civ_name] = tid
 
-            tech_id, effect_id = append_tech(data, tech, effect)
-            disable_tech(reverse_effect, tech_id)
-            all_in_1_civ_feudal_bonus_tech_ids[civ_name] = tech_id
-
-        bonus_ids = civ_castle_bonus_ids[i]
-        if len(bonus_ids) > 0:
-            name = civ_name + " Castle Bonus"
-            effect = get_new_effect(name)
-            for bonus_id in bonus_ids:
-                force_research_tech(effect, bonus_id)
-
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            tech.civ = -1
-
-            tech_id, effect_id = append_tech(data, tech, effect)
-            disable_tech(reverse_effect, tech_id)
-            all_in_1_civ_castle_bonus_tech_ids[civ_name] = tech_id
-
-        bonus_ids = civ_imp_bonus_ids[i]
-        if len(bonus_ids) > 0:
-            name = civ_name + " Imp Bonus"
-            effect = get_new_effect(name)
-            for bonus_id in bonus_ids:
-                force_research_tech(effect, bonus_id)
-
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
-            tech.civ = -1
-
-            tech_id, effect_id = append_tech(data, tech, effect)
-            disable_tech(reverse_effect, tech_id)
-            all_in_1_civ_imp_bonus_tech_ids[civ_name] = tech_id
+        tid = _make_bonus_group(" Imp Bonus", (params.imp_duplicate_tech_id, params.switch_tech_id),
+                                civ_imp_bonus_ids[i])
+        if tid is not None:
+            all_in_1_civ_imp_bonus_tech_ids[civ_name] = tid
 
         bonus_ids = civ_custom_bonus_ids[i]
         if len(bonus_ids) > 0:
@@ -350,25 +352,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
 
     activate_all_regional_units(data, params)
     deal_tech_requrirement(data, params)
-
-    name = 'Enable Unique Warships'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-    effect = get_new_effect(name)
-    enable_unit(effect, 250)
-    enable_unit(effect, 831)
-    enable_unit(effect, 1004)
-    append_tech(data, tech, effect)
-    name = 'Enable Imperial Unique Warships'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-    effect = get_new_effect(name)
-    enable_unit(effect, 1750)
-    enable_unit(effect, 1948)
-    force_tech(effect, 372)
-    force_tech(effect, 448)
-    force_tech(effect, 597)
-    append_tech(data, tech, effect)
 
     # Catapult Galleon requirements
     name = 'Catapult Requirements'

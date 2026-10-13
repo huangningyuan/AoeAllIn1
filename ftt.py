@@ -149,6 +149,17 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 2390, 23)
     move_unit_button(effect, 2391, 23)
     move_tech_button(effect, 1328, 28)
+    # Grenadier
+    move_unit_button(effect, 1911, 22)
+    # Caravanserai
+    move_unit_button(effect, 1754, 3)
+    # Jian Swordsman
+    move_unit_button(effect, 1974, 31)
+    # Flaming camel
+    move_unit_button(effect, 1263, 13)
+    # War Chariot(shu)
+    move_unit_button(effect, 1962, 23)
+    move_unit_button(effect, 1980, 23)
 
     append_tech(data, tech, effect)
 

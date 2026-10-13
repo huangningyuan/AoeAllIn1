@@ -35,6 +35,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     tech.required_tech_count = 1
     chronicle_civs_requirement = append_tech(data, tech)
     params.other_params['chronicle_civs_requirement'] = chronicle_civs_requirement
+
     name = 'enable dock, port'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
@@ -106,8 +107,6 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     force_tech(effect, 631)
     # elite elephant archer
     force_tech(effect, 481)
-    # elite sannahya
-    force_tech(effect, 1328)
     # loom
     move_tech_button(effect, 22, 11)
     append_tech(data, tech, effect)
