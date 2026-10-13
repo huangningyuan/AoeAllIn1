@@ -144,7 +144,9 @@ dat 中 Unit 和 Tech 都有 `name` 和 `language_dll_name` 两个字段，**含
 
 ### Hoplite 希腊步兵 & War Chariot 战车（阿契美尼德）升级科技
 
-这两个单位本应和其他区域兵种（如 Longship、Elephant Archer）一样，通过 `regional_units.py` 的 `activate_all_regional_units()` 主流程自动激活其精锐升级科技。但由于游戏 bug，常规区域兵种激活流程对它们**不生效**。
+这两个单位的 make-avail 和精锐升级科技存在**双重 bug**：不仅 `regional_units.py` 的常规激活流程对它们不生效，**玩家在游戏里直接点击按钮研发这些科技也完全无效**（科技不进入研发队列、效果不应用）。因此无法依赖原生科技，必须 workaround。
+
+Elite Eagle (434) 类似，无法通过常规流程激活。
 
 #### Bug 对象
 
@@ -157,7 +159,7 @@ dat 中 Unit 和 Tech 都有 `name` 和 `language_dll_name` 两个字段，**含
 #### Workaround 实现
 
 1. **`regional_units.py`** 主流程里通过 `_BUG_SKIP_*` 集合跳过以上对象，不让它们走常规路径
-2. **`civ_bonuses.py`** 手动为它们各创建一个 `enable Xxx` / `Elite Xxx` 科技，通过 `force_research_tech` / `force_tech` / `disable_tech` effect 命令模拟正常流程
+2. **`civ_bonuses.py`** 为每个有问题的原生科技**新建一个替代科技**，玩家研发替代科技后，通过 `force_research_tech` / `force_tech` effect 命令**强行推进原生 bug 科技**；同时用 `disable_tech` 隐藏原生 bug 科技按钮避免误操作
 
 #### 开关：`bug_compat`
 
