@@ -156,10 +156,18 @@ Elite Eagle (434) 类似，无法通过常规流程激活。
 | War Chariot（战车） | 2150 / 2151 | 1169 | 1171 | Achaemenids(46) |
 | Elite Eagle（精锐鹰勇士） | — | — | 434 | Aztecs(15) / Mayans(16) / Incas(21) |
 
+#### 模块定位说明
+
+| 模块 | 职责 | 与 bug workaround 的关系 |
+|------|------|------------------------|
+| `regional_units.py` | **区域兵种通用激活流程**：为所有文明复制并激活原本仅某些文明拥有的区域兵种+make-avail+精锐升级科技 | bug 对象在主流程里被跳过（`_BUG_SKIP_*` 集合） |
+| `civ_bonuses.py` | **文明加成科技通用扩展**：把每个文明专属的加成科技（如希腊步兵、战车）扩展成开关打开后所有文明都能研发 | Hoplite / War Chariot / Elite Eagle 的手动 hack 嵌在这里，但这不是该模块的本意——只是 bug 对象无法走通用流程，只能在这里特殊处理 |
+| `custom_civ_bonus.py` | **无法使用通用流程的特殊文明加成实现**（如 Spartans 的 Stratego、Tatars 的 Yassa 等） | 也有一处 bug workaround（`techs[1226].civ = -1`），同样受 `bug_compat` 控制 |
+
 #### Workaround 实现
 
-1. **`regional_units.py`** 主流程里通过 `_BUG_SKIP_*` 集合跳过以上对象，不让它们走常规路径
-2. **`civ_bonuses.py`** 为每个有问题的原生科技**新建一个替代科技**，玩家研发替代科技后，通过 `force_research_tech` / `force_tech` effect 命令**强行推进原生 bug 科技**；同时用 `disable_tech` 隐藏原生 bug 科技按钮避免误操作
+1. **`regional_units.py`** 主流程里通过 `_BUG_SKIP_*` 集合跳过以上对象，不让它们走通用流程
+2. **`civ_bonuses.py`** 里有一个 `if params.bug_compat:` 分支，为 Hoplite / War Chariot / Elite Eagle **手动新建替代科技**：玩家研发替代科技后，通过 `force_research_tech` / `force_tech` effect 命令**强行推进原生 bug 科技**；同时用 `disable_tech` 隐藏原生 bug 科技按钮避免误操作
 
 #### 开关：`bug_compat`
 
