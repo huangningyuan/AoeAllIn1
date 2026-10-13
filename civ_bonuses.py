@@ -86,6 +86,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         tech = techs[i]
         required_techs = tech.required_techs
         research_location = tech.research_locations[0]
+        if i in TECH_TO_REMOVE:
+            continue
         if tech.civ == -1:
             continue
         reqs = [
@@ -100,16 +102,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 research_location.button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
-        elif research_location.location_id > 0 and not has_only_age_reqs:
-            civ_custom_bonus_ids[tech.civ].append(i)
-            continue
-        elif research_location.research_time > 0 and not has_only_age_reqs:
-            continue
         elif tech.name.find('post-imp') > -1:
             continue
         elif tech.effect_id == -1 and required_techs[0] == 104 and tech.required_tech_count == 1:
             continue
-        elif i in TECH_TO_REMOVE:
+        elif research_location.location_id > 0 and not has_only_age_reqs:
+            civ_custom_bonus_ids[tech.civ].append(i)
             continue
         if has_only_age_reqs:
             if 103 in reqs:
