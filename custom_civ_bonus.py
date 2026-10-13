@@ -679,6 +679,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 multiply_unit_attribute(effect, i, -1, 10, 0.85)
             append_tech(data, tech, effect)
         case 'Spartans':
+            techs[1226].civ = -1
             # elite Stratego ext
             upgrade_unit(check_effect(effects, 1128), 2227, 2228)
         case 'Tatars':

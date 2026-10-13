@@ -90,26 +90,29 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         civ_imp_bonus_ids.append(list())
         civ_custom_bonus_ids.append(list())
         civ_ut_ids.append(list())
+    AGE_TECH_IDS = (101, 102, 103, 104, 113, 1209)
     for i in range(constants.ORIGINAL_TECH_NUM):
         tech = techs[i]
         required_techs = tech.required_techs
         research_location = tech.research_locations[0]
         if tech.civ == -1:
             continue
-        is_unit_upgrade = False
-        if tech.effect_id >= 0 and tech.effect_id < len(effects):
-            is_unit_upgrade = any(
-                ec.type == 3 for ec in effects[tech.effect_id].effect_commands
-            )
+        reqs = [
+            rt for rt in tech.required_techs[:tech.required_tech_count]
+            if rt != -1
+        ]
+        has_only_age_reqs = len(reqs) > 0 and all(
+            rt in AGE_TECH_IDS for rt in reqs
+        )
         if research_location.location_id == CASTLE_ID and (
                 research_location.button_id in (6, 7, 8) or (
                 research_location.button_id in (12, 13) and tech.civ in CHRONICLE_CIV_IDS)):
             civ_ut_ids[tech.civ].append(i)
             continue
-        elif research_location.location_id > 0 and not is_unit_upgrade:
+        elif research_location.location_id > 0 and not has_only_age_reqs:
             civ_custom_bonus_ids[tech.civ].append(i)
             continue
-        elif research_location.research_time > 0 and not is_unit_upgrade:
+        elif research_location.research_time > 0 and not has_only_age_reqs:
             continue
         elif tech.name.find('post-imp') > -1:
             continue
@@ -117,16 +120,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             continue
         elif i in TECH_TO_REMOVE:
             continue
-        if is_unit_upgrade:
-            age_preqs = [
-                rt for rt in tech.required_techs[:tech.required_tech_count]
-                if rt in (101, 102, 103, 104, 113, 1209)
-            ]
-            if 103 in age_preqs:
+        if has_only_age_reqs:
+            if 103 in reqs:
                 civ_imp_bonus_ids[tech.civ].append(i)
-            elif 102 in age_preqs or 113 in age_preqs:
+            elif 102 in reqs or 113 in reqs:
                 civ_castle_bonus_ids[tech.civ].append(i)
-            elif 101 in age_preqs or 1209 in age_preqs:
+            elif 101 in reqs or 1209 in reqs:
                 civ_feudal_bonus_ids[tech.civ].append(i)
             else:
                 civ_bonus_ids[tech.civ].append(i)
