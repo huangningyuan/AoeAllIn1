@@ -61,6 +61,8 @@ for i, unit in enumerate(data.civs[0].units):
 | `required_tech_count` | int | 最少需要多少个前置非-1 |
 | `research_locations` | List[ResearchLocation] | 研发地点列表。**原生 tech 通常只有一个**；`get_ut` 创建的副本也只有一个（同一科技在不同建筑中通过创建多个 tech 实例来保证按钮顺序）。**多个 location 的典型案例**是全文明开关科技（同按钮在多个建筑均可研发） |
 
+> **⚠️ 关键：Tech 本身没有 `research_time` 字段！** 研发时间在 `tech.research_locations[].research_time` 里（每个建筑 location 可以有独立时间）。直接写 `tech.research_time` 会 `AttributeError`。
+
 ---
 
 ## Unit (单位)
@@ -152,9 +154,9 @@ bind_effect(data, tech, effect)
 | **5** | multiply_unit_attribute | unit_id | class_id (-1=by unit) | attribute | multiplier | `multiply_unit_attribute`, `multiply_unit_cost`, `multiply_unit_attack` |
 | **6** | multiply_resource | resource_id | — | — | multiplier | `multiply_resource` |
 | **8** | tech 开关 | tech_id | 12(固定) | **-1**=所有建筑生效，**≥0**=建筑下标（配合 research_locations 内各条目） | 1=enable, 2=force, 3=research。**注意**：enable(d=1) 仅对 `civ=-1` 的通用科技有效，文明专属科技只能用 force(d=2)；少数原生科技 enable 莫名无效，也需 force | `force_tech`, `research_tech`, `force_research_tech` |
-| **101** | tech 成本 | tech_id | resource_id | 0=cost, 2=discount | value | `set_tech_cost`, `set_tech_discount` |
+| **101** | tech 成本 | tech_id | resource_id (**-1=所有资源**) | **0=set cost to d (绝对值)**, **1=plus/minus d (绝对增减)** (原生已无使用), **2=discount multiplier (d=0.5 表示半价)** | value | `set_tech_cost`, `set_tech_discount` |
 | **102** | disable_tech | — | — | — | tech_id | `disable_tech` |
-| **103** | tech 研发时间 | tech_id | — | 0=time, 2=discount | value | `set_tech_time`, `set_tech_time_discount` |
+| **103** | tech 研发时间 | tech_id | — | **0=set time to d (绝对值)**, **1=plus/minus d (绝对增减)**, **2=discount multiplier**, -1=同 1 但 b=-1 | value | `set_tech_time`, `set_tech_time_discount` |
 | **203** | set_unit_attribute (selected) | 同 type 0 | 同 type 0 | 同 type 0 | 同 type 0 | `set_unit_attribute(selected=1)` |
 | **204** | plus_unit_attribute (selected) | 同 type 4 | 同 type 4 | 同 type 4 | 同 type 4 | `plus_unit_attribute(selected=1)` |
 | **205** | multiply_unit_attribute (selected) | 同 type 5 | 同 type 5 | 同 type 5 | 同 type 5 | `multiply_unit_attribute(selected=1)` |
@@ -554,10 +556,10 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 ### 科技修改
 | 函数 | 说明 |
 |------|------|
-| `set_tech_cost(effect, tech_id, res_id, val)` | type 101, c=0 |
-| `set_tech_discount(effect, tech_id, res_id, val)` | type 101, c=2 |
-| `set_tech_time(effect, tech_id, val)` | type 103, c=0 |
-| `set_tech_time_discount(effect, tech_id, val)` | type 103, c=2 |
+| `set_tech_cost(effect, tech_id, res_id, val)` | type 101, c=0 — **直接把 res_id 成本设为 val**（res_id=-1 覆盖所有资源） |
+| `set_tech_discount(effect, tech_id, res_id, val)` | type 101, c=2 — **乘以 val**（val=0.5 半价）。**项目统一用 set_tech_cost(c=0) 输出最终值，避免 c=0 和 c=2 叠加顺序 bug** |
+| `set_tech_time(effect, tech_id, val)` | type 103, c=0 — **直接把研发时间设为 val** |
+| `set_tech_time_discount(effect, tech_id, val)` | type 103, c=2 — **乘以 val**。同 type 101，项目统一用 c=0 输出最终值 |
 
 ### 资源
 | 函数 | 说明 |

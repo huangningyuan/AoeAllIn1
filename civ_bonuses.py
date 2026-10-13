@@ -41,20 +41,15 @@ TECH_TO_REMOVE = [286, 287, 500,
                   1195, 1196, 1197]
 
 
-def filter_101discount_bonus(effect_command: EffectCommand):
-    match effect_command.type:
-        case 101:
-            return False
-        case _:
-            return True
-
-
 def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     print('Adding civ bonuses...')
     techs = data.techs
     effects = data.effects
     civs = data.civs
     current_civ_num = len(civs)
+
+    TUPI_FOOD_DISCOUNT = 0.5
+    DRAVIDIANS_TECH_DISCOUNT = 0.5
 
     civ_tech_tree_tech_num = dict()
     civ_tb_tech_num = dict()
@@ -169,10 +164,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 if effect_command.d != 15.0:  # guilds
                     enable_tech(reverse_effect, int(effect_command.d))
             elif effect_command.type == 101:
-                if effect_command.c == 1:  # tech discount
-                    continue
-                else:
-                    tech_tree_bonus_effect_commands.append(effect_command)
+                continue
             elif effect_command.type == 2 and effect_command.b == 0:
                 enable_unit(reverse_effect, effect_command.a)
                 continue
@@ -375,200 +367,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         set_unit_attribute(effect, i, -1, 104, 200 * 0.85 - 100)
     append_tech(data, tech, effect)
 
-    BYZANTINES_AGE_DISCOUNT = 0.67
-    ITALIANS_AGE_DISCOUNT = 0.85
-    MUISCA_AGE_GOLD_DISCOUNT = 0.5
-    name = 'Byzantines + Italians + Muisca Age Discount'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    set_tech_cost(effect, 102, 2, 200 * ITALIANS_AGE_DISCOUNT * MUISCA_AGE_GOLD_DISCOUNT)
-    set_tech_cost(effect, 103, 0, 1000 * BYZANTINES_AGE_DISCOUNT * ITALIANS_AGE_DISCOUNT)
-    set_tech_cost(effect, 103, 2, 800 * BYZANTINES_AGE_DISCOUNT * ITALIANS_AGE_DISCOUNT * MUISCA_AGE_GOLD_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    JURCHENS_WOOD_DISCOUNT = 0.25
-    name = 'Italians + Jurchens Univ'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in (377, 50, 51, 54, 608):
-        for cost in techs[i].resource_costs:
-            if cost.type == 1:
-                set_tech_cost(effect, i, 1, cost.amount * JURCHENS_WOOD_DISCOUNT * ITALIANS_TECH_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    TURKS_TECH_DISCOUNT = 0.5
-    DANES_GOLD_DISCOUNT = 0.66
-    name = 'Italians + Turks elite cannon galleon'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    cannon_galleon_tech_id = 376
-    for cost in techs[cannon_galleon_tech_id].resource_costs:
-        if cost.type in (0, 2):
-            set_tech_cost(effect, cannon_galleon_tech_id, cost.type,
-                          cost.amount * TURKS_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
-
-    name = 'Burgundians + Poles stable tech'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in [435]:
-        for cost in techs[i].resource_costs:
-            if cost.type == 0:
-                set_tech_cost(effect, i, cost.type, cost.amount * 0.5 * 0.5)
-    append_tech(data, tech, effect)
-
-    BULGARIANS_TECH_FOOD_DISCOUNT = 0.5
-    name = 'Bulgarians + Turks + Danes houfnice'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in [787]:
-        for cost in techs[i].resource_costs:
-            if cost.type == 0:
-                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * BULGARIANS_TECH_FOOD_DISCOUNT)
-            if cost.type == 2:
-                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    name = 'Turks + Jurchens + Danes heavy rocket cart'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in [980]:
-        for cost in techs[i].resource_costs:
-            if cost.type == -1:
-                continue
-            if cost.type == 1:
-                set_tech_cost(effect, i, cost.type, cost.amount * JURCHENS_WOOD_DISCOUNT * TURKS_TECH_DISCOUNT)
-                continue
-            if cost.type == 2:
-                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
-            else:
-                set_tech_cost(effect, i, cost.type, cost.amount * TURKS_TECH_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    TUPI_TECH_DISCOUNT = 0.5
-    SHU_ARCHERS_TECH_DISCOUNT = 0.75
-    KHITANS_CA_DISCOUNT = 0.5
-    name = 'Shu + Khitans + Tupi Archery'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    hca_tech_id = 218
-    free_archery_techs = (98, 436, 437)
-    shu_cheap_range_techs = (100, 237, 437, 199, 200, 201, 211, 212, 219, 436, 218)
-    for i, tech1 in enumerate(techs):
-        if i > constants.TECH_NUM:
-            break
-        if len(tech1.research_locations) == 0:
-            continue
-        research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == ARCHERY_RANGE_ID:
-            if i == hca_tech_id:
-                for cost in tech1.resource_costs:
-                    if cost.type == -1:
-                        continue
-                    if cost.type == 0:
-                        set_tech_cost(effect, hca_tech_id, cost.type,
-                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT * TUPI_TECH_DISCOUNT)
-                    else:
-                        set_tech_cost(effect, hca_tech_id, cost.type,
-                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * KHITANS_CA_DISCOUNT)
-                continue
-            if i in free_archery_techs:  # free
-                continue
-            if i in shu_cheap_range_techs:  # shu
-                for cost in tech1.resource_costs:
-                    if cost.type == -1:
-                        continue
-                    if cost.type == 0:
-                        set_tech_cost(effect, i, cost.type,
-                                      cost.amount * SHU_ARCHERS_TECH_DISCOUNT * TUPI_TECH_DISCOUNT)
-                    else:
-                        set_tech_cost(effect, i, cost.type, cost.amount * SHU_ARCHERS_TECH_DISCOUNT)
-                continue
-            for cost in tech1.resource_costs:
-                if cost.type == 0:
-                    set_tech_cost(effect, i, cost.type, cost.amount * TUPI_TECH_DISCOUNT)
-
-    append_tech(data, tech, effect)
-
-    TUPI_FOOD_DISCOUNT = 0.5
-    DRAVIDIANS_TECH_DISCOUNT = 0.5
-    name = 'Cheap Barrack Techs (Tupi + Dravidians + Danes)'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i, tech1 in enumerate(techs):
-        if i > constants.TECH_NUM:
-            break
-        if len(tech1.research_locations) == 0:
-            continue
-        research_location_id = tech1.research_locations[0].location_id
-        if research_location_id == BARRACK_ID:
-            if i in (197, 207, 217, 222, 264, 716, 875, 885, 602, 1173, 1174):
-                continue
-            for j in tech1.resource_costs:
-                if j.type == -1:
-                    continue
-                if j.type == 0:
-                    set_tech_cost(effect, i, j.type, j.amount * TUPI_FOOD_DISCOUNT * DRAVIDIANS_TECH_DISCOUNT)
-                elif j.type == 2:
-                    set_tech_cost(effect, i, j.type, j.amount * DRAVIDIANS_TECH_DISCOUNT * DANES_GOLD_DISCOUNT)
-                else:
-                    set_tech_cost(effect, i, j.type, j.amount * DRAVIDIANS_TECH_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    name = 'Italians + Burgundians Dock Tech'
-
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in (65, 906):
-        set_tech_cost(effect, i, 0, techs[i].resource_costs[
-            0].amount * BURGUNDIAN_ECO_TECH_DISCOUNT * ITALIANS_TECH_DISCOUNT)
-    append_tech(data, tech, effect)
-
-    # lumberjack food
-    shu_lumberjack_food = effects[1071].effect_commands[0].d
-    athenians_lumberjack_food = 0.0
-    for command in effects[1119].effect_commands:
-        if command.type == 1 and command.a == 502:
-            athenians_lumberjack_food = command.d
-
-    name = 'Athenians + Shu + Romans + Celts + Armenians Lumberjack food'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    set_resource(effect, 502, (athenians_lumberjack_food + shu_lumberjack_food) * 1.15 * 1.05 * (1 + 0.2 * 1.4) / 1.2)
-    append_tech(data, tech, effect)
-
-    name = 'Athenians + Armenians Age2'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-    effect = get_new_effect(name)
-    multiply_resource(effect, 502, (1 + 0.2 * 1.4) / 1.2)
-    append_tech(data, tech, effect)
-
-    name = 'Athenians + Armenians Age3'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-    effect = get_new_effect(name)
-    multiply_resource(effect, 502, (1 + 0.1 * 1.4) / 1.1)
-    append_tech(data, tech, effect)
-
-    name = 'Cheap archery attack (Shu + Bulgarians)'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    for i in (199, 200, 201):
-        for cost in techs[i].resource_costs:
-            if cost.type == 0:
-                set_tech_cost(effect, i, cost.type, cost.amount * 0.75 * 0.5)
-    append_tech(data, tech, effect)
 
     name = 'Armenians + Poles Age1'
     tech = get_new_tech(name)
@@ -706,20 +504,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
 
-    for effect in effects:
-        match effect.name:
-            case 'Dravidians Bonus':
-                effect.effect_commands = list(
-                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
-            case 'Burgundians Bonus':
-                effect.effect_commands = list(
-                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
-            case 'Bulgarians Bonus':
-                effect.effect_commands = list(
-                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
-            case 'Turks Bonus':
-                effect.effect_commands = list(
-                    filter(lambda effect_command: filter_101discount_bonus(effect_command), effect.effect_commands))
     # port button
     for i in (13, 545, 17):
         for civ_id, civ in enumerate(civs):

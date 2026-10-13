@@ -9,6 +9,7 @@ from constants import \
 import utils
 from add_switch import adding_switch
 from civ_bonuses import add_civ_bonuses
+from discount_merger import build_discount_tech
 from civ_switch import add_civ_switch
 from deal_xs import deal_xs
 from ftt import deal_ftt
@@ -57,6 +58,7 @@ def update_all_in_1(debug = True):
                 constants.university_techs[tech.name] = i
     deal_ftt(data, params)
     add_civ_bonuses(data, params)
+    build_discount_tech(data, params)
     add_unique_techs(data, params)
     add_civ_switch(data, params)
     print('Auto-extending building variant effects...')

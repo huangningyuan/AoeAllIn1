@@ -40,6 +40,13 @@
 
 ## 关键约定
 
+### 0. 字段用法先看文档再看数据
+- 解读 EffectCommand(a, b, c, d)、Unit、Tech 等 dat 结构字段时，**必须先查 `dat_reference.md`** 确认语义，再用实际数据验证
+- 禁止凭字段名猜含义（例如看到 `c` 以为是 count、看到 `d` 以为是 damage）
+- 反例：type 101 的 c=0 是 set cost、c=2 是 discount，不是"cost 和 count"
+- 反例：type 5 的 d 是 multiplier，不是 plus 值
+- 详细约束见 `.trae/rules/no_hallucination.md`
+
 ### 1. register_as 别名机制
 - 在`unique_techs_config.json`的科技条目中添加`register_as`字段
 - `unique_techs_config_loader.py`解析后自动存入`params.other_params[register_as] = tech_id`
