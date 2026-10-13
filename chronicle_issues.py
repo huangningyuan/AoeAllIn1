@@ -99,14 +99,15 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     # Leviathan
     research_tech(effect, 1160)
-    # bombard tower
-    research_tech(effect, 64)
-    # bombard cannon
-    research_tech(effect, 188)
-    # elite battle elephant
-    force_tech(effect, 631)
-    # elite elephant archer
-    force_tech(effect, 481)
+    if params.bug_compat == True:
+        # bombard tower
+        research_tech(effect, 64)
+        # bombard cannon
+        research_tech(effect, 188)
+        # elite battle elephant
+        force_tech(effect, 631)
+        # elite elephant archer
+        force_tech(effect, 481)
     # loom
     move_tech_button(effect, 22, 11)
     append_tech(data, tech, effect)

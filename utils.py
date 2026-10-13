@@ -50,7 +50,7 @@ def create_new(cls: Type, **kwargs: Any) -> Any:
     return instance
 
 
-def get_new_tech(name='', need_location=False):
+def get_new_tech(name: str = '', need_location: bool = False) -> Tech:
     return Tech(required_techs=(-1, -1, -1, -1, -1, -1),
                 resource_costs=(
                     ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0),),
@@ -69,16 +69,16 @@ def get_new_tech(name='', need_location=False):
                 repeatable=0)
 
 
-def get_new_effect(name=''):
+def get_new_effect(name: str = '') -> Effect:
     effect = Effect(effect_commands=list(), name=name)
     return effect
 
 
-def get_new_unit(units: list[Unit]):
+def get_new_unit(units: list[Unit]) -> Unit:
     return copy.deepcopy(units[946])
 
 
-def get_dead_unit(units: list[Unit]):
+def get_dead_unit(units: list[Unit]) -> Unit:
     treb = copy.deepcopy(units[331])
     treb.hit_points = -1
     treb.language_dll_name = 0
@@ -108,7 +108,7 @@ def get_dead_unit(units: list[Unit]):
     return treb
 
 
-def append_tech_effect(data: DatFile, tech: Tech, effect: Effect):
+def append_tech_effect(data: DatFile, tech: Tech, effect: Effect) -> tuple[int, int]:
     tech_id = len(data.techs)
     effect_id = len(data.effects)
     tech.effect_id = effect_id
@@ -117,7 +117,7 @@ def append_tech_effect(data: DatFile, tech: Tech, effect: Effect):
     return tech_id, effect_id
 
 
-def append_tech(data: DatFile, tech: Tech, effect: Effect = None):
+def append_tech(data: DatFile, tech: Tech, effect: Effect | None = None) -> int | tuple[int, int]:
     if effect is None:
         tech_id = len(data.techs)
         data.techs.append(tech)
@@ -126,28 +126,28 @@ def append_tech(data: DatFile, tech: Tech, effect: Effect = None):
         return append_tech_effect(data, tech, effect)
 
 
-def bind_effect(data: DatFile, tech: Tech, effect: Effect):
+def bind_effect(data: DatFile, tech: Tech, effect: Effect) -> int:
     effect_id = len(data.effects)
     tech.effect_id = effect_id
     data.effects.append(effect)
     return effect_id
 
 
-def append_unit(data: DatFile, unit: Unit):
+def append_unit(data: DatFile, unit: Unit) -> int:
     unit_id = len(data.civs[0].units)
     for civ in data.civs:
         civ.units.append(unit)
     return unit_id
 
 
-def replace_tuple(t: tuple, origin, replace):
+def replace_tuple(t: tuple, origin: Any, replace: Any) -> tuple:
     for i in range(len(t)):
         if t[i] == origin:
             return t[:i] + (replace,) + t[i + 1:]
     return t
 
 
-def add_require_tech(tech: Tech, new_tech_id, update_count=False):
+def add_require_tech(tech: Tech, new_tech_id: int, update_count: bool = False) -> None:
     for i in range(len(tech.required_techs)):
         if tech.required_techs[i] == -1:
             tech.required_techs = tech.required_techs[:i] + (new_tech_id,) + tech.required_techs[i + 1:]

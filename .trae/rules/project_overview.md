@@ -64,8 +64,8 @@
 
 ### 5. 科技分类
 - **独特科技**：只有某个文明/少数文明可研发，需要在unique_techs_config.json注册并在unit_switch中配置
-- **共享科技**：多个文明共用同一升级线（如Malon已归类在掷矛投石手共用科技）
-- **精锐升级**（Elite Xxx）：不是独特科技，不需要配置
+- **共享科技**：多个兵种共用同一升级线（如Malon已归类在掷矛投石手共用科技）
+- **精锐升级**（Elite Xxx）：不需要配置
 
 ### 6. 新建科技 vs 原生科技
 - 1378这类是原生科技，但项目中可能新建了对应的科技实例
@@ -137,6 +137,41 @@ dat 中 Unit 和 Tech 都有 `name` 和 `language_dll_name` 两个字段，**含
 | Attack Type / Armor Type | `dat_reference.md` | type 0-61，AGE3Names vs strings 双栏对比（攻防护甲共用同一套编码，没有独立的 AttackNames section） |
 | Unit / Tech 字段映射 | `dat_reference.md` | `name` vs `language_dll_name` 区别、strings SID 编码规则 |
 | 科技树 Node 名称 | `civ_tech_trees.md` | `Name` 字段 = 游戏内显示名，配合 Node Type / Node Status 判断可用性 |
+
+---
+
+## 已知游戏 Bug 与 Workaround
+
+### Hoplite 希腊步兵 & War Chariot 战车（阿契美尼德）升级科技
+
+这两个单位本应和其他区域兵种（如 Longship、Elephant Archer）一样，通过 `regional_units.py` 的 `activate_all_regional_units()` 主流程自动激活其精锐升级科技。但由于游戏 bug，常规区域兵种激活流程对它们**不生效**。
+
+#### Bug 对象
+
+| 对象 | Unit ID | Make-Avail 科技 ID | 精锐升级科技 ID | 所属文明 |
+|------|---------|-------------------|----------------|---------|
+| Hoplite（希腊步兵） | 2110 / 2111 | 1136 | 1137 | Athenians(47) / Spartans(48) |
+| War Chariot（战车） | 2150 / 2151 | 1169 | 1171 | Achaemenids(46) |
+| Elite Eagle（精锐鹰勇士） | — | — | 434 | Aztecs(15) / Mayans(16) / Incas(21) |
+
+#### Workaround 实现
+
+1. **`regional_units.py`** 主流程里通过 `_BUG_SKIP_*` 集合跳过以上对象，不让它们走常规路径
+2. **`civ_bonuses.py`** 手动为它们各创建一个 `enable Xxx` / `Elite Xxx` 科技，通过 `force_research_tech` / `force_tech` / `disable_tech` effect 命令模拟正常流程
+
+#### 开关：`bug_compat`
+
+`All_In_1_Params.bug_compat: bool = True`（默认开启）。
+
+- `True`：跳过常规流程 → 启用 workaround（当前唯一可用方式）
+- `False`：让这些单位走标准区域兵种主流程 → **用于验证游戏是否已修复此 bug**（经 2026-10-13 测试，Bug 尚未修复）
+
+如果将来制作组修复了此 bug，可以设 `bug_compat=False` 让代码回归干净的单路径实现。
+
+#### 注意区分
+
+- **Camel (ID 329)** 曾经也被 skip，但原因不是 bug（见 `regional_units.py` 注释），已从 bug skip 集合移除
+- `PERMANENT_SKIP_*` 常量预留给**非 bug 原因**需要永久跳过的单位/科技，与 `bug_compat` 开关无关
 
 ---
 

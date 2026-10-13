@@ -37,6 +37,7 @@ def update_all_in_1(debug = True):
         and i != 441
     ]
     params = adding_switch(data)
+    params.bug_compat = True
     constants.TECH_NUM = len(data.techs)
     effects = data.effects
     for command in effects[410].effect_commands:

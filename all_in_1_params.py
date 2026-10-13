@@ -8,3 +8,4 @@ class All_In_1_Params():
     early_imp_duplicate_tech_id: int
     civ_index_to_additional_uts: dict[int, list[int]]
     other_params: dict
+    bug_compat: bool = True

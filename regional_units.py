@@ -31,9 +31,15 @@ WAR_CHARIOT_UNIT_IDS = {2150, 2151}
 WAR_CHARIOT_MAKE_AVAIL_TECH_IDS = {1169}
 WAR_CHARIOT_UPGRADE_TECH_IDS = {1171}
 
-CAMEL_ID = 329
-
 ELITE_EAGLE_TECH_ID = 434
+
+_BUG_SKIP_UNITS = HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS
+_BUG_SKIP_MAKE_AVAIL = HOPLITE_MAKE_AVAIL_TECH_IDS | WAR_CHARIOT_MAKE_AVAIL_TECH_IDS
+_BUG_SKIP_UPGRADES = HOPLITE_UPGRADE_TECH_IDS | WAR_CHARIOT_UPGRADE_TECH_IDS
+
+PERMANENT_SKIP_UNITS: set[int] = set()
+PERMANENT_SKIP_MAKE_AVAIL: set[int] = set()
+PERMANENT_SKIP_UPGRADES: set[int] = set()
 
 
 def _age_to_replacement(age_id: int, build_id: int,
@@ -155,15 +161,19 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
     make_avail_techs_seen = set()
     upgrade_techs_seen = set()
 
+    skip_units = (_BUG_SKIP_UNITS if params.bug_compat else set()) | PERMANENT_SKIP_UNITS
+    skip_make_avail = (_BUG_SKIP_MAKE_AVAIL if params.bug_compat else set()) | PERMANENT_SKIP_MAKE_AVAIL
+    skip_upgrades = (_BUG_SKIP_UPGRADES if params.bug_compat else set()) | PERMANENT_SKIP_UPGRADES
+
     # --- Base units ---
     for unit_id, info in sorted(regional_units.items()):
-        if unit_id in HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS | {CAMEL_ID}:
+        if unit_id in skip_units:
             continue
         if info['link_id'] is not None:
             continue
 
         make_avail_tid = unit_to_make_avail_tech.get(unit_id)
-        if make_avail_tid is not None and make_avail_tid not in HOPLITE_MAKE_AVAIL_TECH_IDS | WAR_CHARIOT_MAKE_AVAIL_TECH_IDS:
+        if make_avail_tid is not None and make_avail_tid not in skip_make_avail:
             if make_avail_tid in make_avail_techs_seen:
                 continue
             make_avail_techs_seen.add(make_avail_tid)
@@ -197,8 +207,8 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
     for info in regional_units.values():
         if info['trigger_tech_id'] is not None:
             all_upgrade_orig_ids.add(info['trigger_tech_id'])
-    all_upgrade_orig_ids -= HOPLITE_UPGRADE_TECH_IDS | WAR_CHARIOT_UPGRADE_TECH_IDS | {ELITE_EAGLE_TECH_ID}
-    all_upgrade_orig_ids -= HOPLITE_UNIT_IDS | WAR_CHARIOT_UNIT_IDS
+    all_upgrade_orig_ids -= skip_upgrades
+    all_upgrade_orig_ids -= skip_units
     all_upgrade_orig_ids -= make_avail_techs_seen
 
     for orig_tid in sorted(all_upgrade_orig_ids):
