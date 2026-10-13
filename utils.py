@@ -3,7 +3,7 @@ import json
 import os
 import zipfile
 from dataclasses import fields
-from typing import Any, Type, Tuple
+from typing import Any, Type, Tuple, overload
 
 from genieutils.civ import Civ
 from genieutils.datfile import DatFile
@@ -117,6 +117,10 @@ def append_tech_effect(data: DatFile, tech: Tech, effect: Effect) -> tuple[int, 
     return tech_id, effect_id
 
 
+@overload
+def append_tech(data: DatFile, tech: Tech, effect: Effect = ...) -> tuple[int, int]: ...
+@overload
+def append_tech(data: DatFile, tech: Tech, effect: None = ...) -> int: ...
 def append_tech(data: DatFile, tech: Tech, effect: Effect | None = None) -> int | tuple[int, int]:
     if effect is None:
         tech_id = len(data.techs)

@@ -8,8 +8,7 @@ import constants
 from all_in_1_params import All_In_1_Params
 from constants import \
     BARRACK_ID, BLOODLINE_ID, CASTLE_ID, FRANKS_FORAGER_WORK_RATE, HOUSE_ID, \
-    MAPUCHE_FORAGER_WORK_RATE, MONESTARY_ID, ROMAN_CIV_WORK_RATE, SIEGE_ID, \
-    STABLE_ID, WP_WITH_RELIC_ID, PAPHOS_SHADOW_TECH_ID
+    MAPUCHE_FORAGER_WORK_RATE, ROMAN_CIV_WORK_RATE, WP_WITH_RELIC_ID, PAPHOS_SHADOW_TECH_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import add_require_tech
@@ -20,10 +19,10 @@ from utils import force_tech
 from utils import get_new_effect
 from utils import get_new_tech
 from utils import replace_require_tech
-from utils import set_require_techs, get_tech_id_by_name, set_tech_cost, plus_resource, set_tech_time, \
-    multiply_unit_cost, multiply_unit_attack, multiply_unit_hp, multiply_unit_attribute, multiply_resource, \
+from utils import set_require_techs, get_tech_id_by_name, plus_resource, multiply_unit_cost, multiply_unit_attack, \
+    multiply_unit_hp, multiply_unit_attribute, multiply_resource, \
     set_unit_attribute, plus_unit_armor, set_resource, upgrade_unit, research_tech, plus_unit_attribute, \
-    set_tech_discount, set_tech_time_discount, append_tech
+    append_tech
 
 
 def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
