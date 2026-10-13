@@ -1,23 +1,22 @@
-import os
-import zipfile
 import json
+import os
+
+from genieutils.datfile import DatFile
+
 import constants
+import mutex
+import utils
+from add_switch import adding_switch
+from analyze_combat_attr import scan_attr63_conflicts, apply_attr63_fixes
+from civ_bonuses import add_civ_bonuses
+from civ_switch import add_civ_switch
 from constants import \
     CASTLE_IDS, CASTLE_IDS_ORIGINAL, GAME_DATA_PATH, MONESTARY_ID, SIEGE_ID, TC_IDS, \
     TC_IDS_ORIGINAL
-
-import utils
-from add_switch import adding_switch
-from civ_bonuses import add_civ_bonuses
 from discount_merger import build_discount_tech
-from civ_switch import add_civ_switch
-from deal_xs import deal_xs
 from ftt import deal_ftt
-from genieutils.datfile import DatFile
 from unique_techs import add_unique_techs
 from utils import auto_extend_building_effects
-from analyze_combat_attr import scan_attr63_conflicts, apply_attr63_fixes
-import mutex
 
 
 def update_all_in_1(debug = True):

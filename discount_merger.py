@@ -163,6 +163,74 @@ def _build_manual_entries(data):
         exclude_ids=(441,),
     ))
 
+    # Dravidian Barracks 科技 res=-1 半价
+    # 原生 E838 只覆盖 197/207/215/217/222/264/429/602/716/875 的 food+gold 0.5,
+    # 其他 Barracks 科技 (384/434/885/982/1137/1173/1174/1291/1387/1401/...) 完全无 type 101,
+    # 统一覆盖所有资源为 0.5 (跳过原生已覆盖的, 结果一样, 减少冗余)
+    comment = 'Dravidian Barracks 半价'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.BARRACK_ID,
+        resource_type=constants.RES_ALL,
+        multiplier=constants.DRAVIDIANS_TECH_DISCOUNT,
+        exclude_ids=(197, 207, 215, 217, 222, 264, 429, 602, 716, 875),
+    ))
+
+    # Tupi Barracks 科技 food 半价
+    # 原生 C-Bonus E1397 只覆盖 197/207/215/217/222/264/429/602/716/875/
+    # 1350/1351/1352/1391/1402 的 food 0.5,
+    # 其他 Barracks 科技 (384/434/885/982/1137/1173/1174/1291/1387/1401/1454) 完全无 type 101,
+    # 统一覆盖 food 为 0.5 (跳过原生已覆盖的, 结果一样, 减少冗余)
+    comment = 'Tupi Barracks food 半价'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.BARRACK_ID,
+        resource_type=constants.RES_FOOD,
+        multiplier=constants.TUPI_TECH_FOOD_DISCOUNT,
+        exclude_ids=(197, 207, 215, 217, 222, 264, 429, 602, 716, 875,
+                     1350, 1351, 1352, 1391, 1402),
+    ))
+
+    # Tupi Archery Range 科技 food 半价
+    # 原生 C-Bonus E1397 只覆盖 98/100/218/237/436/437/481/599/655 的 food 0.5,
+    # 其他 Archery 科技 (1334/1378/1451/1452) 完全无 type 101,
+    # 统一覆盖 food 为 0.5 (跳过原生已覆盖的, 结果一样, 减少冗余)
+    comment = 'Tupi Archery Range food 半价'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.ARCHERY_RANGE_ID,
+        resource_type=constants.RES_FOOD,
+        multiplier=constants.TUPI_TECH_FOOD_DISCOUNT,
+        exclude_ids=(98, 100, 218, 237, 436, 437, 481, 599, 655),
+    ))
+
+    # Italians Dock 科技 res=-1 0.75
+    # 原生 E259 只覆盖 Dock 6 个科技 (73/905/906/412/1019/1702) ALL 0.75,
+    # GAP: 244 Heavy Demolition / 372 Viking LBT / 448 Elite Turtle Ship /
+    #       597 Elite Caravel / 1010 Dragon Ship 完全无 type 101,
+    # 统一覆盖 ALL 为 0.75 (跳过原生已覆盖的)
+    comment = 'Italians Dock 0.75'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.DOCK_ID,
+        resource_type=constants.RES_ALL,
+        multiplier=constants.ITALIANS_TECH_DISCOUNT,
+        exclude_ids=(73, 905, 906, 412, 1019, 1702),
+    ))
+
+    # Bulgarians Siege 科技 food 0.5
+    # 原生 E706 已覆盖 96/239/255/257/320 的 food 0.5,
+    # GAP: 787 Houfnice / 838 Elite Armored Elephant / 980 Heavy Rocket Cart 完全无 type 101,
+    # 统一覆盖 food 为 0.5 (跳过原生已覆盖的)
+    comment = 'Bulgarians Siege food 0.5'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.SIEGE_ID,
+        resource_type=constants.RES_FOOD,
+        multiplier=0.5,
+        exclude_ids=(96, 239, 255, 257, 320),
+    ))
+
     # =========================================================================
     # B. 特定科技条目 — 原生完全无 type 101 覆盖, 或 SET_0 覆盖所有资源
     # =========================================================================
@@ -193,25 +261,9 @@ def _build_manual_entries(data):
     cost_entries.append((c3, constants.ELITE_FIRE_LANCER_TECH_ID, constants.RES_ALL, constants.TURKISH_GUNPOWDER_DISCOUNT))
 
     # --- Jurchens Siege ext wood 0.25 ---
-    # 239/980/321/379 已被 Wei C-Bonus E995 wood 0.25 覆盖, 257/320 原生无覆盖
-    c4 = 'Jurchens Siege wood 0.25 (257/320 原生无覆盖)'
-    cost_entries.append((c4, constants.ONAGER_TECH_ID, constants.RES_WOOD, constants.JURCHENS_SIEGE_WOOD_DISCOUNT))
-    cost_entries.append((c4, constants.SIEGE_ONAGER_TECH_ID, constants.RES_WOOD, constants.JURCHENS_SIEGE_WOOD_DISCOUNT))
-
-    # --- Burgundians Khitan 专属经济科技 food 折扣 ---
-    # 原生 E782 已覆盖原版经济科技 (12/13/14/48/55/65/182/213/249/278/279/906) food BURGUNDIAN_ECO_FOOD_DISCOUNT,
-    # Khitan 专属 Mill 科技 1012/1013/1014 原生无 type 101
-    c5 = 'Burgundians Khitan 经济科技 food 折扣'
-    for tid in constants.KHITAN_ECO_TECH_IDS:
-        cost_entries.append((c5, tid, constants.RES_FOOD, constants.BURGUNDIAN_ECO_FOOD_DISCOUNT))
-
-    # --- Vietnamese Khitan 专属经济科技 wood SET_0 + time 0.5 ---
-    # 原生 E652 已覆盖原版经济科技 wood SET_0 + time 0.5,
-    # Khitan 专属 1012/1013/1014 原生无 type 101
-    c6 = 'Vietnamese Khitan 经济科技 wood SET_0 + time 0.5'
-    for tid in constants.KHITAN_ECO_TECH_IDS:
-        cost_entries.append((c6, tid, constants.RES_WOOD, 0))
-        time_entries.append((c6, tid, 0.5))
+    # 原生 C-Bonus E995 已覆盖 239/980/321/379 的 wood 0.25
+    # Onager 257 / Siege Onager 320 虽然原生无 type 101, 但其资源需求只有 food+gold, 不含 wood,
+    # 故无需手动补充 wood 折扣
 
     return cost_entries, time_entries
 
@@ -283,23 +335,28 @@ def _merge_native_time(native_time):
 
 
 def _apply_manual_cost(final_cost, manual_list, data):
-    """手动 101 条目直接覆盖 final_cost"""
+    """手动 101 条目与 final_cost 相乘 (SET_0 即乘 0, 与原生合并规则一致)"""
     for tid, res, mult in manual_list:
+        keys = []
         if res == -1:
             if tid >= len(data.techs):
                 continue
             for rc in data.techs[tid].resource_costs:
                 if rc.type >= 0:
-                    final_cost[(tid, rc.type)] = mult
+                    keys.append((tid, rc.type))
         else:
-            final_cost[(tid, res)] = mult
+            keys.append((tid, res))
+        for key in keys:
+            cur = final_cost.get(key, 1.0)
+            final_cost[key] = cur * mult
     return final_cost
 
 
 def _apply_manual_time(final_time, manual_list):
-    """手动 103 条目直接覆盖 final_time"""
+    """手动 103 条目与 final_time 相乘 (SET_0 即乘 0, 与原生合并规则一致)"""
     for tid, mult in manual_list:
-        final_time[tid] = mult
+        cur = final_time.get(tid, 1.0)
+        final_time[tid] = cur * mult
     return final_time
 
 
@@ -334,6 +391,10 @@ _NATIVE_ALIGNMENT_SPECS = [
     ('TURKISH_GUNPOWDER_DISCOUNT',       263, 101, 64,  -1, 2, 0.5),
 
     ('JURCHENS_SIEGE_WOOD_DISCOUNT',     995, 101, 239, 1,  2, 0.25),
+
+    ('DRAVIDIANS_TECH_DISCOUNT',         838, 101, 197, 0,  2, 0.5),
+
+    ('TUPI_TECH_FOOD_DISCOUNT',          1397, 101, 197, 0,  2, 0.5),
 ]
 
 

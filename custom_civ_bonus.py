@@ -124,13 +124,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     continue
                 for attack in data.civs[0].units[i].type_50.attacks:
                     multiply_unit_attack(effect, i, -1, 125, attack.class_)
-            name = 'Enable Flemish Millitia'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 773)
-            move_unit_button(effect, 1699, 31)
-            append_tech(data, tech, effect)
             name = 'Feudal Gillnets'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, 906)
@@ -142,6 +135,24 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, 758)
+            append_tech(data, tech, effect)
+            name = 'Burgundians Khitan Domestication'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 1014)
+            append_tech(data, tech, effect)
+            name = 'Burgundians Khitan Pastoralism'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.feudal_duplicate_tech_id, 1014)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 1013)
+            append_tech(data, tech, effect)
+            name = 'Burgundians Khitan Transhumance'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.castle_duplicate_tech_id, 1013)
+            effect = get_new_effect(name)
+            force_research_tech(effect, 1012)
             append_tech(data, tech, effect)
         case 'Burmese':
             name = 'Burmese TB'
@@ -245,54 +256,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_research_tech(effect, 522)
             append_tech(data, tech, effect)
         case 'Khitans':
-            name = '[FTT] pastures'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            move_unit_button(effect, 1889, 1)
-            set_unit_attribute(effect, 1889, -1, 58, -1)
-            append_tech(data, tech, effect)
-            name = 'enable Mounted Trebuchet'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 1005)
-            move_unit_button(effect, 1923, 34)
-            append_tech(data, tech, effect)
-            name = 'enable Domestication'
-            domestication_tech_id = 1014
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, domestication_tech_id)
-            append_tech(data, tech, effect)
-            name = 'enable Pastoralism'
-            pastoralism_tech_id = 1013
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, domestication_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, pastoralism_tech_id)
-            append_tech(data, tech, effect)
-            name = 'enable Transhumance'
-            transhumance_tech_id = 1012
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, pastoralism_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, transhumance_tech_id)
-            append_tech(data, tech, effect)
             name = 'enable farm'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
             tech.civ = 53
             effect = get_new_effect(name)
             enable_unit(effect, 50)
-            append_tech(data, tech, effect)
-        case 'Khmer':
-            name = 'Khmer Requirements'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 638)
             append_tech(data, tech, effect)
         case 'Lithuanians':
             name = '+100f'
@@ -546,16 +515,16 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(effect, 323)
             disable_tech(effect, 324)
             disable_tech(effect, 326)
-            # wheelbarrow, double-bit axe, horse collar, gold/stone mining
-            plus_resource(effect, 3, 100)
+            # wheelbarrow, double-bit axe, horse collar, gold/stone mining, Transhumance
+            plus_resource(effect, 3, 110)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age2'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
             effect = get_new_effect(name)
             # handcart, bow-saw, heavy plow, gold/stone shaft mining, town watch, arson, inf atk/def, arc def, maa,
-            # longswordsman, pikeman
-            plus_resource(effect, 3, 240)
+            # longswordsman, pikeman, Pastoralism
+            plus_resource(effect, 3, 250)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age3'
             tech = get_new_tech(name)
@@ -563,8 +532,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             # two-man saw, crop rotation, thumb ring, pathian tactics, town patrol, gambeson, two-handed swordsman,
             # champion, legionary, light cavalry, arc def, inf atk/def, guard tower, murder hole, herble medicine,
-            # chemistry, elite skirm, careening, caravan
-            plus_resource(effect, 3, 360)
+            # chemistry, elite skirm, careening, caravan, Domestication
+            plus_resource(effect, 3, 370)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age4'
             tech = get_new_tech(name)

@@ -36,7 +36,8 @@ TECH_TO_REMOVE = [286, 287, 500,
                   1397, 1353,
                   1136, 1137,
                   1169, 1170, 1171,
-                  1195, 1196, 1197]
+                  1195, 1196, 1197,
+                  1012, 1013, 1014]
 
 
 def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
