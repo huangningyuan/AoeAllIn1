@@ -163,6 +163,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     enable_tech(reverse_effect, int(effect_command.d))
             elif effect_command.type == 101:
                 continue
+            elif effect_command.type == 103:
+                continue
             elif effect_command.type == 2 and effect_command.b == 0:
                 enable_unit(reverse_effect, effect_command.a)
                 continue
