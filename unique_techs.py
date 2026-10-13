@@ -4,7 +4,7 @@ import constants
 from constants import \
     BARRACK_ID, CHRONICLE_CIV_IDS, DOCK_ID, DOCK_IDS, DONJON_ID, GOTH_AGE4_DISCOUNT, \
     HARBOR_ID, INCA_AGE4_DISCOUNT, KOREANS_SOLDIER_DISCOUNT, KSHATRIYAS_DISCOUNT, MAYAN_AGE3_DISCOUNT, MAYAN_AGE4_DISCOUNT, \
-    MILLITIA_LINE_FOOD, MILLITIA_LINE_GOLD, MILLITIA_LINE_IDS, PORTGUESE_DISCOUNT, SAXON_DISCOUNT, STABLE_ID
+    MILLITIA_LINE_FOOD, MILLITIA_LINE_GOLD, MILLITIA_LINE_IDS, PORTGUESE_GOLD_DISCOUNT, SAXON_DISCOUNT, STABLE_ID
 
 from genieutils.datfile import DatFile
 
@@ -284,7 +284,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Forced Levy'
     effect = get_new_effect(name)
     food = MILLITIA_LINE_FOOD * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
-    gold = 20 * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    gold = 20 * PORTGUESE_GOLD_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
     food += gold
     for id in MILLITIA_LINE_IDS:
         set_unit_attribute(effect, id, -1, 103, food)
@@ -301,7 +301,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     food = hoplite.creatable.resource_costs[0].amount
     gold = hoplite.creatable.resource_costs[1].amount
     new_food = food * GOTH_AGE4_DISCOUNT * INCA_AGE4_DISCOUNT
-    new_gold = gold * GOTH_AGE4_DISCOUNT * PORTGUESE_DISCOUNT
+    new_gold = gold * GOTH_AGE4_DISCOUNT * PORTGUESE_GOLD_DISCOUNT
     for i in (hoplite_id, e_hoplite_id):
         set_unit_attribute(effect, i, -1, 103, new_food + new_gold * 0.33)
         set_unit_attribute(effect, i, -1, 105, new_gold * 0.67)
@@ -312,7 +312,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Kamandaran'
     effect = get_new_effect(name)
     wood = 25 * MAYAN_AGE3_DISCOUNT * KOREANS_SOLDIER_DISCOUNT * SAXON_DISCOUNT
-    gold = 45 * MAYAN_AGE3_DISCOUNT * PORTGUESE_DISCOUNT * SAXON_DISCOUNT
+    gold = 45 * MAYAN_AGE3_DISCOUNT * PORTGUESE_GOLD_DISCOUNT * SAXON_DISCOUNT
     kama_effect = effects[sid2effect[488]]
     for command in kama_effect.effect_commands:
         if command.c == 105:
@@ -382,7 +382,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_unit_attribute(effect, 775, -1, 103, 110)
     cost = units[1811].creatable.resource_costs
     food = cost[0].amount * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT
-    gold = cost[1].amount * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT
+    gold = cost[1].amount * PORTGUESE_GOLD_DISCOUNT * GOTH_AGE4_DISCOUNT
     set_unit_attribute(effect, 1811, -1, 105, 0)
     set_unit_attribute(effect, 1811, -1, 103, food + gold)
     bind_effect(data, techs[hr_id], effect)
@@ -470,7 +470,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     name = 'Forced Levy + Kshatriyas'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, forced_levy_id, ksha_id)
-    gold = MILLITIA_LINE_GOLD * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
+    gold = MILLITIA_LINE_GOLD * PORTGUESE_GOLD_DISCOUNT * GOTH_AGE4_DISCOUNT * SAXON_DISCOUNT
     food = MILLITIA_LINE_FOOD * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT * KSHATRIYAS_DISCOUNT * SAXON_DISCOUNT + gold
     effect = get_new_effect(name)
     for id in MILLITIA_LINE_IDS:
@@ -494,7 +494,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, kam_id)
     effect = get_new_effect(name)
     wood = 25 * MAYAN_AGE4_DISCOUNT * KOREANS_SOLDIER_DISCOUNT * SAXON_DISCOUNT
-    gold = 45 * MAYAN_AGE4_DISCOUNT * PORTGUESE_DISCOUNT * SAXON_DISCOUNT
+    gold = 45 * MAYAN_AGE4_DISCOUNT * PORTGUESE_GOLD_DISCOUNT * SAXON_DISCOUNT
     wood += gold * wood_cost / gold_cost
     set_unit_attribute(effect, 4, -1, 104, wood)
     set_unit_attribute(effect, 24, -1, 104, wood)
@@ -516,7 +516,7 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     # --- Kshatriyas + Hussite Reforms ---
     cost = units[1811].creatable.resource_costs
     food = cost[0].amount * INCA_AGE4_DISCOUNT * GOTH_AGE4_DISCOUNT
-    gold = cost[1].amount * PORTGUESE_DISCOUNT * GOTH_AGE4_DISCOUNT
+    gold = cost[1].amount * PORTGUESE_GOLD_DISCOUNT * GOTH_AGE4_DISCOUNT
     name = 'Kshatriyas + Hussite Reforms'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, hr_id, ksha_id)

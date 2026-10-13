@@ -2,6 +2,7 @@ import collections
 from functools import reduce
 from genieutils.datfile import DatFile
 from utils import get_new_tech, get_new_effect, append_tech, set_require_techs, set_tech_cost, set_tech_time
+import constants
 
 
 def _orig_time(data, tid):
@@ -92,37 +93,135 @@ def collect_native_discounts(data):
 
 
 # =============================================================================
-# Step 2: 手动补充列表 — 原生完全没 type 101/103 覆盖的科技
+# Step 2: 手动补充规则 — 原生 Tech Tree / Team Bonus / C-Bonus 未覆盖的折扣
 # =============================================================================
-# 格式:
-#   _101_extend_list: [(tech_id, resource_type, final_multiplier), ...]
-#     resource_type: -1=全部资源, 0=food, 1=wood, 2=stone, 3=gold
-#     final_multiplier: 最终合并后的值, 直接覆盖原生合并结果
-#       0 = SET_0 (免费)
-#       0.x = 折扣乘数 (乘到原值上得到最终成本)
+# 分为两类:
+#   A. 建筑遍历规则 — 代码动态查找指定建筑下的所有科技, 自动排除原生已覆盖的
+#   B. 特定科技条目 — 固定 tech_id 的 SET_0 / 自定义值, 带注释说明来源
 #
-#   _103_extend_list: [(tech_id, final_multiplier), ...]
-#     final_multiplier 同上, 直接覆盖原生合并结果
-#
-# 注意: 这些条目是从 civ_bonuses.py 的原始硬编码整理而来, 已修正 resource_type
-# 写错 (type 2=stone 被当成 gold 的 bug)
+# 所有资源ID / 建筑ID / 折扣值均使用 constants.py 常量, 避免魔数
 # =============================================================================
 
-_101_extend_list = [
-    # Houfnice (787): Turks Tech Tree 没写, Bulgarians/Danes 也没覆盖
-    #   food = Turks 0.5 * Bulgarians 0.5 = 0.25
-    #   gold = Turks 0.5 * Danes 0.66 = 0.33
-    (787, 0, 0.25),
-    (787, 3, 0.33),
+def _expand_building_rule(data, building_id, resource_type, multiplier, exclude_ids=()):
+    """展开一条建筑遍历规则 → 生成 [(tid, res, mult), ...]
+    查找指定建筑下的所有有效科技, 自动排除:
+      - 无效科技 (幻影/Doctrine/bug 科技)
+      - exclude_ids 指定的排除集合
+    注意: 不排除已有原生 type 101 覆盖的科技 — 手动条目直接覆盖最终值,
+          原生只覆盖部分资源时, res=-1 会补全所有资源
+    """
+    entries = []
+    exclude = set(exclude_ids)
 
-    # Heavy Rocket Cart (980): Turks/Danes Tech Tree 没写
-    #   wood = Turks 0.5 * Jurchens 0.25 = 0.125 (覆盖原生 Jurchens 单独的 0.25)
-    #   gold = Turks 0.5 * Danes 0.66 = 0.33
-    (980, 1, 0.125),
-    (980, 3, 0.33),
-]
+    for tid, tech in enumerate(data.techs):
+        if tid in exclude:
+            continue
+        if not _is_valid_discount_target(data, tid):
+            continue
+        loc_ids = {rl.location_id for rl in tech.research_locations}
+        if building_id not in loc_ids:
+            continue
+        entries.append((tid, resource_type, multiplier))
 
-_103_extend_list = []
+    return entries
+
+
+def _build_manual_entries(data):
+    """构建所有手动补充条目, 返回 (cost_entries, time_entries)
+
+    cost_entries: [(注释, tid, res, mult), ...]
+    time_entries: [(注释, tid, mult), ...]
+    """
+    cost_entries = []
+    time_entries = []
+
+    # =========================================================================
+    # A. 建筑遍历规则 — 代码动态查找, 新文明/新科技自动覆盖
+    # =========================================================================
+
+    # Burgundians Stable 科技 res=-1 半价
+    # 原生 E782 只覆盖 39/435/254/428/209/265 的 food+gold 0.5,
+    # 其他 Stable 科技 (236/521/526/631/715/843/1033/1171/1328/786) 完全无 type 101,
+    # 统一覆盖所有资源为 0.5 (跳过原生已覆盖的 254/428, 结果一样, 减少冗余)
+    comment = 'Burgundians Stable 半价'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.STABLE_ID,
+        resource_type=constants.RES_ALL,
+        multiplier=constants.BURGUNDIAN_STABLE_TECH_DISCOUNT,
+        exclude_ids=(254, 428),
+    ))
+
+    # Burmese Monastery 科技 res=-1 半价
+    # 原生 E650/E651 完全无 type 101/103, 全部需要补充 (441 Herbal Medicine 除外)
+    comment = 'Burmese Monastery 半价 (原生完全无 type 101)'
+    cost_entries.extend((comment, e[0], e[1], e[2]) for e in _expand_building_rule(
+        data,
+        building_id=constants.MONESTARY_ID,
+        resource_type=constants.RES_ALL,
+        multiplier=constants.BURMESE_MONASTERY_DISCOUNT,
+        exclude_ids=(441,),
+    ))
+
+    # =========================================================================
+    # B. 特定科技条目 — 原生完全无 type 101 覆盖, 或 SET_0 覆盖所有资源
+    # =========================================================================
+
+    # --- Bulgarians Free Champion ---
+    # 原生完全无 SET_0 覆盖 Champion 264 / 编年史 Champion 1174
+    c1 = 'Bulgarians Free Champion'
+    cost_entries.append((c1, constants.CHAMPION_TECH_ID, constants.RES_FOOD, 0))
+    cost_entries.append((c1, constants.CHAMPION_TECH_ID, constants.RES_GOLD, 0))
+    time_entries.append((c1, constants.CHAMPION_TECH_ID, 0))
+    cost_entries.append((c1, constants.CHRONICLE_CHAMPION_TECH_ID, constants.RES_FOOD, 0))
+    cost_entries.append((c1, constants.CHRONICLE_CHAMPION_TECH_ID, constants.RES_GOLD, 0))
+    time_entries.append((c1, constants.CHRONICLE_CHAMPION_TECH_ID, 0))
+
+    # --- Turks Free Winged-Hussar ---
+    # 原生 Poles E801 只给 food 0.5, Turks 需要全资源 SET_0
+    c2 = 'Turks Free Winged-Hussar'
+    cost_entries.append((c2, constants.WINGED_HUSSAR_TECH_ID, constants.RES_ALL, 0))
+    time_entries.append((c2, constants.WINGED_HUSSAR_TECH_ID, 0))
+
+    # --- Turks 火药科技半价 ---
+    # 原生 Turks E263 只覆盖 Chemistry 47 SET_0 / Bombard Tower 64 food/wood 0.5 /
+    # Elite Cannon Galley 376 wood/gold 0.5,
+    # Houfnice 787 / Heavy Rocket Cart 980 / Elite Fire Lancer 982 完全无原生 type 101
+    c3 = 'Turks 火药科技半价'
+    cost_entries.append((c3, constants.HOUFNICE_TECH_ID, constants.RES_ALL, constants.TURKISH_GUNPOWDER_DISCOUNT))
+    cost_entries.append((c3, constants.HEAVY_ROCKET_CART_TECH_ID, constants.RES_ALL, constants.TURKISH_GUNPOWDER_DISCOUNT))
+    cost_entries.append((c3, constants.ELITE_FIRE_LANCER_TECH_ID, constants.RES_ALL, constants.TURKISH_GUNPOWDER_DISCOUNT))
+
+    # --- Jurchens Siege ext wood 0.25 ---
+    # 239/980/321/379 已被 Wei C-Bonus E995 wood 0.25 覆盖, 257/320 原生无覆盖
+    c4 = 'Jurchens Siege wood 0.25 (257/320 原生无覆盖)'
+    cost_entries.append((c4, constants.ONAGER_TECH_ID, constants.RES_WOOD, constants.JURCHENS_SIEGE_WOOD_DISCOUNT))
+    cost_entries.append((c4, constants.SIEGE_ONAGER_TECH_ID, constants.RES_WOOD, constants.JURCHENS_SIEGE_WOOD_DISCOUNT))
+
+    # --- Burgundians Khitan 专属经济科技 food 折扣 ---
+    # 原生 E782 已覆盖原版经济科技 (12/13/14/48/55/65/182/213/249/278/279/906) food BURGUNDIAN_ECO_FOOD_DISCOUNT,
+    # Khitan 专属 Mill 科技 1012/1013/1014 原生无 type 101
+    c5 = 'Burgundians Khitan 经济科技 food 折扣'
+    for tid in constants.KHITAN_ECO_TECH_IDS:
+        cost_entries.append((c5, tid, constants.RES_FOOD, constants.BURGUNDIAN_ECO_FOOD_DISCOUNT))
+
+    # --- Vietnamese Khitan 专属经济科技 wood SET_0 + time 0.5 ---
+    # 原生 E652 已覆盖原版经济科技 wood SET_0 + time 0.5,
+    # Khitan 专属 1012/1013/1014 原生无 type 101
+    c6 = 'Vietnamese Khitan 经济科技 wood SET_0 + time 0.5'
+    for tid in constants.KHITAN_ECO_TECH_IDS:
+        cost_entries.append((c6, tid, constants.RES_WOOD, 0))
+        time_entries.append((c6, tid, 0.5))
+
+    return cost_entries, time_entries
+
+
+def _compile_manual_lists(data):
+    """从带注释条目编译出 Step 3 需要的纯列表"""
+    cost_entries, time_entries = _build_manual_entries(data)
+    cost_list = [(tid, res, mult) for _, tid, res, mult in cost_entries]
+    time_list = [(tid, mult) for _, tid, mult in time_entries]
+    return cost_list, time_list
 
 
 # =============================================================================
@@ -211,10 +310,79 @@ def merge_discounts(data):
     final_cost = _merge_native_cost(native_cost, data)
     final_time = _merge_native_time(native_time)
 
-    final_cost = _apply_manual_cost(final_cost, _101_extend_list, data)
-    final_time = _apply_manual_time(final_time, _103_extend_list)
+    manual_cost_list, manual_time_list = _compile_manual_lists(data)
+
+    final_cost = _apply_manual_cost(final_cost, manual_cost_list, data)
+    final_time = _apply_manual_time(final_time, manual_time_list)
 
     return final_cost, final_time
+
+
+# =============================================================================
+# Step 2.5: 常量 ↔ 原生 effect 校验
+# =============================================================================
+# 每条手动规则用到的折扣常量, 应该对齐某个原生 type 101 c=2 命令的 d 值
+# 这里硬编码对齐关系, 版本更新导致原生 d 值变化时, 打印 MISMATCH 提醒
+# =============================================================================
+
+_NATIVE_ALIGNMENT_SPECS = [
+    # (常量名, 原生 effect_id, cmd_type, tid, cmd_b(resource), cmd_c, 期望 d)
+    ('BURGUNDIAN_ECO_FOOD_DISCOUNT',     782, 101, 12,  0, 2, 0.6),
+
+    ('BURGUNDIAN_STABLE_TECH_DISCOUNT',  782, 101, 39,  -1, 2, 0.5),
+
+    ('TURKISH_GUNPOWDER_DISCOUNT',       263, 101, 64,  -1, 2, 0.5),
+
+    ('JURCHENS_SIEGE_WOOD_DISCOUNT',     995, 101, 239, 1,  2, 0.25),
+]
+
+
+def validate_discount_constants(data):
+    """校验常量 ↔ 原生 effect d 值对齐, 不通过只打印不报错"""
+    import constants as C
+
+    ok_cnt = 0
+    mismatch_cnt = 0
+
+    for const_name, eff_id, cmd_type, tid, exp_b, exp_c, exp_d in _NATIVE_ALIGNMENT_SPECS:
+        const_val = getattr(C, const_name, None)
+        if const_val is None:
+            print('  [validate] %s: 常量 MISSING' % const_name)
+            mismatch_cnt += 1
+            continue
+
+        eff = data.effects[eff_id]
+        found = []
+        for cmd in eff.effect_commands:
+            if cmd.type == cmd_type and cmd.a == tid:
+                if exp_b == -1 or cmd.b == exp_b:
+                    found.append(cmd)
+
+        if not found:
+            print('  [validate] %s: 原生 E%d 101 tid=%d 未找到 c=%d d=%g (常量=%g)' %
+                  (const_name, eff_id, tid, exp_c, exp_d, const_val))
+            mismatch_cnt += 1
+            continue
+
+        matched = False
+        for cmd in found:
+            if cmd.c == exp_c and abs(cmd.d - const_val) < 0.001:
+                matched = True
+                break
+
+        if matched:
+            ok_cnt += 1
+        else:
+            native_ds = set((c.c, round(c.d, 4)) for c in found)
+            print('  [validate] %s MISMATCH: 常量=%g 原生 E%d 101 tid=%d c/d 组合=%s' %
+                  (const_name, const_val, eff_id, tid, native_ds))
+            mismatch_cnt += 1
+
+    if mismatch_cnt:
+        print('  [validate] %d/%d 通过, %d 不匹配, 请手动核对常量是否需要更新' %
+              (ok_cnt, ok_cnt + mismatch_cnt, mismatch_cnt))
+    else:
+        print('  [validate] %d/%d 全部通过' % (ok_cnt, ok_cnt + mismatch_cnt))
 
 
 # =============================================================================
@@ -222,6 +390,7 @@ def merge_discounts(data):
 # =============================================================================
 
 def build_discount_tech(data, params):
+    validate_discount_constants(data)
     final_cost, final_time = merge_discounts(data)
 
     tech = get_new_tech('All Discounts Merged')

@@ -15,4 +15,4 @@ if __name__ == '__main__':
     techs = data.techs
     tech_cost = list()
     units = data.civs[0].units
-    print (techs[748])
+    print (data.civs[32])

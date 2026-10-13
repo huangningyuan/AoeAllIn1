@@ -1,23 +1,21 @@
 import copy
 
 from genieutils.datfile import DatFile
-from genieutils.effect import EffectCommand
 from genieutils.tech import ResearchResourceCost
 
 import constants
 from all_in_1_params import All_In_1_Params
 from chronicle_issues import deal_with_chronicle_issues
 from constants import \
-    ARCHERY_RANGE_ID, BARRACK_ID, BURGUNDIAN_ECO_TECH_DISCOUNT, CASTLE_ID, CHRONICLE_CIV_IDS, \
-    ELITE_TEMPLE_GUARD_TECH_ID, ITALIANS_TECH_DISCOUNT, \
-    MONESTARY_ID, TEMPLE_GUARD_IDS
+    BARRACK_ID, CASTLE_ID, CHRONICLE_CIV_IDS, \
+    ELITE_TEMPLE_GUARD_TECH_ID, MONESTARY_ID, TEMPLE_GUARD_IDS
 from custom_civ_bonus import deal_custom_bonus
 from deal_requirement import deal_tech_requrirement
 from ftt import move_unit_button, move_tech_button
 from regional_units import activate_all_regional_units
 from utils import add_require_tech, make_require_age_earlier
-from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_tech_cost, \
-    set_unit_attribute, set_resource, append_tech, force_research_tech, append_tech_effect, multiply_resource, \
+from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_unit_attribute, set_resource, \
+    append_tech, force_research_tech, append_tech_effect, multiply_resource, \
     check_effect, multiply_unit_attribute, disable_unit
 from utils import enable_tech
 from utils import enable_unit

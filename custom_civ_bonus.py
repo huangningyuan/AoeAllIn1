@@ -111,39 +111,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 787)
             append_tech(data, tech, effect)
         case 'Bulgarians':
-            name = 'Free Champion'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.castle_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            set_tech_cost(effect, 264, 0, 0)
-            set_tech_cost(effect, 264, 3, 0)
-            set_tech_time(effect, 264, 0)
-            set_tech_cost(effect, 1174, 0, 0)
-            set_tech_cost(effect, 1174, 3, 0)
-            set_tech_time(effect, 1174, 0)
-            append_tech(data, tech, effect)
-            name = 'Cheap Siege Techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i, tech1 in enumerate(techs):
-                if i > constants.TECH_NUM:
-                    break
-                if len(tech1.research_locations) == 0:
-                    continue
-                research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == SIEGE_ID:
-                    set_tech_discount(effect, i, 0, 0.5)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
-            name = 'Cheap cavalry armor'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (80, 81, 82):
-                set_tech_discount(effect, i, 0, 0.5)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'enable konnik'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
@@ -158,30 +125,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     continue
                 for attack in data.civs[0].units[i].type_50.attacks:
                     multiply_unit_attack(effect, i, -1, 125, attack.class_)
-            name = 'Cheap Stable Techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i, tech1 in enumerate(techs):
-                if i > constants.TECH_NUM:
-                    break
-                if len(tech1.research_locations) == 0:
-                    continue
-                research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == STABLE_ID:
-                    if i in (254, 428):
-                        continue
-                    set_tech_discount(effect, i, -1, 0.5)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
-            name = 'Cheap Eco Techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (1012, 1013, 1014):
-                set_tech_discount(effect, i, 0, 0.67)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
             name = 'Enable Flemish Millitia'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)
@@ -202,17 +145,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_research_tech(effect, 758)
             append_tech(data, tech, effect)
         case 'Burmese':
-            name = 'Cheap Monastery Techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i, tech1 in enumerate(techs):
-                if len(tech1.research_locations) == 0:
-                    continue
-                research_location_id = tech1.research_locations[0].location_id
-                if research_location_id == MONESTARY_ID and i != 441:
-                    set_tech_discount(effect, i, -1, 0.5)
-            append_tech(data, tech, effect)
             name = 'Burmese TB'
             tech = get_new_tech(name)
             tech.effect_id = 651
@@ -312,22 +244,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             effect = get_new_effect(name)
             force_research_tech(effect, 522)
-            append_tech(data, tech, effect)
-        case 'Jurchens':
-            name = 'cheap Siege and Defensive techs'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (239, 980, 321, 379):
-                set_tech_discount(effect, i, 1, 0.25)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
-            name = 'cheap Siege techs ext'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (257, 320):
-                set_tech_discount(effect, i, 1, 0.25)
             append_tech(data, tech, effect)
         case 'Khitans':
             name = '[FTT] pastures'
@@ -614,14 +530,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             research_tech(effect, 1025)
             move_unit_button(effect, 1942, 24)
             append_tech(data, tech, effect)
-            name = 'cheaper archer upgrade'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (100, 237, 218, 437):
-                set_tech_discount(effect, i, -1, 0.75)
-            tech_id, effect_id = append_tech(data, tech, effect)
-            reverse_tech_ids.append(tech_id)
         case 'Slavs':
             # Siege Unit Cheaper ext
             effect = check_effect(effects, 567)
@@ -765,22 +673,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i in origin_units:
                     continue
                 multiply_unit_hp(effect, i, -1, 1.25)
-            name = 'Free Winged-Hussar'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            set_tech_cost(effect, 786, -1, 0)
-            set_tech_time(effect, 786, 0)
-            append_tech(data, tech, effect)
         case 'Vietnamese':
-            name = 'Eco Techs no wood, 1/2 time'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            for i in (1012, 1013, 1014):
-                set_tech_cost(effect, i, 1, 0)
-                set_tech_time_discount(effect, i, 0.5)
-            append_tech(data, tech, effect)
             # Archers + 20%HP ext
             effect = check_effect(effects, 672)
             extend_effect(effect, [2101, 2102])
