@@ -22,6 +22,26 @@ def _orig_time(data, tid):
 #     tag='MULT'     -> c=2 discount d / c=1/-1 绝对增减 d 转 multiplier
 # =============================================================================
 
+def _is_valid_discount_target(data, tid):
+    """判断某个 tech 是否是「可研发的、适合折扣合并的目标」
+    排除:
+      - location_id 全部 <= 0 → 纯脚本/幻影科技 (如 Paphos Shadow, 编年史政体 Reset)
+      - required_tech_count <= 0 → Doctrine / 自动触发类
+      - required_tech_count > 有效前置数 → 文明专属 bug 科技
+    """
+    if tid >= len(data.techs):
+        return False
+    t = data.techs[tid]
+    if not t.research_locations or all(rl.location_id <= 0 for rl in t.research_locations):
+        return False
+    if t.required_tech_count <= 0:
+        return False
+    valid_reqs = sum(1 for x in t.required_techs if x > 0)
+    if t.required_tech_count > valid_reqs:
+        return False
+    return True
+
+
 def collect_native_discounts(data):
     native_cost = collections.defaultdict(list)
     native_time = collections.defaultdict(list)
@@ -45,6 +65,8 @@ def collect_native_discounts(data):
         for cmd in eff.effect_commands:
             if cmd.type == 101:
                 tid, res, c, d = cmd.a, cmd.b, cmd.c, cmd.d
+                if not _is_valid_discount_target(data, tid):
+                    continue
                 if c == 0:
                     native_cost[(tid, res)].append(('SET', d))
                 elif c == 2:
@@ -52,6 +74,8 @@ def collect_native_discounts(data):
 
             elif cmd.type == 103:
                 tid, c, d = cmd.a, cmd.c, cmd.d
+                if not _is_valid_discount_target(data, tid):
+                    continue
                 ot = _orig_time(data, tid)
                 if c == 0:
                     if d == 0:
