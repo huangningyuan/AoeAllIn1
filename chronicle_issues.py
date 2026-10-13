@@ -2,8 +2,9 @@ import copy
 
 from genieutils.datfile import DatFile
 
+import constants
 from all_in_1_params import All_In_1_Params
-from constants import DOCK_ID, PORT_ID, SHIPYARD_ID, CHRONICLE_CIV_IDS
+from constants import DOCK_ID, PORT_ID, SHIPYARD_ID, CHRONICLE_CIV_IDS, PAPHOS_SHADOW_TECH_ID
 from ftt import move_tech_button
 from utils import (
     append_tech,
@@ -17,12 +18,12 @@ from utils import (
     replace_require_tech,
     research_tech,
     set_require_techs,
-    set_unit_attribute,
+    set_unit_attribute, append_tech_effect,
 )
 
 
 def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
-    append_tech_tech_id = 1138
+    techs = data.techs
     chronicle_tech_id_list = list()
     for i in CHRONICLE_CIV_IDS:
         tech = get_new_tech(data.civs[i].name)
@@ -48,7 +49,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
     name = 'enable dock techs'
     tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id, append_tech_tech_id)
+    set_require_techs(tech, params.switch_tech_id, PAPHOS_SHADOW_TECH_ID)
     effect = get_new_effect(name)
     for command in data.effects[1145].effect_commands:
         if command.type == 102:
@@ -126,7 +127,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     for i in append_tech_ship_upgrade_tech_ids:
         tech = copy.deepcopy(data.techs[i])
         tech.civ = -1
-        replace_require_tech(tech, append_tech_tech_id, params.switch_tech_id)
+        replace_require_tech(tech, PAPHOS_SHADOW_TECH_ID, params.switch_tech_id)
         if 101 in tech.required_techs:
             replace_require_tech(tech, 101, params.feudal_duplicate_tech_id)
         elif 102 in tech.required_techs:
@@ -137,3 +138,79 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         force_research_tech(effect, i)
         tech_id, effect_id = append_tech(data, tech, effect)
         disable_tech(data.effects[data.techs[append_tech_dock_tech_id].effect_id], tech_id)
+
+    war_chariot_tech_id = 1169
+    e_war_chariot_tech_id = 1171
+    hoplite_tech_id = 1136
+    e_hoplite_tech_id = 1137
+
+    if params.bug_compat:
+        name = 'enable Hoplite'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_research_tech(effect, hoplite_tech_id)
+        disable_tech(effect, e_hoplite_tech_id)
+        append_tech(data, tech, effect)
+        name = 'Elite Hoplite'
+        tech = copy.deepcopy(techs[e_hoplite_tech_id])
+        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        tech.civ = -1
+        food = tech.resource_costs[0].amount
+        gold = tech.resource_costs[1].amount
+        tech.research_locations[0].button_id = 8
+        tech.resource_costs[0].amount = int(food * constants.TUPI_TECH_FOOD_DISCOUNT * constants.DRAVIDIANS_TECH_DISCOUNT)
+        tech.resource_costs[1].amount = int(gold * constants.DRAVIDIANS_TECH_DISCOUNT)
+        effect = get_new_effect(name)
+        force_research_tech(effect, e_hoplite_tech_id)
+        append_tech(data, tech, effect)
+
+        name = 'enable War Chariot'
+        e_war_chariot_tech_id = 1171
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_research_tech(effect, 1169)
+        disable_tech(effect, e_war_chariot_tech_id)
+        append_tech(data, tech, effect)
+
+        tech = copy.deepcopy(techs[e_war_chariot_tech_id])
+        set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+        tech.research_locations[0].button_id = 32
+        tech.resource_costs[0].amount = 300
+        tech.resource_costs[1].amount = 250
+        effect = get_new_effect(name)
+        force_research_tech(effect, e_war_chariot_tech_id)
+        append_tech_effect(data, tech, effect)
+
+        name = 'elite eagle'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
+        effect = get_new_effect(name)
+        force_tech(effect, 434)
+        append_tech_effect(data, tech, effect)
+    else:
+        # name = 'enable Hoplite'
+        # tech = get_new_tech(name)
+        # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        # effect = get_new_effect(name)
+        # force_research_tech(effect, hoplite_tech_id)
+        # append_tech(data, tech, effect)
+        # name = 'enable Elite Hoplite'
+        # tech = get_new_tech(name)
+        # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        # effect = get_new_effect(name)
+        # force_tech(effect, e_hoplite_tech_id)
+        # append_tech(data, tech, effect)
+        name = 'enable War Chariot'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_research_tech(effect, war_chariot_tech_id)
+        append_tech(data, tech, effect)
+        name = 'enable Elite War Chariot'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_tech(effect, e_war_chariot_tech_id)
+        append_tech(data, tech, effect)

@@ -15,7 +15,7 @@ from ftt import move_unit_button, move_tech_button
 from regional_units import activate_all_regional_units
 from utils import add_require_tech, make_require_age_earlier
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_unit_attribute, set_resource, \
-    append_tech, force_research_tech, append_tech_effect, multiply_resource, \
+    append_tech, force_research_tech, multiply_resource, \
     check_effect, multiply_unit_attribute, disable_unit
 from utils import enable_tech
 from utils import enable_unit
@@ -45,9 +45,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effects = data.effects
     civs = data.civs
     current_civ_num = len(civs)
-
-    TUPI_FOOD_DISCOUNT = 0.5
-    DRAVIDIANS_TECH_DISCOUNT = 0.5
 
     civ_tech_tree_tech_num = dict()
     civ_tb_tech_num = dict()
@@ -388,82 +385,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     multiply_resource(effect, 512, 1.2 * 1.05)
     append_tech(data, tech, effect)
-
-    war_chariot_tech_id = 1169
-    e_war_chariot_tech_id = 1171
-    hoplite_tech_id = 1136
-    e_hoplite_tech_id = 1137
-
-    if params.bug_compat:
-        name = 'enable Hoplite'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_research_tech(effect, hoplite_tech_id)
-        disable_tech(effect, e_hoplite_tech_id)
-        append_tech(data, tech, effect)
-        name = 'Elite Hoplite'
-        tech = copy.deepcopy(techs[e_hoplite_tech_id])
-        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        tech.civ = -1
-        food = tech.resource_costs[0].amount
-        gold = tech.resource_costs[1].amount
-        tech.research_locations[0].button_id = 8
-        tech.resource_costs[0].amount = int(food * TUPI_FOOD_DISCOUNT * DRAVIDIANS_TECH_DISCOUNT)
-        tech.resource_costs[1].amount = int(gold * DRAVIDIANS_TECH_DISCOUNT)
-        effect = get_new_effect(name)
-        force_research_tech(effect, e_hoplite_tech_id)
-        append_tech(data, tech, effect)
-
-        name = 'enable War Chariot'
-        e_war_chariot_tech_id = 1171
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_research_tech(effect, 1169)
-        disable_tech(effect, e_war_chariot_tech_id)
-        append_tech(data, tech, effect)
-
-        tech = copy.deepcopy(techs[e_war_chariot_tech_id])
-        set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-        tech.research_locations[0].button_id = 32
-        tech.resource_costs[0].amount = 300
-        tech.resource_costs[1].amount = 250
-        effect = get_new_effect(name)
-        force_research_tech(effect, e_war_chariot_tech_id)
-        append_tech_effect(data, tech, effect)
-
-        name = 'elite eagle'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, 384)
-        effect = get_new_effect(name)
-        force_tech(effect, 434)
-        append_tech_effect(data, tech, effect)
-    else:
-        name = 'enable Hoplite'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_research_tech(effect, hoplite_tech_id)
-        append_tech(data, tech, effect)
-        name = 'enable Elite Hoplite'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_tech(effect, e_hoplite_tech_id)
-        append_tech(data, tech, effect)
-        name = 'enable War Chariot'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_research_tech(effect, war_chariot_tech_id)
-        append_tech(data, tech, effect)
-        name = 'enable Elite War Chariot'
-        tech = get_new_tech(name)
-        set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-        effect = get_new_effect(name)
-        force_tech(effect, e_war_chariot_tech_id)
-        append_tech(data, tech, effect)
 
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
