@@ -160,6 +160,8 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     # War Chariot(shu)
     move_unit_button(effect, 1962, 23)
     move_unit_button(effect, 1980, 23)
+    # Mounted Trebuchet
+    move_unit_button(effect, 1923, 34)
 
     append_tech(data, tech, effect)
 

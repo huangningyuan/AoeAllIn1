@@ -190,18 +190,18 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         force_tech(effect, 434)
         append_tech_effect(data, tech, effect)
     else:
-        # name = 'enable Hoplite'
-        # tech = get_new_tech(name)
-        # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        # effect = get_new_effect(name)
-        # force_research_tech(effect, hoplite_tech_id)
-        # append_tech(data, tech, effect)
-        # name = 'enable Elite Hoplite'
-        # tech = get_new_tech(name)
-        # set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
-        # effect = get_new_effect(name)
-        # force_tech(effect, e_hoplite_tech_id)
-        # append_tech(data, tech, effect)
+        name = 'enable Hoplite'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_research_tech(effect, hoplite_tech_id)
+        append_tech(data, tech, effect)
+        name = 'enable Elite Hoplite'
+        tech = get_new_tech(name)
+        set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+        effect = get_new_effect(name)
+        force_tech(effect, e_hoplite_tech_id)
+        append_tech(data, tech, effect)
         name = 'enable War Chariot'
         tech = get_new_tech(name)
         set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
