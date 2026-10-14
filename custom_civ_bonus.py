@@ -516,7 +516,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(effect, 324)
             disable_tech(effect, 326)
             # wheelbarrow, double-bit axe, horse collar, gold/stone mining, Transhumance
-            plus_resource(effect, 3, 110)
+            plus_resource(effect, 3, 120)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age2'
             tech = get_new_tech(name)
@@ -524,7 +524,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             # handcart, bow-saw, heavy plow, gold/stone shaft mining, town watch, arson, inf atk/def, arc def, maa,
             # longswordsman, pikeman, Pastoralism
-            plus_resource(effect, 3, 250)
+            plus_resource(effect, 3, 260)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age3'
             tech = get_new_tech(name)
@@ -533,7 +533,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             # two-man saw, crop rotation, thumb ring, pathian tactics, town patrol, gambeson, two-handed swordsman,
             # champion, legionary, light cavalry, arc def, inf atk/def, guard tower, murder hole, herble medicine,
             # chemistry, elite skirm, careening, caravan, Domestication
-            plus_resource(effect, 3, 370)
+            plus_resource(effect, 3, 380)
             append_tech(data, tech, effect)
             name = 'Tech Reward Age4'
             tech = get_new_tech(name)
@@ -652,6 +652,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 1039)
             force_tech(effect, 1042)
+            force_tech(effect, 1042) # Khitans
             force_tech(effect, 1045)
             force_tech(effect, 1047)
             force_tech(effect, 1049)
@@ -663,6 +664,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 1040)
             force_tech(effect, 1043)
+            force_tech(effect, 1043) # Khitans
             force_tech(effect, 1046)
             force_tech(effect, 1048)
             force_tech(effect, 1050)
@@ -674,6 +676,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 1041)
             force_tech(effect, 1044)
+            force_tech(effect, 1044) # Khitans
             tech_id, effect_id = append_tech(data, tech, effect)
             reverse_tech_ids.append(tech_id)
             # Pasture tech + vil

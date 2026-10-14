@@ -110,8 +110,78 @@ C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\resources\{zh|en}\strings\k
 | **Class** | Class List | 13300-13366 | `unit.class_`、type 0/4/5 的 `b`（class_id） | **SID = class_id + 13300** ✅ 严格线性 |
 | **Resource** | Resource List | 15000-15049 | type 1/6/101 的 `a`（resource_id） | **SID = res_id + 15000** ✅ 严格线性 |
 | **Attribute** | Attribute List | 12200-12609 | type 0/4/5 的 `c`（attribute） | **SID = attr + 12200**（有少量跳跃缺口，如 attr 7/31/35-39 无 strings 条目） |
+| **文明加成描述** | Civilization Bonuses | 120150-120211 | 文明 ID（`dat.civs[].ID`） | **SID = civ_id + 120149** ✅ 严格线性 |
 | 单位显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
 | 科技显示名 | — | 各段分散 | `language_dll_name` | 直接取 |
+
+#### 文明加成描述 strings SID 详细映射（游戏内选文明时显示的加成文字）
+
+编码遵循严格线性公式：**SID = 文明 ID + 120149**
+
+| 文明 ID | 文明 | strings SID | 备注 |
+|---------|------|------------|------|
+| 1 | Britons | 120150 | |
+| 2 | French | 120151 | |
+| 3 | Goths | 120152 | |
+| 4 | Teutons | 120153 | |
+| 5 | Japanese | 120154 | |
+| 6 | Chinese | 120155 | |
+| 7 | Byzantines | 120156 | |
+| 8 | Persians | 120157 | |
+| 9 | Saracens | 120158 | |
+| 10 | Turks | 120159 | |
+| 11 | Vikings | 120160 | |
+| 12 | Mongols | 120161 | |
+| 13 | Celts | 120162 | |
+| 14 | Spanish | 120163 | |
+| 15 | Aztecs | 120164 | |
+| 16 | Mayans | 120165 | |
+| 17 | Huns | 120166 | |
+| 18 | Koreans | 120167 | |
+| 19 | Italians | 120168 | |
+| 20 | Hindustanis | 120169 | |
+| 21 | Incas | 120170 | |
+| 22 | Magyars | 120171 | |
+| 23 | Slavs | 120172 | |
+| 24 | Portuguese | 120173 | |
+| 25 | Ethiopians | 120174 | |
+| 26 | Malians | 120175 | |
+| 27 | Berbers | 120176 | |
+| 28 | Khmer | 120177 | |
+| 29 | Malay | 120178 | |
+| 30 | Burmese | 120179 | |
+| 31 | Vietnamese | 120180 | |
+| 32 | Bulgarians | 120181 | |
+| 33 | Tatars | 120182 | |
+| 34 | Cumans | 120183 | |
+| 35 | Lithuanians | 120184 | |
+| 36 | Burgundians | 120185 | |
+| 37 | Sicilians | 120186 | |
+| 38 | Poles | 120187 | |
+| 39 | Bohemians | 120188 | |
+| 40 | Dravidians | 120189 | |
+| 41 | Bengalis | 120190 | |
+| 42 | Gurjaras | 120191 | |
+| 43 | Romans | 120192 | |
+| 44 | Armenians | 120193 | |
+| 45 | Georgians | 120194 | |
+| 46 | Achaemenids | 120195 | 编年史 |
+| 47 | Athenians | 120196 | 编年史 |
+| 48 | Spartans | 120197 | 编年史 |
+| 49 | Shu | 120198 | |
+| 50 | Wu | 120199 | |
+| 51 | Wei | 120200 | |
+| 52 | Jurchens | 120201 | |
+| 53 | Khitans | 120202 | |
+| 54 | Macedonians | 120203 | 编年史 |
+| 55 | Thracians | 120204 | 编年史 |
+| 56 | Puru | 120205 | 编年史 |
+| 57 | Muisca | 120206 | |
+| 58 | Mapuche | 120207 | |
+| 59 | Tupi | 120208 | |
+| 60 | Saxons | 120209 | |
+| 61 | Varangians | 120210 | |
+| 62 | Danes | 120211 | |
 
 ### ResearchLocation (研发地点 / 按钮)
 | 属性 | 类型 | 说明 |
