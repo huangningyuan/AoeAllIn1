@@ -100,6 +100,15 @@ def collect_native_discounts(data):
 #   B. 特定科技条目 — 固定 tech_id 的 SET_0 / 自定义值, 带注释说明来源
 #
 # 所有资源ID / 建筑ID / 折扣值均使用 constants.py 常量, 避免魔数
+#
+# ⚠️ 以下 gap_analysis 识别的条目不在此处处理 — 由 custom_civ_bonus.py 直接 force_research:
+#   - French (Franks)  → MILL: 原生 E43 覆盖 Crop rotation/Heavy plow/Horse collar (12/13/14) SET_0,
+#         缺 Khitan 经济科技 (1012 Grazing Grasslands / 1013 Enclosures / 1014 Livestock Husbandry) SET_0
+#   - Vietnamese      → MILL: 原生 E692 覆盖 12/13/14 wood=0, 同样缺 1012/1013/1014
+#   - Burgundians     → MILL: 原生 E782 覆盖 12/13/14 food 0.6, 缺 1012/1013/1014 food 0.6,
+#         另外 Burgundians 还有"经济科技提前一个时代可研发"的需求, 用 force_research 实现更合适
+#   这三者在 custom_civ_bonus.py Burgundians case 里统一 force_research(1012/1013/1014) 处理,
+#   提前时代通过 set_require_techs 控制阶段 (feudal_duplicate / castle_duplicate)
 # =============================================================================
 
 def _expand_building_rule(data, building_id, resource_type, multiplier, exclude_ids=()):
