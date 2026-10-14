@@ -9,6 +9,7 @@ from all_in_1_params import All_In_1_Params
 from constants import \
     BARRACK_ID, BLOODLINE_ID, CASTLE_ID, FRANKS_FORAGER_WORK_RATE, HOUSE_ID, \
     MAPUCHE_FORAGER_WORK_RATE, ROMAN_CIV_WORK_RATE, WP_WITH_RELIC_ID, PAPHOS_SHADOW_TECH_ID
+from deal_requirement import FLEMISH_REVOLUTION_TECH_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import add_require_tech
@@ -153,6 +154,12 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             set_require_techs(tech, params.castle_duplicate_tech_id, 1013)
             effect = get_new_effect(name)
             force_research_tech(effect, 1012)
+            append_tech(data, tech, effect)
+            name = 'enable Flemish Revolution'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
+            effect = get_new_effect(name)
+            force_tech(effect, FLEMISH_REVOLUTION_TECH_ID)
             append_tech(data, tech, effect)
         case 'Burmese':
             name = 'Burmese TB'

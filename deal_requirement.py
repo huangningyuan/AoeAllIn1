@@ -24,9 +24,4 @@ def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):
             replace_require_tech(tech, 103, params.early_imp_duplicate_tech_id)
             replace_require_tech(tech, 115, params.early_imp_duplicate_tech_id)
 
-    flemish_revolution_tech = data.techs[FLEMISH_REVOLUTION_TECH_ID]
-    flemish_revolution_tech.required_techs = (115, params.switch_tech_id, 758, -1, -1, -1)
-    flemish_revolution_tech.required_tech_count = 2
-    flemish_revolution_tech.civ = -1
-
     print('Required tech finished.')

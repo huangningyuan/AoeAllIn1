@@ -214,3 +214,6 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         effect = get_new_effect(name)
         force_tech(effect, e_war_chariot_tech_id)
         append_tech(data, tech, effect)
+        for i in range(constants.ORIGINAL_TECH_NUM):
+            if PAPHOS_SHADOW_TECH_ID in data.techs[i].required_techs:
+                replace_require_tech(data.techs[i], PAPHOS_SHADOW_TECH_ID, params.switch_tech_id)
