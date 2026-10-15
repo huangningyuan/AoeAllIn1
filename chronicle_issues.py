@@ -118,7 +118,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, chronicle_civs_requirement)
     effect = get_new_effect(name)
     # elite steppe lancer
-    force_tech(effect, 689)
+    force_tech(effect, 715)
     # elite fire lancer
     force_tech(effect, 982)
     append_tech(data, tech, effect)

@@ -306,7 +306,8 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (2384, 2385):
                 if i not in original_units:
                     plus_unit_attribute(effect, i, -1, 22, -0.5)
-
+            # Fortified Outpost
+            add_require_tech(techs[1270], params.switch_tech_id)
         case 'Malians':
             # barrack unit +1 p armor ext
             origin_units = set(map(lambda command: command.a, effects[618].effect_commands))

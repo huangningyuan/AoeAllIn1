@@ -17,5 +17,5 @@ if __name__ == '__main__':
     units = data.civs[0].units
     for effect in effects:
         for command in effect.effect_commands:
-            if command.a == 1261:
+            if command.a == 689:
                 print (effect.name, command)

@@ -329,7 +329,7 @@ def _merge_native_cost(native_cost, data):
     return final
 
 
-def _merge_native_time(native_time):
+def _merge_native_time(native_time, data):
     """原生 type 103 合并 → dict[tid, final_multiplier]"""
     final = {}
     for tid, entries in native_time.items():
@@ -337,9 +337,15 @@ def _merge_native_time(native_time):
         has_set_abs_zero = any(e[0] == 'SET_ABS' and e[1] == 0 for e in entries)
         if has_set_zero or has_set_abs_zero:
             final[tid] = 0
-        else:
-            mults = [e[1] for e in entries if e[0] == 'MULT']
-            final[tid] = reduce(lambda a, b: a * b, mults, 1.0) if mults else 1.0
+            continue
+
+        set_abs_vals = [e[1] for e in entries if e[0] == 'SET_ABS' and e[1] != 0]
+        if set_abs_vals:
+            final[tid] = set_abs_vals[0] / _orig_time(data, tid) if _orig_time(data, tid) > 0 else 1.0
+            continue
+
+        mults = [e[1] for e in entries if e[0] == 'MULT']
+        final[tid] = reduce(lambda a, b: a * b, mults, 1.0) if mults else 1.0
     return final
 
 
@@ -374,7 +380,7 @@ def merge_discounts(data):
     native_cost, native_time = collect_native_discounts(data)
 
     final_cost = _merge_native_cost(native_cost, data)
-    final_time = _merge_native_time(native_time)
+    final_time = _merge_native_time(native_time, data)
 
     manual_cost_list, manual_time_list = _compile_manual_lists(data)
 
