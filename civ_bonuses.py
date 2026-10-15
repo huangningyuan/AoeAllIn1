@@ -57,7 +57,10 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         if effect.name.endswith('Team Bonus'):
             civ_name = effect.name[0:-11]
             civ_tb_tech_num[civ_name] = i
-            all_team_bonus_effect_commands += effect.effect_commands
+            for cmd in effect.effect_commands:
+                if cmd.type in (101, 103):
+                    continue
+                all_team_bonus_effect_commands.append(cmd)
 
     name = 'All Team Bonus'
     tech = get_new_tech()
@@ -90,6 +93,10 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             continue
         if tech.civ == -1:
             continue
+        if tech.effect_id >= 0:
+            eff = data.effects[tech.effect_id]
+            if eff.effect_commands and all(cmd.type in (101, 103) for cmd in eff.effect_commands):
+                continue
         reqs = [
             rt for rt in tech.required_techs[:tech.required_tech_count]
             if rt != -1
@@ -122,6 +129,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         tech_required_tech_count = tech.required_tech_count
         required_techs = tech.required_techs
         if tech_required_tech_count == 0:
+            if i in (1258, 1259, 1260, 1227, 1228, 1229):
+                continue
             civ_bonus_ids[tech.civ].append(i)
         elif tech_required_tech_count == 1:
             match required_techs[0]:
@@ -155,7 +164,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         tech_tree_bonus_effect_commands = list()
         for effect_command in tech_tree_effect.effect_commands:
             if effect_command.type == 102:
-                if effect_command.d != 15.0:  # guilds
+                if effect_command.d not in (15.0, 1261.0):
                     enable_tech(reverse_effect, int(effect_command.d))
             elif effect_command.type == 101:
                 continue

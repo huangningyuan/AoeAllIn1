@@ -8,9 +8,6 @@ from utils import set_require_techs
 FEUDAL_REQUIRE_TECH_LIST = []
 CASTLE_AGE_REQUIRE_TECH_LIST = []
 IMPERIAL_AGE_REQUIRE_TECH_LIST = []
-EAGLE_WARRIOR_TECH_ID = 384
-ELITE_EAGLE_TECH_ID = 434
-FLEMISH_REVOLUTION_TECH_ID = 755
 
 
 def deal_tech_requrirement(data: DatFile, params: All_In_1_Params):

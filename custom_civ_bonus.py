@@ -9,7 +9,6 @@ from all_in_1_params import All_In_1_Params
 from constants import \
     BARRACK_ID, BLOODLINE_ID, CASTLE_ID, FRANKS_FORAGER_WORK_RATE, HOUSE_ID, \
     MAPUCHE_FORAGER_WORK_RATE, ROMAN_CIV_WORK_RATE, WP_WITH_RELIC_ID, PAPHOS_SHADOW_TECH_ID
-from deal_requirement import FLEMISH_REVOLUTION_TECH_ID
 from ftt import move_tech_button
 from ftt import move_unit_button
 from utils import add_require_tech
@@ -159,6 +158,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
             effect = get_new_effect(name)
+            FLEMISH_REVOLUTION_TECH_ID = 755
             force_tech(effect, FLEMISH_REVOLUTION_TECH_ID)
             append_tech(data, tech, effect)
         case 'Burmese':
@@ -224,12 +224,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             techs[242].civ = -1
             effect = check_effect(effects, 231)
             disable_tech(effect, get_tech_id_by_name(data, 'Start w/ Horse'))
-            name = 'disable house'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            disable_unit(effect, HOUSE_ID)
-            append_tech(data, tech, effect)
         case 'Incas':
             name = 'Incas Team Tech Tree'
             tech = get_new_tech(name)

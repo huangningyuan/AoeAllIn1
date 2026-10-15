@@ -324,9 +324,7 @@
       {
         "unit_name": "Pasture",
         "civ_match": {
-          "civ_names": [
-            "Khitans"
-          ]
+          "default": true
         },
         "unit_ids": [
           1889
@@ -367,6 +365,23 @@
           2556,
           2558,
           2560
+        ],
+        "tech_ids": []
+      },
+      {
+        "unit_name": "House",
+        "civ_match": {
+          "civ_names": [
+            "Huns"
+          ]
+        },
+        "unit_ids": [
+          70,
+          191,
+          192,
+          463,
+          464,
+          465
         ],
         "tech_ids": []
       }
