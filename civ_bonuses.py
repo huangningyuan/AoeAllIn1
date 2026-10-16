@@ -373,27 +373,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
 
 
-    name = 'Armenians + Poles Age1'
-    tech = get_new_tech(name)
-    set_require_techs(tech, 278, params.switch_tech_id)
-    effect = get_new_effect('Armenians + Poles + Romans + Koreans Mining')
-    multiply_resource(effect, 241, (1 + (0.15 * 1.4) / 1.15) * 1.05 * 1.2)
-    disable_tech(effect, 806)
-    disable_tech(effect, 807)
-    tech_id, effect_id = append_tech(data, tech, effect)
-    name = 'Armenians + Poles Age2'
-    tech = get_new_tech(name)
-    set_require_techs(tech, 279, params.switch_tech_id)
-    tech.effect_id = effect_id
-    append_tech(data, tech)
-
-    name = 'Puru + Koreans + Romans Stone Mining food generation'
-    tech = get_new_tech(name)
-    set_require_techs(tech, params.switch_tech_id)
-    effect = get_new_effect(name)
-    multiply_resource(effect, 512, 1.2 * 1.05)
-    append_tech(data, tech, effect)
-
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)

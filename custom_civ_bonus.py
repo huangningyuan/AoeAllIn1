@@ -408,14 +408,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             append_tech(data, tech, effect)
             disable_tech(check_effect(effects, 253), 526)
             disable_tech(check_effect(effects, 581), 265)
-        case 'Poles':
-            name = 'Reverse Poles Stone Mining Gold'
-            tech = get_new_tech(name)
-            set_require_techs(tech, 806, params.switch_tech_id)
-            tech.civ = 38
-            effect = get_new_effect(name)
-            multiply_resource(effect, 241, 1 / 1.15)
-            append_tech(data, tech, effect)
         case 'Portuguese':
             name = 'Foraging Wood'
             tech = get_new_tech(name)
@@ -493,13 +485,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i not in original_units and units[i].class_ not in original_classes:
                     multiply_unit_attribute(check_effect(effects, 1068), i, -1, 5, 1.1)
                     multiply_unit_attribute(check_effect(effects, 1072), i, -1, 5, 1.1)
-            name = 'Enable Traction Trebuchets'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            research_tech(effect, 1025)
-            move_unit_button(effect, 1942, 24)
-            append_tech(data, tech, effect)
         case 'Slavs':
             # Siege Unit Cheaper ext
             effect = check_effect(effects, 567)
