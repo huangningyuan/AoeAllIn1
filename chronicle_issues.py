@@ -44,7 +44,6 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     enable_unit(effect, DOCK_ID)
     set_unit_attribute(effect, PORT_ID, -1, 58, -1)
     enable_unit(effect, PORT_ID)
-    force_tech(effect, 1143)
     research_tech(effect, 1143)
     append_tech(data, tech, effect)
     name = 'enable dock techs'
@@ -60,17 +59,18 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
     effect = get_new_effect(name)
     enable_unit(effect, SHIPYARD_ID)
-    force_research_tech(effect, 1147)
-    force_research_tech(effect, 1150)
-    force_research_tech(effect, 1153)
+    research_tech(effect, 1147)
+    research_tech(effect, 1150)
+    research_tech(effect, 1153)
     force_tech(effect, 384)
     append_tech(data, tech, effect)
+
     name = 'enable Castle units'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
     effect = get_new_effect(name)
-    force_research_tech(effect, 1158)
-    force_research_tech(effect, 426)
+    research_tech(effect, 1158)
+    research_tech(effect, 426)
     append_tech(data, tech, effect)
 
     name = 'append_tech Gambesons'
@@ -135,7 +135,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         elif 103 in tech.required_techs:
             replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
         effect = get_new_effect(tech.name)
-        force_research_tech(effect, i)
+        research_tech(effect, i)
         tech_id, effect_id = append_tech(data, tech, effect)
         disable_tech(data.effects[data.techs[append_tech_dock_tech_id].effect_id], tech_id)
 
@@ -149,7 +149,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         tech = get_new_tech(name)
         set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
         effect = get_new_effect(name)
-        force_research_tech(effect, hoplite_tech_id)
+        research_tech(effect, hoplite_tech_id)
         disable_tech(effect, e_hoplite_tech_id)
         append_tech(data, tech, effect)
         name = 'Elite Hoplite'
@@ -162,7 +162,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         tech.resource_costs[0].amount = int(food * constants.TUPI_TECH_FOOD_DISCOUNT * constants.DRAVIDIANS_TECH_DISCOUNT)
         tech.resource_costs[1].amount = int(gold * constants.DRAVIDIANS_TECH_DISCOUNT)
         effect = get_new_effect(name)
-        force_research_tech(effect, e_hoplite_tech_id)
+        research_tech(effect, e_hoplite_tech_id)
         append_tech(data, tech, effect)
 
         name = 'enable War Chariot'
@@ -194,13 +194,13 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
         tech = get_new_tech(name)
         set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
         effect = get_new_effect(name)
-        force_research_tech(effect, hoplite_tech_id)
+        research_tech(effect, hoplite_tech_id)
         append_tech(data, tech, effect)
         name = 'enable Elite Hoplite'
         tech = get_new_tech(name)
         set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
         effect = get_new_effect(name)
-        force_tech(effect, e_hoplite_tech_id)
+        tech(effect, e_hoplite_tech_id)
         append_tech(data, tech, effect)
         name = 'enable War Chariot'
         tech = get_new_tech(name)
