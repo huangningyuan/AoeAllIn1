@@ -37,7 +37,8 @@ TECH_TO_REMOVE = [286, 287, 500,
                   1136, 1137,
                   1169, 1170, 1171,
                   1195, 1196, 1197,
-                  1012, 1013, 1014]
+                  1012, 1013, 1014,
+                  289, 238]
 
 
 def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
@@ -84,7 +85,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         civ_imp_bonus_ids.append(list())
         civ_custom_bonus_ids.append(list())
         civ_ut_ids.append(list())
-    AGE_TECH_IDS = (101, 102, 103, 104, 113, 1209)
+    AGE_TECH_IDS = (101, 102, 103, 104, 113, 1208, 1209)
     for i in range(constants.ORIGINAL_TECH_NUM):
         tech = techs[i]
         required_techs = tech.required_techs
