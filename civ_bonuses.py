@@ -350,14 +350,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     activate_all_regional_units(data, params)
     deal_tech_requrirement(data, params)
 
-    # Catapult Galleon requirements
-    name = 'Catapult Requirements'
-    tech = get_new_tech(name)
-    set_require_techs(tech, 1350, 433, 675)
-    tech.required_tech_count = 1
-    tech_id = append_tech(data, tech)
-    set_require_techs(techs[913], 115, tech_id)
-
     name = 'Bohemians Cumans Saracens Cheap Buildings'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, 595)
