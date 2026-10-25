@@ -109,13 +109,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             force_tech(effect, 787)
             append_tech(data, tech, effect)
-        case 'Bulgarians':
-            name = 'enable konnik'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 1254)
-            append_tech(data, tech, effect)
         case 'Burgundians':
             effect = check_effect(effects, 794)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -124,18 +117,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     continue
                 for attack in data.civs[0].units[i].type_50.attacks:
                     multiply_unit_attack(effect, i, -1, 125, attack.class_)
-            name = 'Feudal Gillnets'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id, 906)
-            effect = get_new_effect(name)
-            force_tech(effect, 65)
-            append_tech(data, tech, effect)
-            name = 'Feudal eco tech requirement'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 758)
-            append_tech(data, tech, effect)
             name = 'Burgundians Khitan Domestication'
             tech = get_new_tech(name)
             set_require_techs(tech, params.switch_tech_id)

@@ -32,7 +32,7 @@ TECH_TO_REMOVE = [286, 287, 500,
                   323, 324, 326, 299, 303, 305,
                   310, 867, 868, 869, 1071,
                   241, 242, 1058, 885,
-                  1059, 995, 1067, 1004, 355,
+                  1059, 355,
                   1397, 1353,
                   1136, 1137,
                   1169, 1170, 1171,
@@ -86,6 +86,39 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         civ_custom_bonus_ids.append(list())
         civ_ut_ids.append(list())
     AGE_TECH_IDS = (101, 102, 103, 104, 113, 1208, 1209)
+
+    or_req_tech_ids = set()
+    for _ti in range(len(data.techs)):
+        _tt = data.techs[_ti]
+        if _tt.civ != -1:
+            continue
+        if (_tt.research_locations[0].location_id == -1 and
+                _tt.effect_id == -1):
+            continue
+        for _j in range(6):
+            _rt = _tt.required_techs[_j]
+            if _rt == -1 or _rt in AGE_TECH_IDS:
+                continue
+            if _j >= _tt.required_tech_count:
+                or_req_tech_ids.add(_rt)
+    def _and_reqs_all_non_researchable(tech):
+        for _j in range(tech.required_tech_count):
+            _rt = tech.required_techs[_j]
+            if _rt == -1:
+                continue
+            _rl = data.techs[_rt].research_locations[0] if len(data.techs[_rt].research_locations) > 0 else None
+            if _rl and _rl.location_id != -1:
+                return False
+        return True
+
+    def _is_pure_discount(tech):
+        if tech.effect_id == -1:
+            return True
+        _eff = data.effects[tech.effect_id]
+        if not _eff.effect_commands:
+            return True
+        return all(cmd.type in (101, 103) for cmd in _eff.effect_commands)
+
     for i in range(constants.ORIGINAL_TECH_NUM):
         tech = techs[i]
         required_techs = tech.required_techs
@@ -94,7 +127,13 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             continue
         if tech.civ == -1:
             continue
-        if tech.effect_id >= 0:
+        _is_req_candidate = (
+            research_location.location_id == -1 and
+            tech.civ not in CHRONICLE_CIV_IDS and
+            i in or_req_tech_ids and
+            _and_reqs_all_non_researchable(tech)
+        )
+        if tech.effect_id >= 0 and not _is_req_candidate:
             eff = data.effects[tech.effect_id]
             if eff.effect_commands and all(cmd.type in (101, 103) for cmd in eff.effect_commands):
                 continue
@@ -111,6 +150,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             civ_ut_ids[tech.civ].append(i)
             continue
         elif tech.name.find('post-imp') > -1:
+            continue
+        if (_is_pure_discount(tech) and
+                research_location.location_id == -1 and
+                tech.civ not in CHRONICLE_CIV_IDS and
+                i in or_req_tech_ids and _and_reqs_all_non_researchable(tech)):
+            civ_bonus_ids[tech.civ].append(i)
             continue
         elif tech.effect_id == -1 and required_techs[0] == 104 and tech.required_tech_count == 1:
             continue

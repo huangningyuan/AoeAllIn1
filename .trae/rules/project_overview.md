@@ -192,6 +192,37 @@ Elite Eagle (434) 类似，无法通过常规流程激活。
 
 ---
 
+## 科技执行顺序与折扣合并
+
+### 执行顺序规则
+
+AoE2 中**每个科技的 effect 在其前置条件全部满足时触发执行**；前置条件同时满足的多个科技之间，**tech index 小的先执行**（不是 effect 在某个全局数组里的顺序）。因此需要手动确保关键科技的 index 位置：
+
+- **Civil Bonus Tech**（`civ_bonuses.py` append）和 requirement tech（如 758、950、1004，原生 index 在 ~758/~950/~1004）都只依赖 Switch 开关，前置同步满足。原生 requirement tech index 更小，其 type 101 c=2 multiplier 先执行
+- **All Discounts Merged**（`discount_merger.py` append）同样只依赖 Switch，但其 index 因 append 在所有 Bonus Tech 之后而最大，确保最后执行，用 type 101 c=0 Set 覆盖所有前置折扣的叠加结果
+
+### 折扣合并机制
+
+- `discount_merger.build_discount_tech()` 收集原生 Tech Tree + Team Bonus + C-Bonus 里所有 type 101 / 103 的折扣（含 c=0 set 和 c=2 multiplier），合并算出每个 tech 的最终 cost / time
+- 输出用 **type 101 c=0（Set 绝对值）** 和 **type 103 c=0（Set 研发时间）**，直接覆盖所有前置折扣效果
+- 因此即使 requirement tech（1004 等）保留了原生 type 101 c=2 multiplier，最终价格仍由 All Discounts Merged 的 c=0 Set 决定，无重复叠加风险
+
+### Requirement Tech 自动 Force
+
+`civ_bonuses.py` 中自动识别并 force-research 满足以下全部条件的科技，**避免手动逐个添加文明 bonus**：
+
+| 条件 | 含义 |
+|------|------|
+| `research_locations[0].location_id == -1` | 不可研发（纯前置标记） |
+| `effect_id == -1` **或** effect 仅含 type 101/103 | 无实际效果（纯折扣或无 effect） |
+| `civ not in CHRONICLE_CIV_IDS` | 排除编年史文明占位科技（保留它们做前置标记的用途） |
+| 被通用科技（civ=-1）在 OR 前置 slot（`required_tech_count` 之后）引用 | 确认为"提前时代解锁"用途 |
+| 所有 AND 前置的 location_id 都是 -1（不可研发） | 可直接激活，无需等待其他可研发前置就位 |
+
+**已验证自动 force 的 requirement tech**：758（勃艮第提前时代）、950（亚美尼亚）、1004（契丹提前时代）
+
+---
+
 ## 注意事项
 - 一个科技不能出现在同一建筑的多个button位置（同一文明同一位置不能有两个科技）
 - 修改后运行`python update_all_in_1.py`验证
