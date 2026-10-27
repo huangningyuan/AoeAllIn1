@@ -416,12 +416,26 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     move_tech_button(effect, ELITE_TEMPLE_GUARD_TECH_ID, 32, 0)
     elite_temple_guard_tech = techs[ELITE_TEMPLE_GUARD_TECH_ID]
-    elite_temple_guard_tech.research_locations.append(elite_temple_guard_tech.research_locations[0])
+    elite_temple_guard_tech.research_locations.append(copy.deepcopy(elite_temple_guard_tech.research_locations[0]))
     elite_temple_guard_tech.research_locations[1].location_id = MONESTARY_ID
     elite_temple_guard_tech.research_locations[1].button_id = 32
     for i in TEMPLE_GUARD_IDS:
         move_unit_button(effect, i, 31, 0)
         move_unit_button(effect, i, 24, 1)
+    append_tech(data, tech, effect)
+
+    name = 'Temple Guard Force Feudal'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.feudal_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, 1400)
+    append_tech(data, tech, effect)
+
+    name = 'Temple Guard Force Castle'
+    tech = get_new_tech(name)
+    set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
+    effect = get_new_effect(name)
+    force_tech(effect, 1401)
     append_tech(data, tech, effect)
 
     additional_tc_ids = [2275, 2276, 2277]

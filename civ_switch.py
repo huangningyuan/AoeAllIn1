@@ -91,13 +91,13 @@ def _execute_unit_switch(effect, civ_name, civ_id, params):
         enable_tids = set(_resolve_ids(target_sc.get('tech_ids', []), params, f"{cat_name}/{target_sc_name}/tech_ids"))
 
         for uid in (all_uids - enable_uids):
-            move_unit_button(effect, uid, -1)
+            move_unit_button(effect, uid, -1, 0)
         for tid in (all_tids - enable_tids):
-            move_tech_button(effect, tid, -1)
+            move_tech_button(effect, tid, -1, 0)
         for uid in enable_uids:
-            move_unit_button(effect, uid, unit_button_id)
+            move_unit_button(effect, uid, unit_button_id, 0)
         for tid in enable_tids:
-            move_tech_button(effect, tid, tech_button_id)
+            move_tech_button(effect, tid, tech_button_id, 0)
 
 
 def get_next_position(pos: tuple):
