@@ -622,6 +622,46 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 >
 > "黑暗时代直接生效" = `req_count == 0`，或 `req_count == 1 and required_techs[0] == 104`。Static Bonus 科技全部满足这个条件。
 
+### 新文明加入 Checklist
+
+当游戏更新增加了新文明（或编年史/南美文化圈扩展）时，按顺序检查以下位置：
+
+#### 1. `constants.py` —— 更新文明分组常量（**最关键，其他地方都引用这里**）
+
+| 常量 | 当前值 | 含义 |
+|------|--------|------|
+| `CHRONICLE_CIV_IDS` | `[46,47,48,54,55,56]` | 编年史文明（Achaemenids/Athenians/Spartans/Macedonians/Thracians/Puru） |
+| `SOUTH_MESO_CIV_IDS` | `[21,57,58,59]` | 南美文明（Incas/Muisca/Mapuche/Tupi） |
+| `DOCK_IDS` | `[45,51,47,133]` | 码头类建筑（含 Chronicle Port/Shipyard 处理） |
+
+#### 2. 引用这些常量的文件（改了 constants.py 后通常**不需要**再改这些文件的逻辑）
+
+| 文件 | 用途 |
+|------|------|
+| `chronicle_issues.py:28` | 遍历 `CHRONICLE_CIV_IDS` 给编年史加科技链 |
+| `civ_bonuses.py:132,149,156,473` | 判断科技树银冠/金冠位置 (button_id 7/8 vs 12/13) |
+| `unique_techs.py:28,33` | 判断 UT 在 Castle/Imperial 的互斥布局 |
+| `civ_name.py:40-63` | `CHRONICLE_CIVS` 字典 —— 用 name 而非 ID，也需要手动同步 |
+
+#### 3. 可能需要**手动追加**新文明专属逻辑的地方
+
+| 文件 | 检查点 |
+|------|--------|
+| `custom_civ_bonus.py` | 是否有新文明需要专属的单位属性加成 |
+| `regional_units.py` | 是否有新的区域独特单位（Saxons/Varangians/Danes 等编年史民族） |
+| `check_civ_tech_trees.py` | 新文明科技树是否和编年史一样有缺失节点落到 default:true |
+| `discount_merger.py` | 新文明 Static Bonus 是否用 type 8 ModifyTech 实现（自动识别，通常无需改动） |
+
+#### 4. 验证方法
+
+```bash
+python -c "from constants import CHRONICLE_CIV_IDS; print(CHRONICLE_CIV_IDS)"
+python check_civ_tech_trees.py     # 看新文明的科技树覆盖率
+python -c "from discount_merger import merge_discounts; ..."  # 看折扣是否正确
+```
+
+> **⚠️ 原则**：文明分组只在 `constants.py` 定义一次。其他文件一律 `from constants import ...`，不要自己写数字列表。`civ_name.py` 的 `CHRONICLE_CIVS` 字典因为用 name 做 key，**必须手动同步**。
+
 > **编年史文明判断方法**：
 > 1. 用 `civ_id in CHRONICLE_CIV_IDS` 直接查常量
 > 2. 检测文明 effect 里有没有 `type=101 (tech cost), tech_id=1138, resource_id=0, amount=0`（Tech 1138 = Paphos Shadow Tech，编年史文明原生 effect 把它成本设为 0 来激活，作为编年史标记）
