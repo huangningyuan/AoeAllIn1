@@ -223,7 +223,67 @@ bind_effect(data, tech, effect)
 | **4** | plus_unit_attribute | unit_id | class_id (-1=by unit) | attribute | value | `plus_unit_attribute`, `plus_unit_attack`, `plus_unit_armor` |
 | **5** | multiply_unit_attribute | unit_id | class_id (-1=by unit) | attribute | multiplier | `multiply_unit_attribute`, `multiply_unit_cost`, `multiply_unit_attack` |
 | **6** | multiply_resource | resource_id | — | — | multiplier | `multiply_resource` |
-| **8** | tech 开关 | tech_id | 12(固定) | **-1**=所有建筑生效，**≥0**=建筑下标（配合 research_locations 内各条目） | 1=enable, 2=force, 3=research。**注意**：enable(d=1) 仅对 `civ=-1` 的通用科技有效，文明专属科技只能用 force(d=2)；少数原生科技 enable 莫名无效，也需 force | `force_tech`, `research_tech`, `force_research_tech` |
+| **8** | **tech 开关** + **Modify Tech** | tech_id | 见下 | 见下 | 见下 | `force_tech`, `research_tech`, `force_research_tech` |
+
+> ⚠️ **type 8 有两种完全不同的用法，由 `b` 值区分**：
+>
+> **用法 A — Set Enabled（Tech Tree 开关）** — `b=12`（固定）：
+> - **a** = tech_id
+> - **b** = 12（固定，这个用法的标识符）
+> - **c** = 建筑索引：**-1** = 所有建筑生效，**≥0** = research_locations 数组下标（指定哪个研发建筑）
+> - **d** = 动作枚举：
+>
+>   | d | 含义 | utils 函数 | 说明 |
+>   |---|------|-----------|------|
+>   | **0** | **disable** | （无封装，直接用 `EffectCommand(8, tid, 12, -1, 0)`） | 该 tech 在此文明科技树中不可用 |
+>   | **1** | **enable** | `enable_tech` | 仅对 `civ=-1` 的通用科技有效，文明专属科技 enable 莫名无效 |
+>   | **2** | **force** | `force_tech` | 强制解锁，无视 civ 限制。**文明专属科技必须用 force** |
+>   | **3** | **research** | `research_tech` | 直接授予已研发状态（游戏开始时视为已研发） |
+>
+>   常见组合：`force_research_tech` = force(d=2) + research(d=3) 双连发
+>
+> **用法 B — Modify Tech 属性** — `b` = 属性码（≠12）：
+> - **a** = tech_id
+> - **b** = 属性码（见下表）
+> - **c** = 未使用（原生均为 0 / -1）
+> - **d** = 设置值（绝对值或增量，取决于 b）
+>
+> 完整 b 值表（来自 AGE 编辑器，经 dat 数据验证）：
+>
+> | b 值 | 含义 | d 参数 | 原生使用 | 典型用途 |
+> |------|------|--------|---------|---------|
+> | **-1** | Set Time（设置研发时间） | 绝对值，**0 = 零时间** | 3 处 | Thracian Elite Skirmisher 免费时间 |
+> | **-2** | Add Time（增加研发时间） | 增量 | 0 处（预留） | |
+> | **0** | Set Food Cost（设置食物成本） | 绝对值，**0 = 免费** | 2 处 | Athenian Elite Hoplite 免费食物 |
+> | **1** | Set Wood Cost（设置木材成本） | 绝对值，**0 = 免费** | 1 处 | Thracian Elite Skirmisher 免费木材 |
+> | **2** | Set Stone Cost（设置石料成本） | 绝对值，**0 = 免费** | 0 处（预留） | |
+> | **3** | Set Gold Cost（设置黄金成本） | 绝对值，**0 = 免费** | 2 处 | Thracian Elite Skirmisher 免费黄金 |
+> | **4** | Set Research Location（设置研发建筑） | building_id | 4 处 | C-Bonus 为区域科技指定研发建筑 |
+> | **5** | Set Research Button（设置按钮位置） | 按钮槽位号 | 19 处 | FTT 区域科技按钮布局 |
+> | **6** | Set Icon（设置图标） | SID/Icon ID | 0 处（预留） | |
+> | **7** | Set Name（设置名称 SID） | SID | 2 处 | Regional Unit 改名 |
+> | **8** | Set Description（设置描述 SID） | SID | 6 处 | Doctrine 科技描述 |
+> | **9** | Set Stacking（设置叠加方式） | | 0 处（预留） | |
+> | **10** | Set Stacking Research Cap | | 0 处（预留） | |
+> | **11** | Set Hotkey（设置快捷键） | 键码 | 6 处 | C-Bonus 区域科技快捷键 |
+> | **16384** | Add Food Cost（增加食物成本） | 增量 | 0 处（预留） | |
+> | **16385** | Add Wood Cost（增加木材成本） | 增量 | 0 处（预留） | |
+> | **16386** | Add Stone Cost（增加石料成本） | 增量 | 0 处（预留） | |
+> | **16387** | Add Gold Cost（增加黄金成本） | 增量 | 0 处（预留） | |
+>
+> **实战证据**：
+> - **Thracian E1248** (Tech 1292 "Static Bonuses") 对 Tech 98 (Elite Skirmisher, orig Wood=230 Gold=130 Time=50)：
+>   `type=8 b=1 d=0` → Set Wood Cost = 0
+>   `type=8 b=3 d=0` → Set Gold Cost = 0
+>   `type=8 b=-1 d=0` → Set Time = 0
+> - **Spartan E1217** (Tech 1266 "Free Elite Hoplite", civ=48) 对 Tech 1137 (Elite Hoplite, orig Food=600 Gold=550 Time=55)：
+>   `type=8 b=0 d=0` → Set Food Cost = 0
+>   `type=8 b=3 d=0` → Set Gold Cost = 0
+>   `type=8 b=-1 d=0` → Set Time = 0
+> - **C-Bonus E1382** 对 Tech 98：
+>   `type=8 b=4 d=2556` → Set Research Location
+>   `type=8 b=5 d=6` → Set Research Button
+>   `type=8 b=11 d=18300` → Set Hotkey
 | **101** | tech 成本 | tech_id | resource_id (**-1=所有资源**) | **0=set cost to d (绝对值)**, **1=plus/minus d (绝对增减)** (原生已无使用), **2=discount multiplier (d=0.5 表示半价)** | value | `set_tech_cost`, `set_tech_discount` |
 | **102** | disable_tech | — | — | — | tech_id | `disable_tech` |
 | **103** | tech 研发时间 | tech_id | — | **0=set time to d (绝对值)**, **1=plus/minus d (绝对增减)**, **2=discount multiplier**, -1=同 1 但 b=-1 | value | `set_tech_time`, `set_tech_time_discount` |
@@ -548,6 +608,19 @@ utils 中编码公式：`value + 256 * type`（type 即下表的值）。
 | `SHIPYARD_ID` | 2119 | 编年史专属造船厂 |
 | `CHRONICLE_CIV_IDS` | [46,47,48,54,55,56] | 编年史文明 |
 | `GAME_DATA_PATH` | — | 运行时解析的 mod dat 目录 |
+
+### 时代 Tech ID（⚠️ dat name 与 regional_units.py 常量名有偏移！）
+
+| Tech ID | dat 里的 name | regional_units.py 常量 | 说明 |
+|---------|--------------|----------------------|------|
+| **104** | **Dark Age** | — | 起始状态，Static Bonus 唯一前置（req_count=0） |
+| 101 | Middle Age | `FEUDAL_AGE_TECH = 101` | 升到封建时代 |
+| 102 | Feudal Age | `CASTLE_AGE_TECH = 102` | 升到城堡时代 |
+| 103 | Imperial Age | `IMPERIAL_AGE_TECH = 103` | 升到帝王时代 |
+
+> ⚠️ **偏移原因**：dat 里 Tech 101 的 name 是 "Middle Age"（实际是升到封建时代），Tech 102 才叫 "Feudal Age"。`regional_units.py` 的常量按**功能语义**命名（101=Feudal Age 升级），不是按 dat name。写代码时用 ID 就行，别被 name 误导。
+>
+> "黑暗时代直接生效" = `req_count == 0`，或 `req_count == 1 and required_techs[0] == 104`。Static Bonus 科技全部满足这个条件。
 
 > **编年史文明判断方法**：
 > 1. 用 `civ_id in CHRONICLE_CIV_IDS` 直接查常量

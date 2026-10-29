@@ -57,7 +57,15 @@ def collect_native_discounts(data):
 
     for t in data.techs:
         if t.civ >= 1 and t.effect_id >= 0:
-            scan_eff_ids.add(t.effect_id)
+            dark_age_active = (
+                t.required_tech_count == 0
+                or (t.required_tech_count == 1 and t.required_techs[0] == 104)
+            )
+            zero_cost = all(rc.amount == 0 for rc in t.resource_costs)
+            no_building = all(rl.location_id < 0 for rl in t.research_locations)
+            zero_time = all(rl.research_time == 0 for rl in t.research_locations)
+            if dark_age_active and zero_cost and no_building and zero_time:
+                scan_eff_ids.add(t.effect_id)
 
     for eff_id in scan_eff_ids:
         if eff_id >= len(data.effects):
@@ -88,6 +96,24 @@ def collect_native_discounts(data):
                         native_time[tid].append(('MULT', (ot + d) / ot))
                 elif c == 2:
                     native_time[tid].append(('MULT', d))
+
+            elif cmd.type == 8:
+                tid, b, d = cmd.a, cmd.b, cmd.d
+                if not _is_valid_discount_target(data, tid):
+                    continue
+                if b == -1:
+                    if d == 0:
+                        native_time[tid].append(('SET_ZERO',))
+                    else:
+                        native_time[tid].append(('SET_ABS', d))
+                elif b == 0:
+                    native_cost[(tid, constants.RES_FOOD)].append(('SET', d))
+                elif b == 1:
+                    native_cost[(tid, constants.RES_WOOD)].append(('SET', d))
+                elif b == 2:
+                    native_cost[(tid, constants.RES_STONE)].append(('SET', d))
+                elif b == 3:
+                    native_cost[(tid, constants.RES_GOLD)].append(('SET', d))
 
     return native_cost, native_time
 
@@ -274,7 +300,7 @@ def _build_manual_entries(data):
     # Onager 257 / Siege Onager 320 虽然原生无 type 101, 但其资源需求只有 food+gold, 不含 wood,
     # 故无需手动补充 wood 折扣
 
-    return cost_entries, time_entries
+    return cost_entries,  time_entries
 
 
 def _compile_manual_lists(data):
