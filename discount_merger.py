@@ -55,11 +55,13 @@ def collect_native_discounts(data):
         if civ.team_bonus_id >= 0:
             scan_eff_ids.add(civ.team_bonus_id)
 
+    _DARK_AGE_PRESET_REQ = {104, 307, 1208}
+
     for t in data.techs:
         if t.civ >= 1 and t.effect_id >= 0:
             dark_age_active = (
                 t.required_tech_count == 0
-                or (t.required_tech_count == 1 and t.required_techs[0] == 104)
+                or (t.required_tech_count == 1 and t.required_techs[0] in _DARK_AGE_PRESET_REQ)
             )
             zero_cost = all(rc.amount == 0 for rc in t.resource_costs)
             no_building = all(rl.location_id < 0 for rl in t.research_locations)
