@@ -327,7 +327,7 @@ def patch_auto_research_techs(data: DatFile) -> list:
         if not t.research_locations:
             continue
         if all(rl.research_time == 0 for rl in t.research_locations) \
-                and all(rc.amount == 0 for rc in t.resource_costs):
+                and all(rc.type == -1 for rc in t.resource_costs):
             t.research_locations = [ResearchLocation(-1, 0, 0, -1)]
             patched.append(tid)
     if patched:

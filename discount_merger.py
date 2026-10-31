@@ -63,7 +63,7 @@ def collect_native_discounts(data):
                 t.required_tech_count == 0
                 or (t.required_tech_count == 1 and t.required_techs[0] in _DARK_AGE_PRESET_REQ)
             )
-            zero_cost = all(rc.amount == 0 for rc in t.resource_costs)
+            zero_cost = all(rc.type == -1 for rc in t.resource_costs)
             no_building = all(rl.location_id < 0 for rl in t.research_locations)
             zero_time = all(rl.research_time == 0 for rl in t.research_locations)
             if dark_age_active and zero_cost and no_building and zero_time:
