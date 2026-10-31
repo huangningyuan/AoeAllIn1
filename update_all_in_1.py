@@ -28,6 +28,8 @@ def update_all_in_1(debug = True):
     print('Loading data...')
     data = DatFile.parse(origin_file_name)
     print('Data loaded.')
+    data.techs[101].name = 'Feudal Age'
+    data.techs[102].name = 'Castle Age'
     constants.ORIGINAL_TECH_NUM = len(data.techs)
     constants.ORIGINAL_MONESTARY_TECH_IDS = [
         i for i, t in enumerate(data.techs[:constants.ORIGINAL_TECH_NUM])
