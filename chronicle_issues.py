@@ -119,8 +119,6 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     effect = get_new_effect(name)
     # elite steppe lancer
     force_tech(effect, 715)
-    # elite fire lancer
-    force_tech(effect, 982)
     append_tech(data, tech, effect)
     append_tech_ship_upgrade_tech_ids = [1144, 1145, 1146, 1148, 1149, 1151, 1152, 1154, 1155, 1159]
 

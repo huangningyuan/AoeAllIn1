@@ -58,6 +58,7 @@ def update_all_in_1(debug = True):
             if tech.research_locations[0].location_id == 209:
                 constants.university_techs[tech.name] = i
     deal_ftt(data, params)
+    utils.patch_auto_research_techs(data)
     add_civ_bonuses(data, params)
     build_discount_tech(data, params)
     add_unique_techs(data, params)

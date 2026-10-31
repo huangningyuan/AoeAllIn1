@@ -317,6 +317,24 @@ def set_require_techs(tech: Tech, *args):
     tech.required_tech_count = len(args)
 
 
+def patch_auto_research_techs(data: DatFile) -> list:
+    """把「research_time=0 且 cost 全 0」的自动研发科技的 research_location
+    还原为默认值 (location_id=-1)。
+    这样后续所有下游逻辑（折扣过滤、civ_bonuses force/force_research 分支等）
+    都自然把它们当作非建筑科技处理，不需要各处单独加判断。"""
+    patched = []
+    for tid, t in enumerate(data.techs):
+        if not t.research_locations:
+            continue
+        if all(rl.research_time == 0 for rl in t.research_locations) \
+                and all(rc.amount == 0 for rc in t.resource_costs):
+            t.research_locations = [ResearchLocation(-1, 0, 0, -1)]
+            patched.append(tid)
+    if patched:
+        print(f"[Patch] Auto-research techs reset location_id: {patched}")
+    return patched
+
+
 def get_mod_path(mod_name: str = 'All Civ Bonus Test') -> str:
     """查找游戏的mod路径"""
     user_path = r'C:\Users'

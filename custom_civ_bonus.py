@@ -141,12 +141,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             effect = get_new_effect(name)
             multiply_unit_cost(effect, 207, -1, 0.75)
             append_tech(data, tech, effect)
-        case 'Chinese':
-            name = 'enable Dragon Ship'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, 246)
-            tech.effect_id = 1010
-            append_tech(data, tech)
         case 'Georgians':
             # Cavalry regeneration ext
             for i in (954, 961):

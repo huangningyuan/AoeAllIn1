@@ -4,6 +4,7 @@ from genieutils.datfile import DatFile
 from genieutils.tech import ResearchResourceCost, ResearchLocation
 
 import constants
+import mutex
 from all_in_1_params import All_In_1_Params
 from chronicle_issues import deal_with_chronicle_issues
 from constants import \
@@ -347,6 +348,10 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     disable_tech(reverse_effect, new_tech_id)
                 else:
                     effect = get_new_effect(tech.name)
+                    tech.language_dll_name = 7000
+                    tech.language_dll_description = 8000
+                    tech.language_dll_help = 107000
+                    tech.language_dll_tech_tree = 150000
                     if len(tech.research_locations) > 0 and tech.research_locations[0].location_id > 0:
                         name = 'force ' + tech.name
                         tech.name = name
@@ -356,7 +361,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                             add_require_tech(techs[tech_id], new_age_tech_id)
                         tech.research_locations = [ResearchLocation(-1, 0, 0, -1)]
                         tech.resource_costs = (ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0))
-                        # early barrack techs
                         force_tech(effect, tech_id)
                     else:
                         name = 'force research ' + tech.name
@@ -482,6 +486,12 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
     append_tech(data, tech, effect)
 
     deal_with_chronicle_issues(data, params)
+
+    eff_sw = data.effects[data.techs[373].effect_id]
+    eff_sw_ch = data.effects[data.techs[1167].effect_id]
+    disable_tech(eff_sw, 1167)
+    disable_tech(eff_sw_ch, 373)
+    mutex.add_mutex(data, [373, 1167], [])
 
     for i in range(5):
         append_tech(data, get_new_tech(), get_new_effect())
