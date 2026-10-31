@@ -89,19 +89,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if unit not in original_units:
                     extend_units.append(unit)
             extend_effect(effect, extend_units)
-        case 'Berbers':
-            name = 'genitour'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 601)
-            append_tech(data, tech, effect)
-            name = 'Elite Genitour'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 599)
-            append_tech(data, tech, effect)
         case 'Bohemians':
             name = 'enable houfnice'
             tech = get_new_tech(name)
@@ -231,12 +218,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i in original_units:
                     continue
                 multiply_unit_cost(effect, i, -1, 0.8)
-            name = 'Condottiero'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id)
-            effect = get_new_effect(name)
-            force_research_tech(effect, 522)
-            append_tech(data, tech, effect)
         case 'Khitans':
             name = 'enable farm'
             tech = get_new_tech(name)

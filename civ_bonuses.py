@@ -220,7 +220,9 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 enable_unit(reverse_effect, effect_command.a)
                 continue
             elif effect_command.type == 18:
-                continue
+                cmd = copy.deepcopy(effect_command)
+                cmd.type = 8
+                tech_tree_bonus_effect_commands.append(cmd)
             else:
                 tech_tree_bonus_effect_commands.append(effect_command)
 
