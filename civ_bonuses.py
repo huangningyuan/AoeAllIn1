@@ -1,7 +1,7 @@
 import copy
 
 from genieutils.datfile import DatFile
-from genieutils.tech import ResearchResourceCost
+from genieutils.tech import ResearchResourceCost, ResearchLocation
 
 import constants
 from all_in_1_params import All_In_1_Params
@@ -300,6 +300,26 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                 elif 103 in tech.required_techs:
                     replace_require_tech(tech, 103, params.imp_duplicate_tech_id)
                 add_require_tech(tech, params.switch_tech_id, update_count=True)
+
+                def _is_make_avail(req_tid):
+                    if req_tid < 0 or req_tid >= len(techs):
+                        return False
+                    req_t = techs[req_tid]
+                    if not req_t.research_locations or req_t.research_locations[0].location_id != -1:
+                        return False
+                    if req_t.effect_id < 0 or req_t.effect_id >= len(effects):
+                        return False
+                    return any(
+                        cmd.type == 2 and cmd.b != 0
+                        for cmd in effects[req_t.effect_id].effect_commands
+                    )
+
+                filtered = [
+                    rt for rt in tech.required_techs[:tech.required_tech_count]
+                    if not _is_make_avail(rt)
+                ]
+                set_require_techs(tech, *filtered)
+
                 if tech.effect_id == -1:
                     first_command = None
                 else:
@@ -332,7 +352,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                         if tech.research_locations[0].location_id == BARRACK_ID:
                             new_age_tech_id = make_require_age_earlier(tech, params)
                             add_require_tech(techs[tech_id], new_age_tech_id)
-                        tech.research_locations = []
+                        tech.research_locations = [ResearchLocation(-1, 0, 0, -1)]
                         tech.resource_costs = (ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0))
                         # early barrack techs
                         force_tech(effect, tech_id)
