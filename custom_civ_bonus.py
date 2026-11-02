@@ -52,13 +52,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in range(942, 948):
                 add_require_tech(techs[i], params.switch_tech_id)
             techs[957].civ = -1
-            name = 'enable Priest Warrior'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id)
-            effect = get_new_effect(name)
-            enable_unit(effect, 1811)
-            move_unit_button(effect, 1811, 13)
-            append_tech(data, tech, effect)
         case 'Athenians':
             name = 'enable Athenians TC techs'
             tech = get_new_tech(name)
@@ -89,13 +82,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if unit not in original_units:
                     extend_units.append(unit)
             extend_effect(effect, extend_units)
-        case 'Bohemians':
-            name = 'enable houfnice'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.imp_duplicate_tech_id, params.switch_tech_id)
-            effect = get_new_effect(name)
-            force_tech(effect, 787)
-            append_tech(data, tech, effect)
         case 'Burgundians':
             effect = check_effect(effects, 794)
             origin_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -143,18 +129,14 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (954, 961):
                 extend_effect(check_effect(effects, i), [1263])
         case 'Gurjaras':
-            name = 'Herdable Garrison'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            effect.effect_commands = effects[871].effect_commands
+            # Herdable Garrison
+            effect = check_effect(effects, 871)
             set_unit_attribute(effect, 1711, -1, 30, 16)
             set_unit_attribute(effect, 1720, -1, 30, 16)
             set_unit_attribute(effect, 1734, -1, 30, 16)
             set_unit_attribute(effect, 1711, -1, 2, 10)
             set_unit_attribute(effect, 1720, -1, 2, 10)
             set_unit_attribute(effect, 1734, -1, 2, 10)
-            append_tech(data, tech, effect)
             # tb elephant ext
             effect = check_effect(effects, 843)
             original_units = set(map(lambda command: command.a, effect.effect_commands))
@@ -353,12 +335,7 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             for i in (2301, 2302):
                 plus_unit_attribute(_e, i, -1, 4, 1)
         case 'Persians':
-            name = 'enable Savar'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, 209)
-            effect = get_new_effect(name)
-            force_tech(effect, 526)
-            append_tech(data, tech, effect)
+            # Savar/Paladin mutex
             disable_tech(check_effect(effects, 253), 526)
             disable_tech(check_effect(effects, 581), 265)
         case 'Portuguese':

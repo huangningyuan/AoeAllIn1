@@ -142,8 +142,14 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             rt for rt in tech.required_techs[:tech.required_tech_count]
             if rt != -1
         ]
-        has_only_age_reqs = len(reqs) > 0 and all(
-            rt in AGE_TECH_IDS for rt in reqs
+        effective_reqs = [
+            rt for rt in reqs
+            if not (techs[rt].civ == -1 and
+                    techs[rt].research_locations and
+                    techs[rt].research_locations[0].location_id == -1)
+        ]
+        has_only_age_reqs = len(effective_reqs) > 0 and all(
+            rt in AGE_TECH_IDS for rt in effective_reqs
         )
         if research_location.location_id == CASTLE_ID and (
                 research_location.button_id in (6, 7, 8) or (
@@ -352,6 +358,8 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                     tech.language_dll_description = 8000
                     tech.language_dll_help = 107000
                     tech.language_dll_tech_tree = 150000
+                    tech.repeatable = 0
+                    tech.full_tech_mode = 0
                     if len(tech.research_locations) > 0 and tech.research_locations[0].location_id > 0:
                         name = 'force ' + tech.name
                         tech.name = name
