@@ -182,10 +182,16 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             force_tech(effect, 521)
             append_tech(data, tech, effect)
         case 'Huns':
+            name = 'huns or all in 1'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id, 545)
+            tech.required_tech_count = 1
+            tech_id = append_tech(data, tech)
+            tech = techs[238]
+            tech.civ = -1
+            add_require_tech(tech, tech_id, True)
             techs[241].civ = -1
             techs[242].civ = -1
-            effect = check_effect(effects, 231)
-            disable_tech(effect, get_tech_id_by_name(data, 'Start w/ Horse'))
         case 'Incas':
             name = 'Incas Team Tech Tree'
             tech = get_new_tech(name)
