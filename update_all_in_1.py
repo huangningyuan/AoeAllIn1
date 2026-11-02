@@ -30,6 +30,7 @@ def update_all_in_1(debug = True):
     print('Data loaded.')
     data.techs[101].name = 'Feudal Age'
     data.techs[102].name = 'Castle Age'
+    data.techs[521].name = 'Imperial Camel Rider'
     constants.ORIGINAL_TECH_NUM = len(data.techs)
     constants.ORIGINAL_MONESTARY_TECH_IDS = [
         i for i, t in enumerate(data.techs[:constants.ORIGINAL_TECH_NUM])

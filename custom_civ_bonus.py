@@ -135,12 +135,9 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             tech.effect_id = 651
             append_tech(data, tech)
         case 'Byzantines':
-            name = 'Byzantines Imperial Camel Discount'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            multiply_unit_cost(effect, 207, -1, 0.75)
-            append_tech(data, tech, effect)
+            # Byzantines Imperial Camel Discount
+            effect = check_effect(effects, 283)
+            extend_effect(effect, 207, -1)
         case 'Georgians':
             # Cavalry regeneration ext
             for i in (954, 961):
@@ -175,12 +172,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                 if i not in origin_units:
                     extend_units.append(i)
             extend_effect(effect, extend_units)
-            name = 'enable Imperial Camel Rider'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id, params.imp_duplicate_tech_id, 236)
-            effect = get_new_effect(name)
-            force_tech(effect, 521)
-            append_tech(data, tech, effect)
         case 'Huns':
             name = 'huns or all in 1'
             tech = get_new_tech(name)
@@ -371,13 +362,6 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
             disable_tech(check_effect(effects, 253), 526)
             disable_tech(check_effect(effects, 581), 265)
         case 'Portuguese':
-            name = 'Foraging Wood'
-            tech = get_new_tech(name)
-            set_require_techs(tech, params.switch_tech_id)
-            effect = get_new_effect(name)
-            forager_wood_prod_rate = effects[510].effect_commands[0].d
-            set_resource(effect, 267, forager_wood_prod_rate * ROMAN_CIV_WORK_RATE * FRANKS_FORAGER_WORK_RATE * MAPUCHE_FORAGER_WORK_RATE)
-            append_tech(data, tech, effect)
             # cheap conquisidator
             effect = check_effect(effects, 33)
             multiply_unit_cost(effect, -1, 23, 0.8)

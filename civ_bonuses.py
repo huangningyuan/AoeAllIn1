@@ -16,8 +16,7 @@ from ftt import move_unit_button, move_tech_button
 from regional_units import activate_all_regional_units
 from utils import add_require_tech, make_require_age_earlier
 from utils import disable_tech, get_new_unit, get_civ_name, set_require_techs, set_unit_attribute, set_resource, \
-    append_tech, force_research_tech, multiply_resource, \
-    check_effect, multiply_unit_attribute, disable_unit
+    append_tech, force_research_tech, check_effect, multiply_unit_attribute, disable_unit
 from utils import enable_tech
 from utils import enable_unit
 from utils import force_tech
