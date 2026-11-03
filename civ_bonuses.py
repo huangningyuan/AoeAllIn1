@@ -24,22 +24,26 @@ from utils import get_new_effect
 from utils import get_new_tech
 from utils import replace_require_tech
 
-TECH_TO_REMOVE = [286, 287, 500,
-                  641, 649, 664,
-                  699, 700, 701, 702, 788, 789,
-                  806, 807, 808, 957,
-                  721, 288, 388,
-                  323, 324, 326, 299, 303, 305,
-                  310, 867, 868, 869, 1071,
-                  241, 242,
-                  1058, 885,
-                  1059, 355,
-                  1397, 1353,
-                  1136, 1137,
-                  1169, 1170, 1171,
-                  1195, 1196, 1197,
-                  1012, 1013, 1014,
-                  289, 238]
+TECH_TO_REMOVE = [286, 287, 288, 388, # Mongols Light Cavalry HP
+                  641, # Mongols Imperial Nomad
+                  664, 808, # Cheap Buildings
+                  699, 700, 701, 702, # Lithuanians relics
+                  788, 789, # Winged Hussar
+                  957, # Free Relic 2
+                  323, 324, 326, # Spanish Reward
+                  299, 303, 305, 310, # TC Annex
+                  867, 868, 869, # Paper Money
+                  241, 242, 289, 238, # Hunnic Horse
+                  1058, 1059, # Wei Cavalry HP
+                  885, # Legionary
+                  355, # Market
+                  1353, # Settlement
+                  1136, 1137, # Hoplite
+                  1295, # Early Battle Drills
+                  1169, 1170, 1171, # War Chariot
+                  1195, 1196, 1197, # 3 Town Centers
+                  1012, 1013, 1014, # Pasture Techs
+                  ]
 
 
 def add_civ_bonuses(data: DatFile, params: All_In_1_Params):

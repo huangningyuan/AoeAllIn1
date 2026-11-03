@@ -330,8 +330,6 @@ def patch_auto_research_techs(data: DatFile) -> list:
                 and all(rc.type == -1 for rc in t.resource_costs):
             t.research_locations = [ResearchLocation(-1, 0, 0, -1)]
             patched.append(tid)
-    if patched:
-        print(f"[Patch] Auto-research techs reset location_id: {patched}")
     return patched
 
 

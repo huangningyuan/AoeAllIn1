@@ -84,7 +84,7 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id, params.castle_duplicate_tech_id, chronicle_civs_requirement)
     effect = get_new_effect(name)
-    research_tech(effect, 1173)
+    force_research_tech(effect, 1173)
     research_tech(effect, 1174)
     append_tech(data, tech, effect)
     name = 'append_tech siege onagers'
