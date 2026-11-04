@@ -43,6 +43,7 @@ TECH_TO_REMOVE = [286, 287, 288, 388, # Mongols Light Cavalry HP
                   1169, 1170, 1171, # War Chariot
                   1195, 1196, 1197, # 3 Town Centers
                   1012, 1013, 1014, # Pasture Techs
+                  1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, # Macedonians Doctrines
                   ]
 
 
@@ -146,11 +147,18 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
             rt for rt in tech.required_techs[:tech.required_tech_count]
             if rt != -1
         ]
+        def _is_make_avail_tech(rtid):
+            rt = techs[rtid]
+            if rt.effect_id < 0 or rt.effect_id >= len(effects):
+                return False
+            eff = effects[rt.effect_id]
+            return any(
+                cmd.type == 2 and cmd.b != 0
+                for cmd in eff.effect_commands
+            )
         effective_reqs = [
             rt for rt in reqs
-            if not (techs[rt].civ == -1 and
-                    techs[rt].research_locations and
-                    techs[rt].research_locations[0].location_id == -1)
+            if not _is_make_avail_tech(rt)
         ]
         has_only_age_reqs = len(effective_reqs) > 0 and all(
             rt in AGE_TECH_IDS for rt in effective_reqs
@@ -368,9 +376,6 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
                         name = 'force ' + tech.name
                         tech.name = name
                         effect.name = name
-                        if tech.research_locations[0].location_id == BARRACK_ID:
-                            new_age_tech_id = make_require_age_earlier(tech, params)
-                            add_require_tech(techs[tech_id], new_age_tech_id)
                         tech.research_locations = [ResearchLocation(-1, 0, 0, -1)]
                         tech.resource_costs = (ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0), ResearchResourceCost(-1, 0, 0))
                         force_tech(effect, tech_id)

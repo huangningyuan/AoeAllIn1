@@ -44,13 +44,12 @@ PERMANENT_SKIP_UPGRADES: set[int] = set()
 
 def _age_to_replacement(age_id: int, build_id: int,
                         params: All_In_1_Params) -> int | None:
-    barrack = (build_id == BARRACK_ID)
     if age_id == FEUDAL_AGE_TECH:
-        return params.early_feudal_tech_id if barrack else params.feudal_duplicate_tech_id
+        return params.feudal_duplicate_tech_id
     elif age_id == CASTLE_AGE_TECH:
-        return params.early_castle_tech_id if barrack else params.castle_duplicate_tech_id
+        return params.castle_duplicate_tech_id
     elif age_id in (IMPERIAL_AGE_TECH, DUPLICATE_IMPERIAL_TECH):
-        return params.early_imp_duplicate_tech_id if barrack else params.imp_duplicate_tech_id
+        return params.imp_duplicate_tech_id
     return None
 
 
@@ -224,17 +223,6 @@ def activate_all_regional_units(data: DatFile, params: All_In_1_Params):
         if orig.effect_id < 0 or orig.effect_id >= len(data.effects):
             continue
         upgrade_techs_seen.add(orig_tid)
-
-        build_id = orig.research_locations[0].location_id if orig.research_locations else -1
-        if build_id != BARRACK_ID:
-            continue
-
-        reqs = _early_upgrade_reqs(orig, params)
-        display_name = tech_display_names.get(orig_tid, orig.name)
-        req_tech = get_new_tech(f'Requirement {display_name}')
-        set_require_techs(req_tech, *reqs)
-        req_id = append_tech(data, req_tech)
-        add_require_tech(orig, req_id)
 
     print(f'Regional units activated: {len(make_avail_techs_seen)} make-avail, '
           f'{len(upgrade_techs_seen)} upgrade techs patched')
