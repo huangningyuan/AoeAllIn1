@@ -166,6 +166,8 @@ def deal_ftt(data: DatFile, params: All_In_1_Params):
     move_unit_button(effect, 1942, 24)
     # Priest Warrior
     move_unit_button(effect, 1811, 13)
+    # Flemish Millitia
+    move_unit_button(effect, 1699, 31)
 
     append_tech(data, tech, effect)
 
