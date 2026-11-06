@@ -453,7 +453,7 @@ def add_civ_bonuses(data: DatFile, params: All_In_1_Params):
         set_unit_attribute(effect, i, -1, 104, 200 * 0.85 - 100)
     append_tech(data, tech, effect)
 
-
+    name = 'Temple Guard issues'
     tech = get_new_tech(name)
     set_require_techs(tech, params.switch_tech_id)
     effect = get_new_effect(name)

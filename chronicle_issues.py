@@ -62,7 +62,6 @@ def deal_with_chronicle_issues(data: DatFile, params: All_In_1_Params):
     research_tech(effect, 1147)
     research_tech(effect, 1150)
     research_tech(effect, 1153)
-    force_tech(effect, 384)
     append_tech(data, tech, effect)
 
     name = 'enable Castle units'
