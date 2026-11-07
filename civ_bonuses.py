@@ -44,6 +44,7 @@ TECH_TO_REMOVE = [286, 287, 288, 388, # Mongols Light Cavalry HP
                   1195, 1196, 1197, # 3 Town Centers
                   1012, 1013, 1014, # Pasture Techs
                   1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, # Macedonians Doctrines
+                  1381, # Foragers Bonus
                   ]
 
 

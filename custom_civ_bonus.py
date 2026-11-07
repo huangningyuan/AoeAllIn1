@@ -264,8 +264,17 @@ def deal_custom_bonus(data: DatFile, params: All_In_1_Params, civ_name):
                     break
             if not b_wp_with_relic:
                 extend_effect(effect, [WP_WITH_RELIC_ID])
+            # foragers bonus just add work rate for conflict to portuguese
+            name = 'faster forager workrate'
+            tech = get_new_tech(name)
+            set_require_techs(tech, params.switch_tech_id)
+            effect = get_new_effect(name)
+            rate = 1.25
+            multiply_unit_attribute(effect, 120, -1, 13, rate)
+            multiply_unit_attribute(effect, 354, -1, 13, rate)
+            append_tech(data, tech, effect)
+
         case 'Mayans':
-            # Cheap Archers ext
             origin_units = (763, 765)
             ext_units = list()
             for i, unit in enumerate(data.civs[1].units):
