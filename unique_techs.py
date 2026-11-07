@@ -118,12 +118,6 @@ def add_unique_techs(data: DatFile, params: All_In_1_Params):
     move_tech_button(effect, vedic_teaching_id, 7)
     append_tech(data, tech, effect)
 
-    effect = check_effect(effects, vedic_effect_id)
-    multiply_resource(effect, 502, 1.02)
-    multiply_resource(effect, 267, 1.02)
-    multiply_resource(effect, 241, 1.02)
-    multiply_resource(effect, 512, 1.02)
-
     current_vedic_univ_techs = list()
     for i in range(constants.TECH_NUM):
         required_techs = techs[i].required_techs
